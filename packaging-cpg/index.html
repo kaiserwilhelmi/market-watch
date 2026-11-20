@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Packaging & CPG Market Watch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one 1240px column; summary strip, then dense master tables, then analyst tools. Matches the Market Watch palette. */
+:root {
+  --bg: #f6f5f2; --surface: #fcfcfb; --border: #e3e1db; --grid: #ebe9e4;
+  --text: #0b0b0b; --text-2: #52514e; --text-3: #6f6e69;
+  --accent: #2a78d6; --accent-soft: rgba(42,120,214,.14);
+  --good: #0ca30c; --warn: #fab219; --crit: #d03b3b; --neutral: #8a8984;
+  --good-ink: #006300; --warn-ink: #8a5a00; --crit-ink: #a52222; --neutral-ink: #52514e;
+  --pos: 208, 59, 59; --neg: 12, 120, 12;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --border: #33332f; --grid: #2a2a27;
+    --text: #f0efec; --text-2: #c3c2b7; --text-3: #9a998f; --accent: #5a9cec; --accent-soft: rgba(90,156,236,.18);
+    --neutral: #8f8e86; --good-ink: #4cc94c; --warn-ink: #fab219; --crit-ink: #f07a7a; --neutral-ink: #c3c2b7;
+    --pos: 240, 110, 110; --neg: 76, 201, 76;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --border: #33332f; --grid: #2a2a27;
+  --text: #f0efec; --text-2: #c3c2b7; --text-3: #9a998f; --accent: #5a9cec; --accent-soft: rgba(90,156,236,.18);
+  --neutral: #8f8e86; --good-ink: #4cc94c; --warn-ink: #fab219; --crit-ink: #f07a7a; --neutral-ink: #c3c2b7;
+  --pos: 240, 110, 110; --neg: 76, 201, 76;
+}
+* { box-sizing: border-box; min-width: 0; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--text); font: 14px/1.5 var(--font);
+  padding-block: 24px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); overflow-x: clip; }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-size: clamp(24px, 3.2vw, 30px); line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.015em; text-wrap: balance; }
+h2 { font-size: 16px; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, tr:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sub { color: var(--text-2); max-width: 75ch; }
+.note { color: var(--text-3); font-size: 12.5px; }
+.crumb { font-size: 13px; }
+.top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
+.pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+.head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpi { padding: 12px 14px; }
+.kpi .k { font-size: 12px; color: var(--text-3); }
+.kpi .n { font-size: 26px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.kpi .d { font-size: 12px; color: var(--text-2); }
+.sig { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.sig .ic { width: 15px; height: 15px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 9.5px; color: #fff; font-weight: 700; }
+.sig.Alert { color: var(--crit-ink); } .sig.Alert .ic { background: var(--crit); }
+.sig.Watch { color: var(--warn-ink); } .sig.Watch .ic { background: var(--warn); color: #3a2a00; }
+.sig.Stable { color: var(--neutral-ink); } .sig.Stable .ic { background: var(--neutral); }
+.sig.Opportunity { color: var(--good-ink); } .sig.Opportunity .ic { background: var(--good); }
+.mix { display: inline-flex; gap: 8px; font-size: 12.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mix span { display: inline-flex; align-items: center; gap: 3px; }
+.mix i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.up { color: var(--crit-ink); } .dn { color: var(--good-ink); } .fl { color: var(--text-2); }
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.t { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+.t th, .t td { padding: 7px 8px; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; vertical-align: middle; }
+.t th { color: var(--text-2); font-weight: 600; font-size: 12px; position: sticky; top: 0; background: var(--surface); }
+.t th.l, .t td.l { text-align: left; }
+.t td.wrap-ok { white-space: normal; min-width: 180px; }
+.t th[data-sort] { cursor: pointer; user-select: none; }
+.t th[data-sort]::after { content: " ↕"; color: var(--text-3); font-weight: 400; }
+.t th[aria-sort="ascending"]::after { content: " ↑"; color: var(--accent); }
+.t th[aria-sort="descending"]::after { content: " ↓"; color: var(--accent); }
+.t tbody tr.click { cursor: pointer; }
+.t tbody tr.click:hover, .t tbody tr.sel { background: var(--accent-soft); }
+.t .nm { font-weight: 600; }
+.t .id { color: var(--text-3); font-size: 11.5px; }
+.t .rng { color: var(--text-3); font-size: 11.5px; }
+.t .better { color: var(--good-ink); font-weight: 600; }
+.spark svg { display: block; width: 96px; height: 24px; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 12.5px; cursor: pointer; min-height: 30px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+input[type=search], input[type=number], select { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; min-height: 32px; }
+input[type=search] { width: 220px; max-width: 100%; }
+.acts { display: grid; gap: 0; }
+.act { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 4px 14px; padding: 9px 0; border-top: 1px solid var(--grid); }
+.act:first-child { border-top: 0; }
+.act span { color: var(--text-2); }
+@media (max-width: 600px) { .act { grid-template-columns: 1fr; } }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 12.5px; padding: 6px 11px; cursor: pointer; min-height: 32px; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.fig { position: relative; height: 320px; }
+.fig svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fig text { fill: var(--text-2); font-size: 11px; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; white-space: nowrap; z-index: 3; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-2); }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--accent); vertical-align: middle; margin-right: 5px; }
+.legend i.dash { border-top-style: dashed; }
+.legend i.band { height: 10px; border: 0; background: var(--accent-soft); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.facts div { border-top: 1px solid var(--grid); padding-top: 7px; }
+.facts .k { font-size: 12px; color: var(--text-3); }
+.facts .v { font-weight: 500; font-variant-numeric: tabular-nums; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .two { grid-template-columns: 1fr; } }
+.calc { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 860px) { .calc { grid-template-columns: 1fr; } }
+.calc .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.calc label { font-size: 12.5px; color: var(--text-2); display: grid; gap: 3px; }
+.comp { display: grid; grid-template-columns: minmax(0, 1fr) 84px 32px; gap: 6px; align-items: center; }
+.comp select { width: 100%; }
+.comp button, .btn { font: inherit; font-size: 12.5px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 32px; cursor: pointer; padding: 4px 10px; }
+.out { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; display: grid; gap: 8px; }
+.out .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.1; }
+.out table { width: 100%; }
+.formula { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: var(--text-2); overflow-x: auto; white-space: nowrap; }
+.method p { color: var(--text-2); max-width: 95ch; }
+.method ul { margin: 0; padding-left: 18px; color: var(--text-2); }
+.method li { margin: 3px 0; }
+.heat td.c { min-width: 52px; text-align: center; }
+.heat th.rot { white-space: normal; min-width: 52px; max-width: 80px; font-size: 11px; text-align: center; vertical-align: bottom; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+{
+const D = {"page":"industry","built":"2026-11-20 21:22 UTC","thresholds":{"Materials":[5.0,10.0,2.0,5.0,-3.0],"Commodities":[10.0,20.0,4.0,8.0,-6.0],"Energy":[12.0,25.0,5.0,10.0,-8.0],"Freight & services":[8.0,15.0,3.0,7.0,-5.0],"Labor":[2.0,5.0,1.0,3.5,-1.0],"Currency":[4.0,8.0,2.0,4.0,-3.0]},"industry":{"slug":"packaging-cpg","name":"Packaging & CPG","blurb":"Substrates (paper, resin, metal, glass) set packaging cost; aluminum drives cans.","series":["PCU322211322211","WPU0915","PCU325211325211","PCU332431332431","PCU327213327213","PALUMUSDM"],"pressure_3m":0.2975946447304145,"pressure_12m":7.58610823298751,"pressure_f6":2.220446049250313e-14,"alerts":1,"watches":3,"opportunities":0,"top_driver":"PALUMUSDM","leadlag":[{"lead":"PCU332431332431","follow":"WPU0915","lag":4,"r":0.4757518100603002,"r0":0.4089739797195867,"n":101},{"lead":"PCU325211325211","follow":"PCU322211322211","lag":3,"r":0.47061204426237996,"r0":0.2830413345173509,"n":102},{"lead":"PCU322211322211","follow":"PCU332431332431","lag":6,"r":0.41973931143508264,"r0":0.3172613728665751,"n":99},{"lead":"PALUMUSDM","follow":"PCU325211325211","lag":1,"r":0.3879113233772719,"r0":0.1928466682127132,"n":104},{"lead":"PCU325211325211","follow":"WPU0915","lag":3,"r":0.3765694222132972,"r0":0.10486815268023426,"n":102},{"lead":"PALUMUSDM","follow":"PCU322211322211","lag":4,"r":0.34437090813886767,"r0":0.04646487812639619,"n":101}],"corr":[[1.0,0.84,0.64,0.82,0.52,0.56],[0.84,1.0,0.31,0.9,0.75,0.19],[0.64,0.31,1.0,0.29,0.2,0.82],[0.82,0.9,0.29,1.0,0.54,0.3],[0.52,0.75,0.2,0.54,1.0,0.12],[0.56,0.19,0.82,0.3,0.12,1.0]]},"series":{"PCU322211322211":{"id":"PCU322211322211","name":"Corrugated boxes","group":"Materials","unit":"index","direction":1,"publisher":"U.S. Bureau of Labor Statistics, Producer Price Index","publisher_url":"https://www.bls.gov/ppi/","source":"https://fred.stlouisfed.org/series/PCU322211322211","latest_month":"2026-10","latest":506.674,"change":{"m1":0.08039236213301937,"m3":3.152974325460556,"m12":8.982775234883157},"cost_change":{"m1":0.08039236213301937,"m3":3.152974325460556,"m12":8.982775234883157},"signal":"Watch","low":333.8,"high":506.674,"range_pct":100.0,"forecast":[{"month":"2026-11","mid":509.2547704112371,"lo":503.954419541308,"hi":514.787517681872},{"month":"2026-12","mid":511.53020088650493,"lo":501.7544297826101,"hi":522.8563309726125},{"month":"2027-01","mid":513.5352455530707,"lo":500.47075425023,"hi":528.3111252350443},{"month":"2027-02","mid":515.3011283848233,"lo":497.9953601936108,"hi":533.3508152004956},{"month":"2027-03","mid":516.8556771206183,"lo":494.35517357338523,"hi":540.3136815935991},{"month":"2027-04","mid":518.2236432934324,"lo":492.0126979935434,"hi":548.2972397649987}],"forecast_6m_pct":2.2795018677556733,"forecast_6m_cost":2.2795018677556733,"backtest":{"ets":{"h1":0.5337951889441509,"h3":1.4865907008528851,"h6":3.1796449785592373,"avg":1.8096817331915738},"naive":{"h1":0.6512243557856177,"h3":1.8301694614078452,"h6":3.129008250051223,"avg":1.9833346954216795},"n_origins_h3":55,"n_origins_h6":52,"coverage80":{"h3":90.47619047619048,"n3":42,"h6":88.88888888888889,"n6":36},"chosen":"ets"},"gaps":[],"series":[["2018-01",333.8],["2018-02",333.8],["2018-03",334.1],["2018-04",335.5],["2018-05",342.0],["2018-06",346.2],["2018-07",347.2],["2018-08",347.7],["2018-09",347.9],["2018-10",348.3],["2018-11",348.0],["2018-12",348.6],["2019-01",348.8],["2019-02",348.5],["2019-03",348.3],["2019-04",348.3],["2019-05",348.0],["2019-06",347.6],["2019-07",345.6],["2019-08",345.4],["2019-09",344.3],["2019-10",343.1],["2019-11",343.0],["2019-12",343.0],["2020-01",340.8],["2020-02",340.6],["2020-03",339.7],["2020-04",338.2],["2020-05",338.3],["2020-06",338.2],["2020-07",338.2],["2020-08",337.7],["2020-09",337.6],["2020-10",337.6],["2020-11",338.6],["2020-12",342.2],["2021-01",351.1],["2021-02",354.7],["2021-03",359.7],["2021-04",362.3],["2021-05",368.1],["2021-06",374.7],["2021-07",385.165],["2021-08",388.671],["2021-09",394.324],["2021-10",411.678],["2021-11",413.107],["2021-12",413.784],["2022-01",417.679],["2022-02",422.05],["2022-03",423.97],["2022-04",435.009],["2022-05",445.647],["2022-06",449.526],["2022-07",450.68],["2022-08",453.53],["2022-09",452.373],["2022-10",452.167],["2022-11",451.91],["2022-12",450.337],["2023-01",449.4],["2023-02",446.036],["2023-03",438.893],["2023-04",433.457],["2023-05",432.625],["2023-06",428.154],["2023-07",424.883],["2023-08",422.891],["2023-09",421.472],["2023-10",422.297],["2023-11",422.203],["2023-12",423.337],["2024-01",419.755],["2024-02",418.889],["2024-03",420.789],["2024-04",424.202],["2024-05",427.053],["2024-06",427.908],["2024-07",427.894],["2024-08",434.819],["2024-09",438.567],["2024-10",442.685],["2024-11",442.341],["2024-12",444.46],["2025-01",447.401],["2025-02",447.616],["2025-03",448.336],["2025-04",454.175],["2025-05",459.814],["2025-06",461.262],["2025-07",464.434],["2025-08",465.617],["2025-09",464.926],["2025-10",464.912],["2025-11",464.935],["2025-12",464.966],["2026-01",465.078],["2026-02",465.261],["2026-03",464.041],["2026-04",463.66],["2026-05",474.653],["2026-06",481.444],["2026-07",491.187],["2026-08",501.629],["2026-09",506.267],["2026-10",506.674]]},"WPU0915":{"id":"WPU0915","name":"Converted paper & paperboard","group":"Materials","unit":"index","direction":1,"publisher":"U.S. Bureau of Labor Statistics, Producer Price Index","publisher_url":"https://www.bls.gov/ppi/","source":"https://fred.stlouisfed.org/series/WPU0915","latest_month":"2026-10","latest":332.572,"change":{"m1":0.0773362622812801,"m3":1.5583154435992341,"m12":4.3801943405227695},"cost_change":{"m1":0.0773362622812801,"m3":1.5583154435992341,"m12":4.3801943405227695},"signal":"Stable","low":234.7,"high":332.572,"range_pct":100.0,"forecast":[{"month":"2026-11","mid":333.7359560654451,"lo":331.979178812219,"hi":335.60470206935497},{"month":"2026-12","mid":334.72413246726194,"lo":331.6612800052495,"hi":338.6961971081871},{"month":"2027-01","mid":335.6515144079916,"lo":331.05888587843975,"hi":341.59532823326884},{"month":"2027-02","mid":336.5216821915312,"lo":330.2552754870747,"hi":343.5844189832591},{"month":"2027-03","mid":337.338025239356,"lo":328.2119746980302,"hi":347.24886317091125},{"month":"2027-04","mid":338.10374970444406,"lo":327.34019550155324,"hi":349.18909026734894}],"forecast_6m_pct":1.6633239432195301,"forecast_6m_cost":1.6633239432195301,"backtest":{"ets":{"h1":0.3434523913319733,"h3":0.9011740016157084,"h6":1.8527606865550315,"avg":1.0731509999414985},"naive":{"h1":0.4636901471293327,"h3":1.2206318603448896,"h6":2.0239614639216454,"avg":1.3173825755103679},"n_origins_h3":55,"n_origins_h6":52,"coverage80":{"h3":88.09523809523809,"n3":42,"h6":91.66666666666666,"n6":36},"chosen":"ets"},"gaps":[],"series":[["2018-01",234.7],["2018-02",234.8],["2018-03",234.8],["2018-04",235.0],["2018-05",237.0],["2018-06",237.8],["2018-07",238.6],["2018-08",238.5],["2018-09",239.4],["2018-10",239.4],["2018-11",239.5],["2018-12",239.3],["2019-01",240.8],["2019-02",241.0],["2019-03",241.8],["2019-04",241.5],["2019-05",241.4],["2019-06",242.2],["2019-07",241.1],["2019-08",241.9],["2019-09",241.3],["2019-10",241.4],["2019-11",241.4],["2019-12",241.5],["2020-01",241.6],["2020-02",241.4],["2020-03",241.2],["2020-04",241.1],["2020-05",240.9],["2020-06",240.9],["2020-07",241.0],["2020-08",241.0],["2020-09",241.3],["2020-10",241.1],["2020-11",241.7],["2020-12",242.4],["2021-01",244.0],["2021-02",245.4],["2021-03",247.4],["2021-04",249.1],["2021-05",251.3],["2021-06",252.7],["2021-07",256.472],["2021-08",259.3],["2021-09",262.977],["2021-10",267.722],["2021-11",270.396],["2021-12",271.857],["2022-01",275.274],["2022-02",279.302],["2022-03",281.221],["2022-04",285.877],["2022-05",292.425],["2022-06",295.273],["2022-07",298.296],["2022-08",301.832],["2022-09",303.24],["2022-10",305.221],["2022-11",307.236],["2022-12",308.054],["2023-01",308.79],["2023-02",309.203],["2023-03",307.812],["2023-04",307.873],["2023-05",308.582],["2023-06",307.397],["2023-07",306.877],["2023-08",305.362],["2023-09",305.232],["2023-10",304.362],["2023-11",303.829],["2023-12",302.934],["2024-01",301.877],["2024-02",302.539],["2024-03",301.536],["2024-04",302.94],["2024-05",304.383],["2024-06",304.294],["2024-07",304.877],["2024-08",306.64],["2024-09",308.678],["2024-10",309.83],["2024-11",309.699],["2024-12",309.233],["2025-01",309.608],["2025-02",310.349],["2025-03",311.7],["2025-04",313.324],["2025-05",315.886],["2025-06",315.973],["2025-07",316.967],["2025-08",317.109],["2025-09",317.394],["2025-10",318.616],["2025-11",318.65],["2025-12",318.721],["2026-01",319.093],["2026-02",317.153],["2026-03",317.42],["2026-04",318.506],["2026-05",320.846],["2026-06",323.409],["2026-07",327.469],["2026-08",330.535],["2026-09",332.315],["2026-10",332.572]]},"PCU325211325211":{"id":"PCU325211325211","name":"Resin manufacturing (PPI industry)","group":"Materials","unit":"index","direction":1,"publisher":"U.S. Bureau of Labor Statistics, Producer Price Index","publisher_url":"https://www.bls.gov/ppi/","source":"https://fred.stlouisfed.org/series/PCU325211325211","latest_month":"2026-10","latest":335.923,"change":{"m1":1.0918009599903744,"m3":0.4509367103748385,"m12":8.614875242095321},"cost_change":{"m1":1.0918009599903744,"m3":0.4509367103748385,"m12":8.614875242095321},"signal":"Watch","low":249.0,"high":380.764,"range_pct":65.96870161804438,"forecast":[{"month":"2026-11","mid":335.923,"lo":328.2996376331362,"hi":346.2299512025534},{"month":"2026-12","mid":335.923,"lo":320.17264794432424,"hi":356.4925117029296},{"month":"2027-01","mid":335.923,"lo":315.9024540307017,"hi":363.6259793816885},{"month":"2027-02","mid":335.923,"lo":315.2437706803405,"hi":366.5531572821232},{"month":"2027-03","mid":335.923,"lo":314.11289928576576,"hi":366.92417208869466},{"month":"2027-04","mid":335.923,"lo":314.89007518227095,"hi":371.152995465411}],"forecast_6m_pct":0.0,"forecast_6m_cost":0.0,"backtest":{"ets":{"h1":1.744002048910657,"h3":4.507449453922323,"h6":5.630573153485971,"avg":4.413832877404986},"naive":{"h1":1.553564416009054,"h3":3.336960931255343,"h6":4.207005842300209,"avg":3.298279164926052},"n_origins_h3":55,"n_origins_h6":52,"coverage80":{"h3":85.71428571428571,"n3":42,"h6":86.11111111111111,"n6":36},"chosen":"naive"},"gaps":[],"series":[["2018-01",275.1],["2018-02",278.0],["2018-03",282.7],["2018-04",280.7],["2018-05",285.1],["2018-06",288.0],["2018-07",289.0],["2018-08",292.6],["2018-09",290.4],["2018-10",291.4],["2018-11",286.8],["2018-12",282.2],["2019-01",276.5],["2019-02",275.8],["2019-03",273.9],["2019-04",273.9],["2019-05",275.7],["2019-06",273.2],["2019-07",272.7],["2019-08",273.1],["2019-09",273.3],["2019-10",273.8],["2019-11",271.2],["2019-12",266.1],["2020-01",265.7],["2020-02",269.6],["2020-03",268.6],["2020-04",255.8],["2020-05",249.0],["2020-06",251.1],["2020-07",254.5],["2020-08",261.2],["2020-09",262.3],["2020-10",272.2],["2020-11",273.6],["2020-12",279.1],["2021-01",287.5],["2021-02",300.4],["2021-03",326.7],["2021-04",342.8],["2021-05",350.3],["2021-06",362.9],["2021-07",371.402],["2021-08",376.96],["2021-09",377.061],["2021-10",379.449],["2021-11",375.398],["2021-12",367.883],["2022-01",357.296],["2022-02",357.647],["2022-03",357.628],["2022-04",370.66],["2022-05",377.211],["2022-06",380.764],["2022-07",373.717],["2022-08",362.99],["2022-09",361.292],["2022-10",353.335],["2022-11",337.078],["2022-12",333.108],["2023-01",327.564],["2023-02",334.96],["2023-03",338.133],["2023-04",344.749],["2023-05",340.782],["2023-06",334.366],["2023-07",322.48],["2023-08",318.412],["2023-09",317.718],["2023-10",318.102],["2023-11",318.798],["2023-12",317.748],["2024-01",314.049],["2024-02",320.519],["2024-03",317.074],["2024-04",320.7],["2024-05",321.393],["2024-06",321.248],["2024-07",324.553],["2024-08",325.268],["2024-09",315.105],["2024-10",320.429],["2024-11",317.001],["2024-12",315.192],["2025-01",315.011],["2025-02",321.45],["2025-03",325.548],["2025-04",322.852],["2025-05",319.543],["2025-06",317.427],["2025-07",315.615],["2025-08",313.877],["2025-09",309.16],["2025-10",309.279],["2025-11",307.1],["2025-12",302.525],["2026-01",303.509],["2026-02",308.307],["2026-03",312.707],["2026-04",328.413],["2026-05",364.982],["2026-06",354.422],["2026-07",334.415],["2026-08",332.462],["2026-09",332.295],["2026-10",335.923]]},"PCU332431332431":{"id":"PCU332431332431","name":"Metal cans","group":"Materials","unit":"index","direction":1,"publisher":"U.S. Bureau of Labor Statistics, Producer Price Index","publisher_url":"https://www.bls.gov/ppi/","source":"https://fred.stlouisfed.org/series/PCU332431332431","latest_month":"2026-10","latest":243.8,"change":{"m1":-0.2124271955926349,"m3":-1.5915686820616504,"m12":6.557341223879698},"cost_change":{"m1":-0.2124271955926349,"m3":-1.5915686820616504,"m12":6.557341223879698},"signal":"Watch","low":152.7,"high":247.743,"range_pct":95.85135149353452,"forecast":[{"month":"2026-11","mid":243.8000000000001,"lo":241.97283552484802,"hi":249.35518924996657},{"month":"2026-12","mid":243.8000000000001,"lo":241.04612022814226,"hi":252.0704465519378},{"month":"2027-01","mid":243.8000000000001,"lo":241.0811955939172,"hi":256.8754108699635},{"month":"2027-02","mid":243.8000000000001,"lo":240.72953847899055,"hi":260.0728177376273},{"month":"2027-03","mid":243.8000000000001,"lo":240.80338033947015,"hi":259.98188517633787},{"month":"2027-04","mid":243.8000000000001,"lo":240.2195993155224,"hi":263.81518845281863}],"forecast_6m_pct":4.440892098500626e-14,"forecast_6m_cost":4.440892098500626e-14,"backtest":{"ets":{"h1":0.8527256202201807,"h3":1.9376712000260168,"h6":3.9926621155900843,"avg":2.318848980305401},"naive":{"h1":0.744779997284761,"h3":1.651920006924399,"h6":2.5601557007913756,"avg":1.7385104138940128},"n_origins_h3":55,"n_origins_h6":52,"coverage80":{"h3":88.09523809523809,"n3":42,"h6":91.66666666666666,"n6":36},"chosen":"naive"},"gaps":[],"series":[["2018-01",152.7],["2018-02",152.8],["2018-03",154.0],["2018-04",158.2],["2018-05",158.3],["2018-06",159.0],["2018-07",159.8],["2018-08",160.0],["2018-09",158.4],["2018-10",157.9],["2018-11",158.0],["2018-12",158.1],["2019-01",158.2],["2019-02",158.7],["2019-03",162.4],["2019-04",161.7],["2019-05",164.2],["2019-06",160.8],["2019-07",158.6],["2019-08",158.7],["2019-09",158.5],["2019-10",158.0],["2019-11",158.1],["2019-12",158.2],["2020-01",161.3],["2020-02",161.2],["2020-03",158.9],["2020-04",157.9],["2020-05",158.0],["2020-06",158.0],["2020-07",157.1],["2020-08",157.1],["2020-09",157.1],["2020-10",158.2],["2020-11",158.2],["2020-12",158.3],["2021-01",160.8],["2021-02",161.5],["2021-03",167.3],["2021-04",168.8],["2021-05",167.3],["2021-06",168.7],["2021-07",172.193],["2021-08",172.427],["2021-09",172.294],["2021-10",176.185],["2021-11",176.229],["2021-12",181.297],["2022-01",204.773],["2022-02",209.816],["2022-03",208.276],["2022-04",219.907],["2022-05",222.994],["2022-06",226.389],["2022-07",222.308],["2022-08",222.134],["2022-09",224.275],["2022-10",223.827],["2022-11",223.784],["2022-12",223.925],["2023-01",220.125],["2023-02",221.492],["2023-03",220.701],["2023-04",221.196],["2023-05",221.199],["2023-06",221.057],["2023-07",220.751],["2023-08",216.139],["2023-09",215.494],["2023-10",213.271],["2023-11",213.275],["2023-12",213.285],["2024-01",214.296],["2024-02",214.329],["2024-03",213.398],["2024-04",213.025],["2024-05",212.853],["2024-06",213.067],["2024-07",214.927],["2024-08",214.9],["2024-09",214.586],["2024-10",213.941],["2024-11",213.581],["2024-12",213.743],["2025-01",214.723],["2025-02",214.846],["2025-03",216.756],["2025-04",219.247],["2025-05",223.907],["2025-06",224.036],["2025-07",224.274],["2025-08",227.543],["2025-09",228.401],["2025-10",228.797],["2025-11",228.617],["2025-12",234.243],["2026-01",236.668],["2026-02",234.18],["2026-03",235.684],["2026-04",241.642],["2026-05",243.603],["2026-06",244.269],["2026-07",247.743],["2026-08",247.015],["2026-09",244.319],["2026-10",243.8]]},"PCU327213327213":{"id":"PCU327213327213","name":"Glass containers","group":"Materials","unit":"index","direction":1,"publisher":"U.S. Bureau of Labor Statistics, Producer Price Index","publisher_url":"https://www.bls.gov/ppi/","source":"https://fred.stlouisfed.org/series/PCU327213327213","latest_month":"2026-10","latest":306.849,"change":{"m1":0.05282258458949585,"m3":0.14425257908599054,"m12":3.2358670528982447},"cost_change":{"m1":0.05282258458949585,"m3":0.14425257908599054,"m12":3.2358670528982447},"signal":"Stable","low":199.9,"high":308.59,"range_pct":98.39819670622873,"forecast":[{"month":"2026-11","mid":306.849,"lo":306.40903078394473,"hi":314.0531345224579},{"month":"2026-12","mid":306.849,"lo":305.8443488800291,"hi":317.6880793255304},{"month":"2027-01","mid":306.849,"lo":305.63853464430565,"hi":322.26312663503876},{"month":"2027-02","mid":306.849,"lo":306.23378574387993,"hi":325.16161411482943},{"month":"2027-03","mid":306.849,"lo":306.5273155256757,"hi":331.23631585282465},{"month":"2027-04","mid":306.849,"lo":306.94658158286705,"hi":334.76659014959176}],"forecast_6m_pct":0.0,"forecast_6m_cost":0.0,"backtest":{"ets":{"h1":0.8203192531641411,"h3":2.0446218312989903,"h6":2.9368802689899978,"avg":2.0763001265372503},"naive":{"h1":0.5512790787496967,"h3":1.47522221699045,"h6":2.6717487632965757,"avg":1.6519187435813334},"n_origins_h3":55,"n_origins_h6":52,"coverage80":{"h3":83.33333333333334,"n3":42,"h6":77.77777777777779,"n6":36},"chosen":"naive"},"gaps":[],"series":[["2018-01",200.0],["2018-02",199.9],["2018-03",200.8],["2018-04",201.1],["2018-05",201.6],["2018-06",201.7],["2018-07",201.9],["2018-08",201.9],["2018-09",201.9],["2018-10",201.9],["2018-11",201.9],["2018-12",202.0],["2019-01",205.9],["2019-02",206.0],["2019-03",206.1],["2019-04",206.6],["2019-05",207.0],["2019-06",207.2],["2019-07",207.2],["2019-08",207.2],["2019-09",207.5],["2019-10",207.5],["2019-11",207.5],["2019-12",207.5],["2020-01",212.3],["2020-02",212.3],["2020-03",212.3],["2020-04",212.3],["2020-05",211.4],["2020-06",211.4],["2020-07",211.4],["2020-08",211.4],["2020-09",211.4],["2020-10",211.0],["2020-11",211.0],["2020-12",211.0],["2021-01",214.8],["2021-02",214.8],["2021-03",221.3],["2021-04",221.3],["2021-05",221.1],["2021-06",221.1],["2021-07",222.35],["2021-08",222.35],["2021-09",234.24],["2021-10",234.257],["2021-11",239.321],["2021-12",239.371],["2022-01",247.964],["2022-02",248.298],["2022-03",248.298],["2022-04",248.298],["2022-05",248.298],["2022-06",249.4],["2022-07",250.239],["2022-08",250.239],["2022-09",250.239],["2022-10",250.239],["2022-11",256.03],["2022-12",256.03],["2023-01",278.523],["2023-02",277.779],["2023-03",277.779],["2023-04",277.779],["2023-05",279.324],["2023-06",279.324],["2023-07",278.875],["2023-08",280.052],["2023-09",274.106],["2023-10",274.2],["2023-11",272.617],["2023-12",272.471],["2024-01",282.193],["2024-02",283.099],["2024-03",283.192],["2024-04",281.131],["2024-05",281.678],["2024-06",281.955],["2024-07",291.066],["2024-08",290.257],["2024-09",290.264],["2024-10",291.474],["2024-11",291.403],["2024-12",291.586],["2025-01",295.532],["2025-02",296.181],["2025-03",296.921],["2025-04",296.938],["2025-05",297.608],["2025-06",297.624],["2025-07",297.203],["2025-08",297.065],["2025-09",296.931],["2025-10",297.231],["2025-11",297.251],["2025-12",298.273],["2026-01",306.179],["2026-02",308.59],["2026-03",306.021],["2026-04",306.089],["2026-05",306.166],["2026-06",306.309],["2026-07",306.407],["2026-08",306.469],["2026-09",306.687],["2026-10",306.849]]},"PALUMUSDM":{"id":"PALUMUSDM","name":"Aluminum","group":"Commodities","unit":"$/t","direction":1,"publisher":"International Monetary Fund, Primary Commodity Prices","publisher_url":"https://www.imf.org/en/Research/commodity-prices","source":"https://fred.stlouisfed.org/series/PALUMUSDM","latest_month":"2026-09","latest":3283.05,"change":{"m1":1.0131933590144415,"m3":-4.530584352327082,"m12":23.679590729634437},"cost_change":{"m1":1.0131933590144415,"m3":-4.530584352327082,"m12":23.679590729634437},"signal":"Alert","low":1459.93,"high":3658.22,"range_pct":82.93355289793432,"forecast":[{"month":"2026-10","mid":3283.0499999999975,"lo":3065.3081755838816,"hi":3506.5321893649725},{"month":"2026-11","mid":3283.0499999999975,"lo":3020.049921910468,"hi":3708.480288353962},{"month":"2026-12","mid":3283.0499999999975,"lo":2972.058124602298,"hi":3820.341078716544},{"month":"2027-01","mid":3283.0499999999975,"lo":2968.598283320853,"hi":3870.2354367527078},{"month":"2027-02","mid":3283.0499999999975,"lo":2959.1288460329165,"hi":3962.4686279207954},{"month":"2027-03","mid":3283.0499999999975,"lo":2928.211557309596,"hi":4093.190685556888}],"forecast_6m_pct":-7.771561172376096e-14,"forecast_6m_cost":-7.771561172376096e-14,"backtest":{"ets":{"h1":4.134304305543952,"h3":9.335375293542482,"h6":14.426326311194018,"avg":9.890155551680634},"naive":{"h1":3.9184713972539176,"h3":8.224022974593018,"h6":10.596951445001533,"avg":8.021541281239152},"n_origins_h3":54,"n_origins_h6":51,"coverage80":{"h3":87.8048780487805,"n3":41,"h6":91.42857142857143,"n6":35},"chosen":"naive"},"gaps":[],"series":[["2018-01",2209.73],["2018-02",2181.79],["2018-03",2069.24],["2018-04",2254.69],["2018-05",2299.67],["2018-06",2237.62],["2018-07",2082.24],["2018-08",2051.51],["2018-09",2026.46],["2018-10",2029.86],["2018-11",1938.51],["2018-12",1920.38],["2019-01",1853.72],["2019-02",1862.99],["2019-03",1871.21],["2019-04",1845.43],["2019-05",1781.26],["2019-06",1755.95],["2019-07",1796.99],["2019-08",1740.68],["2019-09",1753.51],["2019-10",1725.96],["2019-11",1774.79],["2019-12",1771.38],["2020-01",1773.09],["2020-02",1688.1],["2020-03",1610.89],["2020-04",1459.93],["2020-05",1466.37],["2020-06",1568.57],["2020-07",1643.81],["2020-08",1738.56],["2020-09",1743.77],["2020-10",1806.1],["2020-11",1935.28],["2020-12",2014.67],["2021-01",2003.98],["2021-02",2078.59],["2021-03",2190.48],["2021-04",2319.39],["2021-05",2434.78],["2021-06",2446.65],["2021-07",2497.64],["2021-08",2602.99],["2021-09",2834.56],["2021-10",2934.39],["2021-11",2636.45],["2021-12",2695.53],["2022-01",3005.98],["2022-02",3245.79],["2022-03",3498.37],["2022-04",3246.99],["2022-05",2839.51],["2022-06",2575.67],["2022-07",2408.42],["2022-08",2433.92],["2022-09",2224.76],["2022-10",2255.54],["2022-11",2350.72],["2022-12",2398.21],["2023-01",2494.9],["2023-02",2416.18],["2023-03",2296.42],["2023-04",2338.13],["2023-05",2274.01],["2023-06",2184.75],["2023-07",2159.73],["2023-08",2135.58],["2023-09",2184.67],["2023-10",2194.39],["2023-11",2202.26],["2023-12",2192.01],["2024-01",2201.57],["2024-02",2179.46],["2024-03",2229.44],["2024-04",2499.23],["2024-05",2566.32],["2024-06",2497.61],["2024-07",2349.13],["2024-08",2352.47],["2024-09",2457.48],["2024-10",2595.58],["2024-11",2582.19],["2024-12",2540.88],["2025-01",2571.37],["2025-02",2655.77],["2025-03",2651.6],["2025-04",2367.8],["2025-05",2447.34],["2025-06",2525.96],["2025-07",2606.37],["2025-08",2598.74],["2025-09",2654.48],["2025-10",2793.09],["2025-11",2819.06],["2025-12",2875.9],["2026-01",3133.98],["2026-02",3065.19],["2026-03",3372.95],["2026-04",3594.38],["2026-05",3658.22],["2026-06",3438.85],["2026-07",3158.27],["2026-08",3250.12],["2026-09",3283.05]]}}};
+const ICON = { Alert: "!", Watch: "▲", Stable: "–", Opportunity: "✓" };
+const ORDER = ["Alert", "Watch", "Opportunity", "Stable"];
+const ACTIONS = {
+  Alert: "Costs rising fast. Lock in pricing or extend contracts now, and expect supplier increase notices.",
+  Watch: "Costs trending up. Check contract escalation clauses and pull forward planned buys.",
+  Opportunity: "Costs easing. Ask suppliers to pass through decreases and rebid before the next renewal.",
+  Stable: "No action needed. Keep the standard reorder schedule.",
+};
+const TH = D.thresholds;
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const mLabel = (m, long) => new Date(m + "-15T12:00:00").toLocaleString("en-US", { month: long ? "long" : "short", year: long ? "numeric" : "2-digit" });
+const sig = s => `<span class="sig ${s}"><span class="ic" aria-hidden="true">${ICON[s]}</span>${s}</span>`;
+const pct = (v, d = 1) => { if (v === null || v === undefined || isNaN(v)) return "—"; const r = +v.toFixed(d); return (r > 0 ? "+" : r < 0 ? "−" : "") + Math.abs(r).toFixed(d) + "%"; };
+const cls = c => c === null || c === undefined ? "fl" : c > 0.25 ? "up" : c < -0.25 ? "dn" : "fl";
+function fmt(s, v) {
+  if (v === null || v === undefined) return "—";
+  const u = s.unit;
+  if (u === "index") return v < 10 ? v.toFixed(3) : v.toFixed(1);
+  if (u === "$/t") return "$" + Math.round(v).toLocaleString("en-US");
+  if (u === "¢/lb") return v.toFixed(1) + "¢";
+  if (u.startsWith("$/")) return "$" + v.toFixed(2);
+  if (u === "KRW") return v.toFixed(0);
+  if (u === "JPY" || u === "TWD") return v.toFixed(2);
+  return v.toFixed(4);
+}
+const unitLbl = s => s.unit === "index" ? "index" : ["MXN","JPY","TWD","KRW","CNY","CAD"].includes(s.unit) ? s.unit + " per USD" : s.unit === "USD" ? "USD per EUR" : s.unit;
+function spark(s, n = 24) {
+  const pts = s.series.filter(p => p[1] !== null).slice(-n).map(p => p[1]);
+  const W = 96, H = 24, lo = Math.min(...pts), hi = Math.max(...pts);
+  const x = i => i / (pts.length - 1) * (W - 4) + 2, y = v => H - 3 - (v - lo) / (hi - lo || 1) * (H - 6);
+  const d = pts.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1)).join("");
+  return `<span class="spark"><svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round"/><circle cx="${x(pts.length - 1)}" cy="${y(pts[pts.length - 1])}" r="2.4" fill="var(--accent)"/></svg></span>`;
+}
+const money = v => (Math.round(v) < 0 ? "−$" : "$") + Math.abs(Math.round(v)).toLocaleString("en-US");
+const pubList = ids => [...new Map(ids.map(i => D.series[i]).map(s => [s.publisher, s.publisher_url])).entries()];
+
+/* sortable tables: header cells carry data-sort="key"; rows are re-rendered by the caller */
+function sortable(table, rows, render, initial) {
+  let key = initial[0], dir = initial[1];
+  const go = () => {
+    const sorted = [...rows].sort((a, b) => {
+      const x = a.sort[key], y = b.sort[key];
+      if (x === y) return 0; if (x === null || x === undefined) return 1; if (y === null || y === undefined) return -1;
+      return (typeof x === "string" ? x.localeCompare(y) : x - y) * dir;
+    });
+    table.querySelectorAll("th[data-sort]").forEach(th => th.setAttribute("aria-sort", th.dataset.sort === key ? (dir > 0 ? "ascending" : "descending") : "none"));
+    render(sorted);
+  };
+  table.querySelector("thead").addEventListener("click", e => {
+    const th = e.target.closest("th[data-sort]"); if (!th) return;
+    if (th.dataset.sort === key) dir = -dir; else { key = th.dataset.sort; dir = th.dataset.first === "asc" ? 1 : -1; }
+    go();
+  });
+  go();
+  return { refresh: r => { rows = r; go(); } };
+}
+
+const methodHTML = ids => `
+  <div class="card method" id="method">
+    <h2>Method and sources</h2>
+    <p><b>Cost impact.</b> Every series is converted to what it means for a US buyer: for prices, a rise is a cost increase; for currencies quoted as foreign units per dollar, a rise is a stronger dollar and cheaper imports, so the sign flips (USD per euro keeps its sign). Industry figures are the <b>median</b> driver, so one volatile input such as jet fuel cannot dominate.</p>
+    <div class="scroll"><table class="t"><thead><tr><th class="l">Group</th><th class="l">Alert</th><th class="l">Watch</th><th class="l">Opportunity</th></tr></thead><tbody>
+      ${Object.entries(TH).map(([g, t]) => `<tr><td class="l">${g}</td><td class="l">3 mo ≥ +${t[0]}% or 12 mo ≥ +${t[1]}%</td><td class="l">3 mo ≥ +${t[2]}% or 12 mo ≥ +${t[3]}%</td><td class="l">3 mo ≤ ${t[4]}%</td></tr>`).join("")}
+    </tbody></table></div>
+    <p><b>Forecasts.</b> Each series gets a damped-trend exponential smoothing model on log prices (Gardner and McKenzie, 1985; Hyndman and Athanasopoulos, <i>Forecasting: Principles and Practice</i>, 3rd ed., ch. 8). It is tested against the naive forecast (no change from the latest value) in a rolling-origin backtest (Tashman, 2000): the model is refit every month since December 2020 and scored on what actually happened 1 to 6 months later, using mean absolute percentage error (MAPE) from January 2022. Where the naive forecast was more accurate, the page publishes the naive forecast, which is common for commodity prices and exchange rates (Meese and Rogoff, 1983).</p>
+    <p><b>Ranges.</b> The 80% range is the 10th to 90th percentile of the chosen method's past errors at each horizon (Williams and Goodman, 1971). "Hit rate" tests it honestly: for each month since January 2023, the range is rebuilt from errors known at the time and checked against the actual outcome. A well-calibrated range hits about 80%.</p>
+    <p><b>Lead/lag and correlation.</b> Lead/lag compares monthly log changes of one driver with another 0 to 6 months later and lists pairs where a lagged correlation beats the same-month one and clears a rough significance screen of |r| &gt; 2/√n. Correlations use 12-month % changes since January 2019. Both describe history, not cause and effect.</p>
+    <p><b>Data handling.</b> Daily and weekly series (exchange rates, crude oil, jet fuel, diesel) are averaged to monthly. IMF commodity prices are released about a month after BLS data. October 2025 is missing for two BLS consumer price series because collection stopped during the federal government shutdown; that month is interpolated for calculations and left blank in charts. Every value was cross-checked against FRED's own annual and quarterly averages.</p>
+    <h2 style="margin-top:6px">Data publishers</h2>
+    <ul>${pubList(ids).map(([n, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${esc(n)}</a></li>`).join("")}</ul>
+    <p class="note">Retrieved through FRED, Federal Reserve Bank of St. Louis. Series links are in the tables. Signals, forecasts and actions are illustrative analysis for purchasing decisions, not financial advice.</p>
+  </div>`;
+
+const app = document.getElementById("app");
+const ALL = Object.values(D.series);
+
+/* ------------------------------ HUB ------------------------------ */
+function hub() {
+  const inds = D.industries;
+  const hot = [...inds].sort((a, b) => b.pressure_12m - a.pressure_12m);
+  const nA = ALL.filter(s => s.signal === "Alert").length;
+  const months = [...new Set(ALL.map(s => s.latest_month))].sort();
+  app.innerHTML = `
+  <div class="top">
+    <div>
+      <h1>Industry Market Watch</h1>
+      <p class="sub">Input-cost pressure for ${inds.length} industries from ${ALL.length} official price, wage and currency series, with 6-month forecasts, backtested accuracy and buying signals.</p>
+    </div>
+    <span class="pill"><i></i>Updated ${esc(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>
+  </div>
+  <div class="kpis">
+    <div class="card kpi"><div class="k">Most cost pressure, 12 mo</div><div class="n">${esc(hot[0].name)}</div><div class="d">Median driver ${pct(hot[0].pressure_12m)}</div></div>
+    <div class="card kpi"><div class="k">Least cost pressure, 12 mo</div><div class="n">${esc(hot[hot.length - 1].name)}</div><div class="d">Median driver ${pct(hot[hot.length - 1].pressure_12m)}</div></div>
+    <div class="card kpi"><div class="k">Drivers on Alert</div><div class="n">${nA} of ${ALL.length}</div><div class="d">${ALL.filter(s => s.signal === "Opportunity").length} flagged as buying opportunities</div></div>
+    <div class="card kpi"><div class="k">Forecasts that beat "no change"</div><div class="n">${ALL.filter(s => s.backtest.chosen === "ets").length} of ${ALL.length}</div><div class="d">The rest publish a flat, naive forecast</div></div>
+  </div>
+
+  <div class="card">
+    <div class="head"><h2>Industries</h2><span class="note">Click a column to sort · median of each industry's cost drivers · red = rising costs</span></div>
+    <div class="scroll"><table class="t" id="ind"><thead><tr>
+      <th class="l" data-sort="name" data-first="asc">Industry</th>
+      <th class="l" data-sort="alerts">Signals</th>
+      <th data-sort="p3">3 mo</th><th data-sort="p12">12 mo</th><th data-sort="f6">Next 6 mo (fcst)</th>
+      <th class="l" data-sort="topv">Biggest 12-mo riser</th><th class="l">Drivers</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="card">
+    <div class="head"><h2>All cost drivers</h2>
+      <div class="filters" id="gf"></div>
+    </div>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><input type="search" id="q" placeholder="Search drivers or series IDs" aria-label="Search drivers"><span class="note" id="cnt"></span></div>
+    <div class="scroll"><table class="t" id="drv"><thead><tr>
+      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="group" data-first="asc">Group</th><th data-sort="latest_month">Latest</th>
+      <th data-sort="m1">1 mo</th><th data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th><th class="l" data-sort="sigr">Signal</th>
+      <th data-sort="f6">6-mo fcst</th><th data-sort="mape">Backtest error, 3 mo</th><th class="l">24 mo</th><th class="l">Used in</th></tr></thead><tbody></tbody></table></div>
+    <p class="note">Changes are raw % changes; color shows cost impact. Backtest error is MAPE of the published method 3 months ahead, with the naive forecast's error alongside.</p>
+  </div>
+  ${methodHTML(Object.keys(D.series))}`;
+
+  const indRows = inds.map(d => ({ d, sort: { name: d.name, alerts: d.alerts * 100 + d.watches, p3: d.pressure_3m, p12: d.pressure_12m, f6: d.pressure_f6, topv: D.series[d.top_driver].cost_change.m12 } }));
+  const itb = document.querySelector("#ind tbody");
+  sortable(document.getElementById("ind"), indRows, rows => {
+    itb.innerHTML = rows.map(({ d }) => {
+      const t = D.series[d.top_driver];
+      return `<tr class="click" tabindex="0" data-href="${d.slug}/index.html">
+        <td class="l"><a href="${d.slug}/index.html" class="nm">${esc(d.name)}</a></td>
+        <td class="l"><span class="mix"><span title="Alert"><i style="background:var(--crit)"></i>${d.alerts}</span><span title="Watch"><i style="background:var(--warn)"></i>${d.watches}</span><span title="Opportunity"><i style="background:var(--good)"></i>${d.opportunities}</span><span title="Stable"><i style="background:var(--neutral)"></i>${d.series.length - d.alerts - d.watches - d.opportunities}</span></span></td>
+        <td class="${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</td><td class="${cls(d.pressure_12m)}"><b>${pct(d.pressure_12m)}</b></td><td class="${cls(d.pressure_f6)}">${pct(d.pressure_f6)}</td>
+        <td class="l">${esc(t.name)} <span class="${cls(t.cost_change.m12)}">${pct(t.cost_change.m12)}</span></td><td class="l">${d.series.length}</td></tr>`;
+    }).join("");
+  }, ["p12", -1]);
+  itb.addEventListener("click", e => { const tr = e.target.closest("tr[data-href]"); if (tr && !e.target.closest("a")) location.href = tr.dataset.href; });
+  itb.addEventListener("keydown", e => { const tr = e.target.closest("tr[data-href]"); if (tr && e.key === "Enter") location.href = tr.dataset.href; });
+
+  const usedIn = {}; inds.forEach(d => d.series.forEach(i => (usedIn[i] = usedIn[i] || []).push(d)));
+  const groups = ["All", ...new Set(ALL.map(s => s.group))];
+  let g = "All", q = "";
+  document.getElementById("gf").innerHTML = groups.map(x => `<button class="chip" aria-pressed="${x === "All"}" data-g="${esc(x)}">${esc(x)}</button>`).join("");
+  const mk = s => ({ s, sort: { name: s.name, group: s.group, latest_month: s.latest_month, m1: s.cost_change.m1, m3: s.cost_change.m3, m12: s.cost_change.m12, sigr: 4 - ORDER.indexOf(s.signal), f6: s.forecast_6m_cost, mape: s.backtest[s.backtest.chosen].h3 } });
+  const dtb = document.querySelector("#drv tbody");
+  const filt = () => ALL.filter(s => (g === "All" || s.group === g) && (!q || (s.name + " " + s.id).toLowerCase().includes(q))).map(mk);
+  const T = sortable(document.getElementById("drv"), filt(), rows => {
+    document.getElementById("cnt").textContent = `${rows.length} of ${ALL.length} drivers`;
+    dtb.innerHTML = rows.map(({ s }) => {
+      const b = s.backtest, f = s.forecast[5], ch = b.chosen;
+      return `<tr><td class="l"><span class="nm">${esc(s.name)}</span><br><a class="id" href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a></td>
+      <td class="l">${esc(s.group)}</td><td>${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+      ${["m1", "m3", "m12"].map(k => `<td class="${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
+      <td class="l">${sig(s.signal)}</td>
+      <td class="${ch === "ets" ? cls(s.forecast_6m_cost) : "fl"}">${ch === "ets" ? pct(s.forecast_6m_pct) : "Flat"}<br><span class="rng">${fmt(s, f.lo)}–${fmt(s, f.hi)}</span></td>
+      <td>${b[ch].h3.toFixed(1)}%<br><span class="rng">naive ${b.naive.h3.toFixed(1)}%</span></td>
+      <td class="l">${spark(s)}</td>
+      <td class="l">${(usedIn[s.id] || []).map(d => `<a href="${d.slug}/index.html">${esc(d.name.split(/[ ,&]/)[0])}</a>`).join(", ")}</td></tr>`;
+    }).join("");
+  }, ["m12", -1]);
+  document.getElementById("gf").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; g = b.dataset.g;
+    document.querySelectorAll("#gf .chip").forEach(c => c.setAttribute("aria-pressed", c === b)); T.refresh(filt()); });
+  document.getElementById("q").addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); T.refresh(filt()); });
+}
+
+/* ---------------------------- INDUSTRY ---------------------------- */
+function industry() {
+  const d = D.industry, S = d.series.map(i => D.series[i]);
+  const months = [...new Set(S.map(s => s.latest_month))].sort();
+  const acts = S.filter(s => s.signal === "Alert" || s.signal === "Opportunity")
+    .sort((a, b) => ORDER.indexOf(a.signal) - ORDER.indexOf(b.signal) || Math.abs(b.cost_change.m3) - Math.abs(a.cost_change.m3));
+  const ets = S.filter(s => s.backtest.chosen === "ets");
+  app.innerHTML = `
+  <div class="crumb"><a href="../index.html">← All industries</a></div>
+  <div class="top">
+    <div><h1>${esc(d.name)}</h1><p class="sub">${esc(d.blurb)}</p></div>
+    <span class="pill"><i></i>Updated ${esc(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>
+  </div>
+  <div class="kpis">
+    <div class="card kpi"><div class="k">Median driver, 3 mo</div><div class="n ${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</div><div class="d">cost impact</div></div>
+    <div class="card kpi"><div class="k">Median driver, 12 mo</div><div class="n ${cls(d.pressure_12m)}">${pct(d.pressure_12m)}</div><div class="d">cost impact</div></div>
+    <div class="card kpi"><div class="k">Forecast, next 6 mo</div><div class="n ${cls(d.pressure_f6)}">${pct(d.pressure_f6)}</div><div class="d">${ets.length} of ${S.length} drivers have a model that beat "no change"</div></div>
+    <div class="card kpi"><div class="k">Signals</div><div class="n">${d.alerts} Alert</div><div class="d">${d.watches} Watch · ${d.opportunities} Opportunity · ${S.length - d.alerts - d.watches - d.opportunities} Stable</div></div>
+  </div>
+  <div class="card"><h2>What to do now</h2>
+    <div class="acts">${acts.map(s => {
+      const why = s.group === "Currency"
+        ? `Dollar ${s.cost_change.m3 < 0 ? "up" : "down"} ${Math.abs(s.cost_change.m3).toFixed(1)}% in cost terms over 3 months.`
+        : `${s.change.m3 > 0 ? "Up" : "Down"} ${Math.abs(s.change.m3).toFixed(1)}% in 3 months, ${pct(s.change.m12)} over 12.`;
+      return `<div class="act">${sig(s.signal)}<div><b>${esc(s.name)}:</b> <span>${why} ${ACTIONS[s.signal]}</span></div></div>`;
+    }).join("") || `<p class="note">Nothing flagged Alert or Opportunity right now. ${ACTIONS.Stable}</p>`}</div>
+  </div>
+  <div class="card">
+    <div class="head"><h2>Cost drivers</h2><span class="note">Click a row to chart it · sort by any column</span></div>
+    <div class="scroll"><table class="t" id="drv"><thead><tr>
+      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="sigr">Signal</th><th data-sort="latest_month">Latest</th>
+      <th data-sort="m1">1 mo</th><th data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th>
+      <th data-sort="f6">6-mo forecast</th><th data-sort="mape">Error, 3 mo ahead</th><th data-sort="hit">80% range hit rate</th><th class="l">24 mo</th></tr></thead><tbody></tbody></table></div>
+  </div>
+  <div class="card" id="detail">
+    <div class="head"><div><h2 id="d-name"></h2><span class="note" id="d-sub"></span></div>
+      <div class="seg" id="range" role="group" aria-label="Time range"><button data-r="24">2Y</button><button data-r="48" aria-pressed="true">4Y</button><button data-r="999">Since 2018</button></div></div>
+    <div class="legend"><span><i></i>Actual</span><span><i class="dash"></i>Forecast</span><span><i class="band"></i>80% range</span></div>
+    <div class="fig" id="fig"></div>
+    <div class="facts" id="d-facts"></div>
+  </div>
+  <div class="card" id="esc">
+    <div class="head"><h2>Price escalation calculator</h2><span class="note">Index-linked price adjustment, the formula used in most escalation clauses</span></div>
+    <div class="calc">
+      <div style="display:grid;gap:12px">
+        <div class="row">
+          <label for="e-base">Base price ($)<input type="number" id="e-base" value="100000" min="0" step="100" style="width:140px"></label>
+          <label for="e-from">Base month<select id="e-from"></select></label>
+          <label for="e-to">Adjust to<select id="e-to"></select></label>
+        </div>
+        <div style="display:grid;gap:6px" id="e-comps"></div>
+        <div class="row"><button class="btn" id="e-add" type="button">Add cost component</button><span class="note" id="e-fixed"></span></div>
+      </div>
+      <div class="out" id="e-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="two">
+    <div class="card"><div class="head"><h2>Lead/lag</h2><span class="note">Monthly changes, 2018 on</span></div><div id="ll"></div></div>
+    <div class="card"><div class="head"><h2>Correlation of 12-mo changes</h2><span class="note">Since Jan 2019</span></div><div class="scroll" id="corr"></div></div>
+  </div>
+  ${methodHTML(d.series)}`;
+
+  /* driver table */
+  let selId = S.slice().sort((a, b) => (b.cost_change.m3 ?? -99) - (a.cost_change.m3 ?? -99))[0].id, range = 48;
+  const tb = document.querySelector("#drv tbody");
+  const rows = S.map(s => ({ s, sort: { name: s.name, sigr: 4 - ORDER.indexOf(s.signal), latest_month: s.latest_month, m1: s.cost_change.m1, m3: s.cost_change.m3, m12: s.cost_change.m12, f6: s.forecast_6m_cost, mape: s.backtest[s.backtest.chosen].h3, hit: s.backtest.coverage80.h3 } }));
+  sortable(document.getElementById("drv"), rows, r => {
+    tb.innerHTML = r.map(({ s }) => {
+      const b = s.backtest, f = s.forecast[5], ch = b.chosen, beat = ch === "ets";
+      return `<tr class="click${s.id === selId ? " sel" : ""}" tabindex="0" data-id="${s.id}">
+        <td class="l"><span class="nm">${esc(s.name)}</span><br><span class="id">${esc(s.id)} · ${esc(s.group)}</span></td>
+        <td class="l">${sig(s.signal)}</td>
+        <td>${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+        ${["m1", "m3", "m12"].map(k => `<td class="${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
+        <td>${beat ? `<span class="${cls(s.forecast_6m_cost)}">${fmt(s, f.mid)} (${pct(s.forecast_6m_pct)})</span>` : `<span class="fl">${fmt(s, f.mid)} (flat)</span>`}<br><span class="rng">${fmt(s, f.lo)} – ${fmt(s, f.hi)} by ${mLabel(f.month)}</span></td>
+        <td><span class="${beat ? "better" : ""}">${b[ch].h3.toFixed(1)}%</span><br><span class="rng">${beat ? "model; naive " + b.naive.h3.toFixed(1) + "%" : "naive; model " + b.ets.h3.toFixed(1) + "%"}</span></td>
+        <td>${b.coverage80.h3 === null ? "—" : b.coverage80.h3.toFixed(0) + "%"}<br><span class="rng">${b.coverage80.n3} tests</span></td>
+        <td class="l">${spark(s)}</td></tr>`;
+    }).join("");
+  }, ["sigr", -1]);
+  const pick = id => { selId = id; tb.querySelectorAll("tr").forEach(tr => tr.classList.toggle("sel", tr.dataset.id === id)); chart(); };
+  tb.addEventListener("click", e => { const tr = e.target.closest("tr[data-id]"); if (tr) { pick(tr.dataset.id); document.getElementById("detail").scrollIntoView({ behavior: "smooth", block: "nearest" }); } });
+  tb.addEventListener("keydown", e => { const tr = e.target.closest("tr[data-id]"); if (tr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); pick(tr.dataset.id); } });
+  document.getElementById("range").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; range = +b.dataset.r;
+    document.querySelectorAll("#range button").forEach(x => x.setAttribute("aria-pressed", x === b)); chart(); });
+
+  function chart() {
+    const s = D.series[selId], b = s.backtest;
+    document.getElementById("d-name").innerHTML = `${esc(s.name)} &nbsp;${sig(s.signal)}`;
+    document.getElementById("d-sub").textContent = `${unitLbl(s)} · ${s.publisher}`;
+    const hist = s.series.slice(-range - 1), fc = s.forecast;
+    const pts = [...hist.map(p => ({ m: p[0], v: p[1] })), ...fc.map(f => ({ m: f.month, f }))];
+    const box = document.getElementById("fig"), W = box.clientWidth, H = box.clientHeight, narrow = W < 520;
+    const m = { l: 54, r: 14, t: 12, b: 26 };
+    const vals = [...hist.map(p => p[1]).filter(v => v !== null), ...fc.flatMap(f => [f.lo, f.hi])];
+    let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+    const n = pts.length, x = i => m.l + i / (n - 1) * (W - m.l - m.r), y = v => m.t + (1 - (v - lo) / (hi - lo)) * (H - m.t - m.b);
+    let g = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(s.name)} history and 6-month forecast">`;
+    for (let i = 0; i <= 5; i++) { const v = lo + (hi - lo) * i / 5;
+      g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end">${fmt(s, v)}</text>`; }
+    const step = Math.ceil(n / (narrow ? 4 : 9));
+    pts.forEach((p, i) => { if (i % step === 0 && n - 1 - i >= step * 0.6 || i === n - 1) g += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === n - 1 ? "end" : "middle"}">${mLabel(p.m)}</text>`; });
+    const h0 = hist.length - 1;
+    g += `<line x1="${x(h0)}" x2="${x(h0)}" y1="${m.t}" y2="${H - m.b}" stroke="var(--border)"/>`;
+    const lastV = hist[h0][1];
+    const band = [[h0, lastV, lastV], ...fc.map((f, k) => [h0 + 1 + k, f.lo, f.hi])];
+    g += `<path d="${band.map((p, i) => (i ? "L" : "M") + x(p[0]).toFixed(1) + "," + y(p[2]).toFixed(1)).join("")}${band.slice().reverse().map(p => "L" + x(p[0]).toFixed(1) + "," + y(p[1]).toFixed(1)).join("")}Z" fill="var(--accent-soft)" stroke="none"/>`;
+    let d1 = "", pen = false;
+    hist.forEach((p, i) => { if (p[1] === null) { pen = false; return; } d1 += (pen ? "L" : "M") + x(i).toFixed(1) + "," + y(p[1]).toFixed(1); pen = true; });
+    g += `<path d="${d1}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
+    g += `<path d="M${x(h0)},${y(lastV)}${fc.map((f, k) => "L" + x(h0 + 1 + k).toFixed(1) + "," + y(f.mid).toFixed(1)).join("")}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4"/>`;
+    g += `<circle cx="${x(h0)}" cy="${y(lastV)}" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`;
+    g += `<line id="xh" y1="${m.t}" y2="${H - m.b}" stroke="var(--text-3)" stroke-dasharray="3 3" opacity="0"/><rect id="hit" x="${m.l}" y="0" width="${W - m.l - m.r}" height="${H}" fill="transparent"/></svg><div class="tip" id="tip"></div>`;
+    box.innerHTML = g;
+    const svg = box.querySelector("svg"), tip = box.querySelector("#tip"), xh = svg.querySelector("#xh");
+    svg.querySelector("#hit").addEventListener("pointermove", e => {
+      const r = svg.getBoundingClientRect(), i = Math.max(0, Math.min(n - 1, Math.round((e.clientX - r.left - m.l) / (W - m.l - m.r) * (n - 1))));
+      const p = pts[i]; xh.setAttribute("x1", x(i)); xh.setAttribute("x2", x(i)); xh.setAttribute("opacity", 1);
+      if (p.f) tip.innerHTML = `<b>${mLabel(p.m, true)} forecast</b><br>${fmt(s, p.f.mid)} · 80% range ${fmt(s, p.f.lo)}–${fmt(s, p.f.hi)}`;
+      else { const j = s.series.findIndex(q => q[0] === p.m), prev = s.series[j - 12];
+        tip.innerHTML = `<b>${mLabel(p.m, true)}</b><br>${p.v === null ? "Not published" : fmt(s, p.v)}${p.v !== null && prev && prev[1] ? ` · ${pct((p.v / prev[1] - 1) * 100)} vs. year before` : ""}`; }
+      tip.style.opacity = 1;
+      tip.style.left = Math.max(0, Math.min(W - tip.offsetWidth, x(i) + 12)) + "px";
+      tip.style.top = "8px";
+    });
+    svg.querySelector("#hit").addEventListener("pointerleave", () => { tip.style.opacity = 0; xh.setAttribute("opacity", 0); });
+    const pos = s.range_pct, f6 = fc[5];
+    document.getElementById("d-facts").innerHTML = [
+      ["Latest", `${fmt(s, s.latest)} (${mLabel(s.latest_month, true)})`],
+      ["Range since Jan 2018", `${fmt(s, s.low)} – ${fmt(s, s.high)}; ${pos >= 90 ? "near its high" : pos <= 10 ? "near its low" : pos.toFixed(0) + "% of the way up"}`],
+      [`Forecast for ${mLabel(f6.month, true)}`, `${fmt(s, f6.mid)} (${b.chosen === "ets" ? pct(s.forecast_6m_pct) : "flat, naive"}); 80% range ${fmt(s, f6.lo)} – ${fmt(s, f6.hi)}`],
+      ["Backtest MAPE, 1 / 3 / 6 mo", `Model ${b.ets.h1.toFixed(1)} / ${b.ets.h3.toFixed(1)} / ${b.ets.h6.toFixed(1)}%<br>Naive ${b.naive.h1.toFixed(1)} / ${b.naive.h3.toFixed(1)} / ${b.naive.h6.toFixed(1)}%`],
+      ["80% range hit rate", `${b.coverage80.h3?.toFixed(0) ?? "—"}% at 3 mo, ${b.coverage80.h6?.toFixed(0) ?? "—"}% at 6 mo`],
+      ["Source", `<a href="${s.source}" target="_blank" rel="noopener">FRED ${esc(s.id)}</a> · <a href="${s.publisher_url}" target="_blank" rel="noopener">${esc(s.publisher.split(",")[0])}</a>`],
+    ].map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+  }
+
+  /* escalation calculator */
+  const allMonths = [...new Set(S.flatMap(s => s.series.map(p => p[0])))].sort();
+  const fMonths = S[0].forecast.map(f => f.month);
+  const val = (s, mth) => { const p = s.series.find(q => q[0] === mth); if (p && p[1] !== null) return { v: p[1], est: false };
+    const f = s.forecast.find(q => q.month === mth); if (f) return { v: f.mid, lo: f.lo, hi: f.hi, est: true };
+    if (p) { const i = s.series.indexOf(p), a = s.series[i - 1], c = s.series[i + 1]; if (a && c && a[1] !== null && c[1] !== null) return { v: (a[1] + c[1]) / 2, est: true }; }
+    return null; };
+  const last = S.reduce((m, s) => s.latest_month < m ? s.latest_month : m, "9999-99");
+  const defFrom = allMonths[allMonths.indexOf(last) - 12] || allMonths[0];
+  const opts = (sel, list) => list.map(mm => `<option value="${mm}"${mm === sel ? " selected" : ""}>${mLabel(mm, true)}</option>`).join("");
+  document.getElementById("e-from").innerHTML = opts(defFrom, allMonths.filter(mm => mm <= last));
+  const toList = [...allMonths.filter(mm => mm <= last), ...new Set(S.flatMap(s => s.forecast.map(f => f.month)).filter(mm => mm > last))].sort();
+  document.getElementById("e-to").innerHTML = toList.map(mm => `<option value="${mm}"${mm === last ? " selected" : ""}>${mLabel(mm, true)}${mm > last ? " (forecast)" : ""}</option>`).join("");
+  const labor = S.find(s => s.group === "Labor"), mat = S.filter(s => s.group !== "Labor" && s.group !== "Currency");
+  let comps = [[mat[0].id, 40], ...(mat[1] ? [[mat[1].id, 20]] : []), ...(labor ? [[labor.id, 25]] : [])];
+  const compsEl = document.getElementById("e-comps");
+  const drawComps = () => {
+    compsEl.innerHTML = `<div class="comp note"><span>Cost component (index)</span><span>Weight %</span><span></span></div>` + comps.map((c, i) => `
+      <div class="comp"><select id="e-c${i}" data-i="${i}" aria-label="Component ${i + 1} index">${S.map(s => `<option value="${s.id}"${s.id === c[0] ? " selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
+      <input type="number" id="e-w${i}" data-i="${i}" min="0" max="100" step="1" value="${c[1]}" aria-label="Component ${i + 1} weight percent">
+      <button type="button" data-del="${i}" aria-label="Remove component ${i + 1}">✕</button></div>`).join("");
+    calc();
+  };
+  function calc() {
+    const P0 = +document.getElementById("e-base").value || 0, a = document.getElementById("e-from").value, z = document.getElementById("e-to").value;
+    const wsum = comps.reduce((t, c) => t + (+c[1] || 0), 0), fixed = 100 - wsum;
+    document.getElementById("e-fixed").textContent = fixed >= 0 ? `Fixed (non-indexed) share: ${fixed}%` : `Weights add up to ${wsum}%; reduce them to 100% or less.`;
+    const out = document.getElementById("e-out");
+    if (fixed < 0 || a >= z) { out.innerHTML = `<p class="note">${a >= z ? "Choose an adjust-to month after the base month." : "Weights exceed 100%."}</p>`; return; }
+    let factor = fixed / 100, flo = factor, fhi = factor, anyEst = false; const lines = [];
+    for (const [id, w] of comps) {
+      const s = D.series[id], b0 = val(s, a), b1 = val(s, z);
+      if (!b0 || !b1) { lines.push(`<tr><td class="l">${esc(s.name)}</td><td colspan="3" class="note">No value for one of these months</td></tr>`); factor = NaN; continue; }
+      anyEst = anyEst || b0.est || b1.est;
+      const r = b1.v / b0.v, adj = s.direction < 0 ? 1 / r : r;   // currencies: foreign units per USD fall = cost up
+      const rl = (b1.lo ?? b1.v) / b0.v, rh = (b1.hi ?? b1.v) / b0.v;
+      factor += w / 100 * adj;
+      flo += w / 100 * (s.direction < 0 ? 1 / rh : rl); fhi += w / 100 * (s.direction < 0 ? 1 / rl : rh);
+      lines.push(`<tr><td class="l">${esc(s.name)}</td><td>${w}%</td><td class="${cls((adj - 1) * 100)}">${pct((adj - 1) * 100)}</td><td>${P0 ? money(P0 * w / 100 * (adj - 1)) : "—"}</td></tr>`);
+    }
+    const P1 = P0 * factor, isF = z > last;
+    out.innerHTML = isNaN(factor) ? `<table class="t">${lines.join("")}</table>` : `
+      <div class="note">Adjusted price, ${mLabel(z, true)}${isF ? " (forecast)" : ""}</div>
+      <div class="big">$${Math.round(P1).toLocaleString("en-US")}</div>
+      <div class="${cls((factor - 1) * 100)}"><b>${pct((factor - 1) * 100, 2)}</b> vs. base of $${Math.round(P0).toLocaleString("en-US")} (${mLabel(a, true)})</div>
+      ${isF ? `<div class="note">If every indexed component lands at its 80% range edge: $${Math.round(P0 * flo).toLocaleString("en-US")} to $${Math.round(P0 * fhi).toLocaleString("en-US")}. Treat as a stress test, since inputs rarely all hit their extremes together.</div>` : ""}
+      <div class="scroll"><table class="t"><thead><tr><th class="l">Component</th><th>Weight</th><th>Index change</th><th>$ impact</th></tr></thead><tbody>${lines.join("")}
+      <tr><td class="l">Fixed share</td><td>${fixed}%</td><td>0.0%</td><td>$0</td></tr></tbody></table></div>
+      <div class="formula">P₁ = P₀ × [ F + Σ wᵢ × Iᵢ(${z}) / Iᵢ(${a}) ]</div>
+      ${anyEst ? `<div class="note">Uses a forecast or interpolated value for at least one month.</div>` : ""}`;
+  }
+  compsEl.addEventListener("change", e => { const i = +e.target.dataset.i; if (e.target.tagName === "SELECT") comps[i][0] = e.target.value; calc(); });
+  compsEl.addEventListener("input", e => { if (e.target.type === "number") { comps[+e.target.dataset.i][1] = +e.target.value; calc(); } });
+  compsEl.addEventListener("click", e => { const b = e.target.closest("[data-del]"); if (b) { comps.splice(+b.dataset.del, 1); drawComps(); } });
+  document.getElementById("e-add").addEventListener("click", () => { if (comps.length < 6) { comps.push([S.find(s => !comps.some(c => c[0] === s.id))?.id || S[0].id, 0]); drawComps(); } });
+  ["e-base", "e-from", "e-to"].forEach(id => document.getElementById(id).addEventListener("input", calc));
+  drawComps();
+
+  /* lead/lag */
+  document.getElementById("ll").innerHTML = d.leadlag.length ? `<div class="scroll"><table class="t"><thead><tr><th class="l">Leads</th><th class="l">Follows</th><th>Lag</th><th>r (lagged)</th><th>r (same month)</th></tr></thead><tbody>
+    ${d.leadlag.map(l => `<tr><td class="l">${esc(D.series[l.lead].name)}</td><td class="l">${esc(D.series[l.follow].name)}</td><td>${l.lag} mo</td><td><b>${l.r.toFixed(2)}</b></td><td>${l.r0.toFixed(2)}</td></tr>`).join("")}
+    </tbody></table></div><p class="note">Read the first row as: monthly moves in "${esc(D.series[d.leadlag[0].lead].name)}" have tended to show up in "${esc(D.series[d.leadlag[0].follow].name)}" about ${d.leadlag[0].lag} month${d.leadlag[0].lag > 1 ? "s" : ""} later (n = ${d.leadlag[0].n}). Use it as an early-warning hint, not a rule.</p>`
+    : `<p class="note">No driver pair showed a lagged relationship stronger than its same-month one and the significance screen.</p>`;
+
+  /* correlation heat table */
+  const short = s => s.name.length > 18 ? s.name.slice(0, 16) + "…" : s.name;
+  document.getElementById("corr").innerHTML = `<table class="t heat"><thead><tr><th></th>${S.map(s => `<th class="rot" title="${esc(s.name)}">${esc(short(s))}</th>`).join("")}</tr></thead><tbody>
+    ${S.map((s, i) => `<tr><th class="l" style="position:static">${esc(short(s))}</th>${d.corr[i].map((r, j) => {
+      if (r === null) return `<td class="c">—</td>`;
+      const a = i === j ? 0 : Math.min(1, Math.abs(r)) * 0.55, rgb = r >= 0 ? "var(--pos)" : "var(--neg)";
+      return `<td class="c" style="background:rgba(${rgb},${a.toFixed(2)})">${i === j ? "" : r.toFixed(2)}</td>`; }).join("")}</tr>`).join("")}
+    </tbody></table><p class="note">Red = move together, green = move opposite. Currency signs are as quoted, not cost-adjusted.</p>`;
+
+  new ResizeObserver(() => chart()).observe(document.getElementById("fig"));
+  chart();
+}
+
+D.page === "hub" ? hub() : industry();
+}
+</script>
+</body>
+</html>
