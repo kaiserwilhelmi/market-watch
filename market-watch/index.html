@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procurement Market Watch</title>
+<style>
+.mw {
+  color-scheme: light;
+  --bg: #f6f5f2; --surface: #fcfcfb; --border: #e3e1db; --grid: #ebe9e4;
+  --text: #0b0b0b; --text-2: #52514e; --text-3: #7a7974;
+  --accent: #2a78d6;
+  --good: #0ca30c; --warn: #fab219; --crit: #d03b3b; --neutral: #8a8984;
+  --good-ink: #006300; --warn-ink: #8a5a00; --crit-ink: #a52222; --neutral-ink: #52514e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .mw {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --border: #33332f; --grid: #2a2a27;
+    --text: #f0efec; --text-2: #c3c2b7; --text-3: #94938b; --accent: #3987e5; --neutral: #8f8e86;
+    --good-ink: #4cc94c; --warn-ink: #fab219; --crit-ink: #f07a7a; --neutral-ink: #c3c2b7;
+  }
+}
+:root[data-theme="dark"] .mw {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --border: #33332f; --grid: #2a2a27;
+  --text: #f0efec; --text-2: #c3c2b7; --text-3: #94938b; --accent: #3987e5; --neutral: #8f8e86;
+  --good-ink: #4cc94c; --warn-ink: #fab219; --crit-ink: #f07a7a; --neutral-ink: #c3c2b7;
+}
+* { box-sizing: border-box; min-width: 0; }
+body { margin: 0; }
+.mw { background: var(--bg); color: var(--text); min-height: 100vh;
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 24px clamp(12px, 3vw, 40px) 48px; overflow-x: clip; }
+.wrap { max-width: 1240px; margin: 0 auto; }
+.mw h1 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.015em; text-wrap: balance; }
+.mw h2 { font-size: 16px; margin: 0 0 2px; }
+.sub { color: var(--text-2); margin: 0; }
+.note { color: var(--text-3); font-size: 13px; }
+.top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 20px; }
+.live { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-2); border: 1px solid var(--border);
+  background: var(--surface); border-radius: 999px; padding: 4px 10px; }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 25%, transparent); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.counts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.count .n { font-size: 30px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.count .names { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.sig { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.sig .ic { width: 16px; height: 16px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 10px; color: #fff; font-weight: 700; }
+.sig.Alert { color: var(--crit-ink); } .sig.Alert .ic { background: var(--crit); }
+.sig.Watch { color: var(--warn-ink); } .sig.Watch .ic { background: var(--warn); color: #3a2a00; }
+.sig.Stable { color: var(--neutral-ink); } .sig.Stable .ic { background: var(--neutral); }
+.sig.Opportunity { color: var(--good-ink); } .sig.Opportunity .ic { background: var(--good); }
+.actions { margin-bottom: 16px; }
+.act { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 16px; padding: 10px 0; border-top: 1px solid var(--grid); }
+.act:first-of-type { border-top: 0; }
+.act .what b { font-weight: 600; }
+.act .what span { color: var(--text-2); }
+@media (max-width: 600px) { .act { grid-template-columns: 1fr; } }
+.grouphead { display: flex; align-items: baseline; gap: 10px; margin: 22px 0 10px; }
+.grouphead h2 { font-size: 15px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+.sc { cursor: pointer; transition: border-color .15s; position: relative; }
+.sc:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
+.sc.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.sc:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sc .row1 { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.sc .nm { font-weight: 600; }
+.sc .val { font-size: 26px; font-weight: 650; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin: 6px 0 0; line-height: 1.1; }
+.sc .val small { font-size: 13px; color: var(--text-3); font-weight: 400; letter-spacing: 0; }
+.chg { display: flex; gap: 14px; font-size: 13px; font-variant-numeric: tabular-nums; margin-top: 6px; }
+.chg span { color: var(--text-3); }
+.chg b { font-weight: 600; }
+.up { color: var(--crit-ink); } .dn { color: var(--good-ink); } .fl { color: var(--text-2); }
+.spark { height: 44px; margin-top: 10px; }
+.spark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.detail { margin-top: 20px; }
+.dhead { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 13px; padding: 7px 12px; cursor: pointer; min-height: 36px; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.fig { position: relative; height: 300px; }
+.fig svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fig text { fill: var(--text-2); font-size: 11px; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; transition: opacity .1s; white-space: nowrap; z-index: 3; }
+.dfacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 14px; }
+.dfacts div { border-top: 1px solid var(--grid); padding-top: 8px; }
+.dfacts .k { font-size: 12px; color: var(--text-3); }
+.dfacts .v { font-weight: 500; font-variant-numeric: tabular-nums; }
+.method { margin-top: 16px; }
+.method p { color: var(--text-2); margin: 8px 0; }
+.method table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+.method th, .method td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--grid); }
+.method th:first-child, .method td:first-child { text-align: left; }
+.method th { color: var(--text-2); font-weight: 600; font-size: 12px; }
+.scroll { overflow-x: auto; }
+.mw a { color: var(--accent); }
+.srcs { columns: 2 260px; padding-left: 18px; margin: 8px 0; color: var(--text-2); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="mw"><div class="wrap">
+
+  <div class="top">
+    <div>
+      <h1 id="headline">Procurement Market Watch</h1>
+      <p class="sub">Tracks the material, freight and currency costs behind an office-supply buyer's prices and flags when to act.</p>
+    </div>
+    <span class="live"><i></i><span id="updated"></span></span>
+  </div>
+
+  <div class="counts" id="counts"></div>
+
+  <div class="card actions">
+    <h2>What to do now</h2>
+    <span class="note">Cost drivers flagged Alert or Opportunity, with the recommended buyer response</span>
+    <div id="actions" style="margin-top:8px"></div>
+  </div>
+
+  <div id="groups"></div>
+
+  <div class="card detail" id="detail">
+    <div class="dhead">
+      <div><h2 id="d-name"></h2><span class="note" id="d-note"></span></div>
+      <div class="seg" id="range" role="group" aria-label="Time range">
+        <button data-r="12">1Y</button><button data-r="36" aria-pressed="true">3Y</button><button data-r="999">Since 2021</button>
+      </div>
+    </div>
+    <div class="fig" id="fig"></div>
+    <div class="dfacts" id="d-facts"></div>
+  </div>
+
+  <div class="card method">
+    <h2>How signals work</h2>
+    <p>Each series is converted to its <b>cost impact</b>: for prices, a rise means higher costs; for currencies (foreign units per dollar), a rise means a stronger dollar and cheaper imports. Signals use the 3-month and 12-month cost impact:</p>
+    <div class="scroll"><table id="th-table"></table></div>
+    <p><b>Order of checks:</b> Alert first, then Opportunity (a sharp recent drop outranks an older 12-month rise), then Watch, otherwise Stable. Producer price indexes are published with a lag of about one to two months, so "latest" shows the most recent month available.</p>
+    <p><b>Updates:</b> a scheduled job downloads fresh data from the Federal Reserve Bank of St. Louis (FRED) every morning, recalculates every signal and republishes this page.</p>
+    <h2 style="margin-top:14px">Sources</h2>
+    <ul class="srcs" id="srcs"></ul>
+    <p class="note">Data: U.S. Bureau of Labor Statistics (producer price indexes), U.S. Energy Information Administration (diesel), Federal Reserve Board (exchange rates), via FRED. Signals and actions are illustrative guidance, not financial advice.</p>
+  </div>
+
+</div></div>
+
+<script>
+{
+const DATA = {"built":"2026-11-20 18:21 UTC","series":[{"id":"WPU0913","name":"Paper","group":"Materials","unit":"index","direction":1,"note":"Copy paper, printing paper and paper stock pricing.","latest_month":"2026-08","latest":282.266,"change":{"m1":-0.31044164650619877,"m3":2.119700297025773,"m12":9.951775878590507},"cost_change":{"m1":-0.31044164650619877,"m3":2.119700297025773,"m12":9.951775878590507},"range_pct":98.98434340516499,"high":283.145,"low":196.6,"signal":"Watch","action":"Costs trending up. Check contract escalation clauses and pull forward planned buys.","series":[["2021-01",196.6],["2021-02",199.1],["2021-03",201.7],["2021-04",207.4],["2021-05",209.2],["2021-06",212.0],["2021-07",217.645],["2021-08",221.072],["2021-09",223.527],["2021-10",225.618],["2021-11",228.288],["2021-12",229.376],["2022-01",231.272],["2022-02",232.067],["2022-03",233.647],["2022-04",236.757],["2022-05",238.926],["2022-06",241.249],["2022-07",243.577],["2022-08",246.295],["2022-09",247.998],["2022-10",249.997],["2022-11",249.047],["2022-12",249.606],["2023-01",248.804],["2023-02",250.607],["2023-03",249.613],["2023-04",251.521],["2023-05",250.079],["2023-06",250.148],["2023-07",248.057],["2023-08",246.618],["2023-09",248.219],["2023-10",246.876],["2023-11",246.732],["2023-12",246.932],["2024-01",247.658],["2024-02",248.356],["2024-03",247.942],["2024-04",248.98],["2024-05",250.066],["2024-06",249.772],["2024-07",251.044],["2024-08",251.082],["2024-09",251.527],["2024-10",252.863],["2024-11",251.812],["2024-12",251.58],["2025-01",250.121],["2025-02",252.79],["2025-03",253.731],["2025-04",255.162],["2025-05",254.503],["2025-06",254.05],["2025-07",256.438],["2025-08",256.718],["2025-09",256.483],["2025-10",256.275],["2025-11",255.888],["2025-12",256.366],["2026-01",256.98],["2026-02",263.831],["2026-03",264.81],["2026-04",270.864],["2026-05",276.407],["2026-06",280.52],["2026-07",283.145],["2026-08",282.266]],"source":"https://fred.stlouisfed.org/series/WPU0913"},{"id":"WPU0915","name":"Converted paper & packaging","group":"Materials","unit":"index","direction":1,"note":"Corrugated boxes, envelopes, labels and paper packaging.","latest_month":"2026-10","latest":332.572,"change":{"m1":0.0773362622812801,"m3":1.5583154435992341,"m12":4.3801943405227695},"cost_change":{"m1":0.0773362622812801,"m3":1.5583154435992341,"m12":4.3801943405227695},"range_pct":100.0,"high":332.572,"low":244.0,"signal":"Stable","action":"No action needed. Keep standard reorder schedule.","series":[["2021-01",244.0],["2021-02",245.4],["2021-03",247.4],["2021-04",249.1],["2021-05",251.3],["2021-06",252.7],["2021-07",256.472],["2021-08",259.3],["2021-09",262.977],["2021-10",267.722],["2021-11",270.396],["2021-12",271.857],["2022-01",275.274],["2022-02",279.302],["2022-03",281.221],["2022-04",285.877],["2022-05",292.425],["2022-06",295.273],["2022-07",298.296],["2022-08",301.832],["2022-09",303.24],["2022-10",305.221],["2022-11",307.236],["2022-12",308.054],["2023-01",308.79],["2023-02",309.203],["2023-03",307.812],["2023-04",307.873],["2023-05",308.582],["2023-06",307.397],["2023-07",306.877],["2023-08",305.362],["2023-09",305.232],["2023-10",304.362],["2023-11",303.829],["2023-12",302.934],["2024-01",301.877],["2024-02",302.539],["2024-03",301.536],["2024-04",302.94],["2024-05",304.383],["2024-06",304.294],["2024-07",304.877],["2024-08",306.64],["2024-09",308.678],["2024-10",309.83],["2024-11",309.699],["2024-12",309.233],["2025-01",309.608],["2025-02",310.349],["2025-03",311.7],["2025-04",313.324],["2025-05",315.886],["2025-06",315.973],["2025-07",316.967],["2025-08",317.109],["2025-09",317.394],["2025-10",318.616],["2025-11",318.65],["2025-12",318.721],["2026-01",319.093],["2026-02",317.153],["2026-03",317.42],["2026-04",318.506],["2026-05",320.846],["2026-06",323.409],["2026-07",327.469],["2026-08",330.535],["2026-09",332.315],["2026-10",332.572]],"source":"https://fred.stlouisfed.org/series/WPU0915"},{"id":"WPU066","name":"Plastic resins","group":"Materials","unit":"index","direction":1,"note":"Feeds pricing for plastic office products, bags, film and binders.","latest_month":"2026-09","latest":276.296,"change":{"m1":-1.5022637339132339,"m3":-7.67020107001194,"m12":6.516367056936789},"cost_change":{"m1":-1.5022637339132339,"m3":-7.67020107001194,"m12":6.516367056936789},"range_pct":43.282644776387194,"high":326.872,"low":237.7,"signal":"Opportunity","action":"Costs easing. Ask suppliers to pass through decreases and rebid before the next contract renewal.","series":[["2021-01",237.7],["2021-02",249.9],["2021-03",274.0],["2021-04",289.7],["2021-05",298.5],["2021-06",311.4],["2021-07",320.153],["2021-08",326.872],["2021-09",325.79],["2021-10",326.733],["2021-11",323.232],["2021-12",313.849],["2022-01",304.44],["2022-02",304.632],["2022-03",304.748],["2022-04",316.927],["2022-05",322.403],["2022-06",326.29],["2022-07",319.83],["2022-08",309.932],["2022-09",306.825],["2022-10",299.731],["2022-11",283.819],["2022-12",280.446],["2023-01",275.754],["2023-02",281.969],["2023-03",284.482],["2023-04",289.072],["2023-05",285.861],["2023-06",280.39],["2023-07",270.722],["2023-08",267.608],["2023-09",267.261],["2023-10",266.048],["2023-11",266.482],["2023-12",265.438],["2024-01",262.312],["2024-02",267.951],["2024-03",265.417],["2024-04",268.226],["2024-05",267.898],["2024-06",267.287],["2024-07",271.484],["2024-08",270.614],["2024-09",263.854],["2024-10",267.158],["2024-11",265.272],["2024-12",263.662],["2025-01",262.691],["2025-02",269.737],["2025-03",272.362],["2025-04",270.527],["2025-05",267.258],["2025-06",265.103],["2025-07",264.631],["2025-08",263.078],["2025-09",259.393],["2025-10",259.307],["2025-11",257.278],["2025-12",253.552],["2026-01",252.962],["2026-02",258.5],["2026-03",263.464],["2026-04",277.033],["2026-05",309.985],["2026-06",299.249],["2026-07",283.282],["2026-08",280.51],["2026-09",276.296]],"source":"https://fred.stlouisfed.org/series/WPU066"},{"id":"WPU1017","name":"Steel mill products","group":"Materials","unit":"index","direction":1,"note":"Drives costs for shelving, filing cabinets, furniture frames and fasteners.","latest_month":"2026-08","latest":381.162,"change":{"m1":1.6993380345950992,"m3":8.904362037388891,"m12":23.444483308071963},"cost_change":{"m1":1.6993380345950992,"m3":8.904362037388891,"m12":23.444483308071963},"range_pct":71.64009912664297,"high":449.711,"low":208.0,"signal":"Alert","action":"Costs rising fast. Lock in pricing or extend contracts now, and expect supplier increase notices.","series":[["2021-01",208.0],["2021-02",228.8],["2021-03",266.4],["2021-04",310.2],["2021-05",321.8],["2021-06",343.4],["2021-07",380.189],["2021-08",399.074],["2021-09",418.472],["2021-10",435.669],["2021-11",448.746],["2021-12",449.711],["2022-01",441.497],["2022-02",400.067],["2022-03",376.596],["2022-04",386.663],["2022-05",427.4],["2022-06",420.183],["2022-07",404.112],["2022-08",384.885],["2022-09",357.587],["2022-10",337.206],["2022-11",326.698],["2022-12",315.63],["2023-01",308.022],["2023-02",315.255],["2023-03",318.19],["2023-04",329.705],["2023-05",347.224],["2023-06",345.801],["2023-07",329.45],["2023-08",322.94],["2023-09",311.522],["2023-10",304.112],["2023-11",297.967],["2023-12",305.125],["2024-01",321.392],["2024-02",332.52],["2024-03",305.677],["2024-04",297.573],["2024-05",298.564],["2024-06",293.269],["2024-07",283.09],["2024-08",275.28],["2024-09",270.97],["2024-10",273.422],["2024-11",278.339],["2024-12",266.511],["2025-01",261.563],["2025-02",268.865],["2025-03",287.362],["2025-04",303.829],["2025-05",326.743],["2025-06",309.231],["2025-07",305.538],["2025-08",308.772],["2025-09",304.579],["2025-10",300.665],["2025-11",291.556],["2025-12",312.41],["2026-01",315.369],["2026-02",325.105],["2026-03",331.357],["2026-04",341.57],["2026-05",349.997],["2026-06",360.148],["2026-07",374.793],["2026-08",381.162]],"source":"https://fred.stlouisfed.org/series/WPU1017"},{"id":"PCU484484","name":"Truck transportation","group":"Freight & fuel","unit":"index","direction":1,"note":"What carriers charge to move freight; shows up in delivered pricing.","latest_month":"2026-10","latest":230.302,"change":{"m1":3.5474704602269647,"m3":10.13595910227778,"m12":19.980828240834803},"cost_change":{"m1":3.5474704602269647,"m3":10.13595910227778,"m12":19.980828240834803},"range_pct":100.0,"high":230.302,"low":151.8,"signal":"Alert","action":"Costs rising fast. Lock in pricing or extend contracts now, and expect supplier increase notices.","series":[["2021-01",151.8],["2021-02",154.5],["2021-03",157.4],["2021-04",159.9],["2021-05",162.6],["2021-06",163.4],["2021-07",163.969],["2021-08",166.08],["2021-09",168.53],["2021-10",171.823],["2021-11",177.063],["2021-12",179.575],["2022-01",185.887],["2022-02",190.459],["2022-03",198.15],["2022-04",200.798],["2022-05",203.759],["2022-06",202.669],["2022-07",202.126],["2022-08",198.87],["2022-09",197.733],["2022-10",196.905],["2022-11",197.51],["2022-12",196.307],["2023-01",191.078],["2023-02",193.339],["2023-03",194.625],["2023-04",185.833],["2023-05",189.015],["2023-06",187.623],["2023-07",182.644],["2023-08",181.217],["2023-09",185.925],["2023-10",186.91],["2023-11",187.062],["2023-12",183.079],["2024-01",184.262],["2024-02",184.65],["2024-03",182.824],["2024-04",183.711],["2024-05",187.023],["2024-06",186.97],["2024-07",191.387],["2024-08",185.349],["2024-09",182.892],["2024-10",180.186],["2024-11",177.704],["2024-12",182.528],["2025-01",188.648],["2025-02",187.867],["2025-03",181.628],["2025-04",185.71],["2025-05",187.171],["2025-06",183.558],["2025-07",189.746],["2025-08",191.057],["2025-09",192.514],["2025-10",191.949],["2025-11",193.999],["2025-12",190.449],["2026-01",191.864],["2026-02",192.918],["2026-03",198.245],["2026-04",209.405],["2026-05",212.3],["2026-06",209.828],["2026-07",209.107],["2026-08",215.025],["2026-09",222.412],["2026-10",230.302]],"source":"https://fred.stlouisfed.org/series/PCU484484"},{"id":"GASDESW","name":"Diesel (US retail)","group":"Freight & fuel","unit":"$/gal","direction":1,"note":"Fuel surcharges on inbound freight move with diesel.","latest_month":"2026-09","latest":6.291,"change":{"m1":15.177590626144276,"m3":25.21894904458599,"m12":67.8495197438634},"cost_change":{"m1":15.177590626144276,"m3":25.21894904458599,"m12":67.8495197438634},"range_pct":100.0,"high":6.291,"low":2.681,"signal":"Alert","action":"Costs rising fast. Lock in pricing or extend contracts now, and expect supplier increase notices.","series":[["2021-01",2.681],["2021-02",2.847],["2021-03",3.152],["2021-04",3.13],["2021-05",3.217],["2021-06",3.287],["2021-07",3.339],["2021-08",3.35],["2021-09",3.384],["2021-10",3.612],["2021-11",3.727],["2021-12",3.641],["2022-01",3.724],["2022-02",4.032],["2022-03",5.105],["2022-04",5.12],["2022-05",5.571],["2022-06",5.754],["2022-07",5.486],["2022-08",5.013],["2022-09",4.993],["2022-10",5.211],["2022-11",5.255],["2022-12",4.714],["2023-01",4.576],["2023-02",4.413],["2023-03",4.211],["2023-04",4.099],["2023-05",3.915],["2023-06",3.802],["2023-07",3.882],["2023-08",4.37],["2023-09",4.563],["2023-10",4.507],["2023-11",4.254],["2023-12",3.972],["2024-01",3.854],["2024-02",4.044],["2024-03",4.022],["2024-04",4.002],["2024-05",3.822],["2024-06",3.722],["2024-07",3.81],["2024-08",3.7],["2024-09",3.558],["2024-10",3.585],["2024-11",3.522],["2024-12",3.494],["2025-01",3.634],["2025-02",3.675],["2025-03",3.585],["2025-04",3.567],["2025-05",3.499],["2025-06",3.599],["2025-07",3.779],["2025-08",3.744],["2025-09",3.748],["2025-10",3.679],["2025-11",3.822],["2025-12",3.615],["2026-01",3.523],["2026-02",3.722],["2026-03",4.921],["2026-04",5.501],["2026-05",5.6],["2026-06",5.024],["2026-07",4.955],["2026-08",5.462],["2026-09",6.291]],"source":"https://fred.stlouisfed.org/series/GASDESW"},{"id":"DEXMXUS","name":"Mexican peso per USD","group":"Currency","unit":"MXN","direction":-1,"note":"Higher = stronger dollar = Mexican-sourced goods cost less.","latest_month":"2026-10","latest":18.4464,"change":{"m1":6.814904890124196,"m3":5.675510005327777,"m12":0.11832007207754902},"cost_change":{"m1":-6.814904890124196,"m3":-5.675510005327777,"m12":-0.11832007207754902},"range_pct":40.34690980826137,"high":20.926,"low":16.7693,"signal":"Opportunity","action":"Costs easing. Ask suppliers to pass through decreases and rebid before the next contract renewal.","series":[["2021-01",19.9412],["2021-02",20.3296],["2021-03",20.75],["2021-04",20.0376],["2021-05",19.9644],["2021-06",20.0314],["2021-07",19.9664],["2021-08",20.075],["2021-09",20.0461],["2021-10",20.4399],["2021-11",20.8698],["2021-12",20.926],["2022-01",20.5074],["2022-02",20.4578],["2022-03",20.5444],["2022-04",20.0908],["2022-05",20.0575],["2022-06",20.0101],["2022-07",20.5464],["2022-08",20.113],["2022-09",20.0689],["2022-10",19.9772],["2022-11",19.4543],["2022-12",19.6148],["2023-01",18.9705],["2023-02",18.6368],["2023-03",18.3892],["2023-04",18.0948],["2023-05",17.7489],["2023-06",17.2407],["2023-07",16.8929],["2023-08",16.9767],["2023-09",17.3067],["2023-10",18.0589],["2023-11",17.3594],["2023-12",17.1927],["2024-01",17.0932],["2024-02",17.0937],["2024-03",16.7693],["2024-04",16.8008],["2024-05",16.8033],["2024-06",18.1946],["2024-07",18.1002],["2024-08",19.1382],["2024-09",19.5963],["2024-10",19.7183],["2024-11",20.3381],["2024-12",20.2616],["2025-01",20.5367],["2025-02",20.4728],["2025-03",20.2235],["2025-04",20.0387],["2025-05",19.4573],["2025-06",19.0203],["2025-07",18.6886],["2025-08",18.7063],["2025-09",18.4789],["2025-10",18.4246],["2025-11",18.4193],["2025-12",18.0708],["2026-01",17.6446],["2026-02",17.228],["2026-03",17.77],["2026-04",17.4544],["2026-05",17.3102],["2026-06",17.3792],["2026-07",17.4557],["2026-08",17.0609],["2026-09",17.2695],["2026-10",18.4464]],"source":"https://fred.stlouisfed.org/series/DEXMXUS"},{"id":"DEXCHUS","name":"Chinese yuan per USD","group":"Currency","unit":"CNY","direction":-1,"note":"Higher = stronger dollar = China-sourced goods cost less.","latest_month":"2026-09","latest":6.7084,"change":{"m1":-0.41121717314173134,"m3":-0.9947164910416473,"m12":-5.827191689478484},"cost_change":{"m1":0.41121717314173134,"m3":0.9947164910416473,"m12":5.827191689478484},"range_pct":37.86196159833937,"high":7.3071,"low":6.3436,"signal":"Watch","action":"Costs trending up. Check contract escalation clauses and pull forward planned buys.","series":[["2021-01",6.4672],["2021-02",6.4601],["2021-03",6.5109],["2021-04",6.5186],["2021-05",6.4321],["2021-06",6.425],["2021-07",6.4763],["2021-08",6.4768],["2021-09",6.4563],["2021-10",6.4172],["2021-11",6.3889],["2021-12",6.3693],["2022-01",6.3556],["2022-02",6.3436],["2022-03",6.3446],["2022-04",6.431],["2022-05",6.699],["2022-06",6.6952],["2022-07",6.7352],["2022-08",6.8007],["2022-09",7.0195],["2022-10",7.1902],["2022-11",7.1812],["2022-12",6.9717],["2023-01",6.7904],["2023-02",6.838],["2023-03",6.8909],["2023-04",6.8876],["2023-05",6.9854],["2023-06",7.1614],["2023-07",7.1863],["2023-08",7.2486],["2023-09",7.2979],["2023-10",7.3071],["2023-11",7.2226],["2023-12",7.1402],["2024-01",7.1707],["2024-02",7.1935],["2024-03",7.2015],["2024-04",7.2374],["2024-05",7.2327],["2024-06",7.2547],["2024-07",7.2609],["2024-08",7.1475],["2024-09",7.076],["2024-10",7.0881],["2024-11",7.2063],["2024-12",7.2807],["2025-01",7.2957],["2025-02",7.2734],["2025-03",7.2493],["2025-04",7.2968],["2025-05",7.2166],["2025-06",7.1804],["2025-07",7.1741],["2025-08",7.1727],["2025-09",7.1235],["2025-10",7.12],["2025-11",7.1069],["2025-12",7.0432],["2026-01",6.9692],["2026-02",6.9064],["2026-03",6.8921],["2026-04",6.8371],["2026-05",6.7996],["2026-06",6.7758],["2026-07",6.7757],["2026-08",6.7361],["2026-09",6.7084]],"source":"https://fred.stlouisfed.org/series/DEXCHUS"}]};
+const S = DATA.series;
+const top = [...S].sort((a, b) => b.cost_change.m3 - a.cost_change.m3)[0];
+const state = { sel: top.id, range: 36 };
+const ICON = { Alert: "!", Watch: "▲", Stable: "–", Opportunity: "✓" };
+const ORDER = ["Alert", "Watch", "Opportunity", "Stable"];
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const mLabel = (m, long) => new Date(m + "-15").toLocaleString("en-US", { month: long ? "long" : "short", year: long ? "numeric" : "2-digit" });
+const sig = s => `<span class="sig ${s}"><span class="ic" aria-hidden="true">${ICON[s]}</span>${s}</span>`;
+const fmtV = s => s.unit === "$/gal" ? "$" + s.latest.toFixed(2) : s.unit === "index" ? s.latest.toFixed(1) : s.latest.toFixed(2);
+const unitLbl = s => s.unit === "index" ? "index" : s.unit === "$/gal" ? "per gallon" : s.unit + " per USD";
+const fmtVal = (s, v) => s.unit === "$/gal" ? "$" + v.toFixed(2) : v.toFixed(s.unit === "index" ? 1 : 2);
+function chg(s, k) {
+  const v = s.change[k]; if (v === null) return `<b class="fl">—</b>`;
+  const cost = s.cost_change[k], cls = cost > 0.25 ? "up" : cost < -0.25 ? "dn" : "fl";
+  return `<b class="${cls}">${v > 0 ? "+" : ""}${v.toFixed(1)}%</b>`;
+}
+const list = arr => arr.length <= 2 ? arr.join(" and ") : arr.slice(0, -1).join(", ") + " and " + arr[arr.length - 1];
+
+/* header + counts */
+const alerts = S.filter(s => s.signal === "Alert");
+document.getElementById("headline").textContent = alerts.length
+  ? `${alerts.length} of ${S.length} cost drivers on Alert: ${list(alerts.sort((a, b) => b.cost_change.m3 - a.cost_change.m3).map(s => s.name.replace(" (US retail)", "")))}`
+  : "No cost drivers on Alert";
+document.getElementById("updated").textContent = "Updated " + DATA.built;
+document.getElementById("counts").innerHTML = ORDER.map(k => {
+  const xs = S.filter(s => s.signal === k);
+  return `<div class="card count">${sig(k)}<div class="n">${xs.length}</div><div class="names">${xs.map(s => esc(s.name)).join(" · ") || "None"}</div></div>`;
+}).join("");
+
+/* actions */
+const acts = S.filter(s => s.signal === "Alert" || s.signal === "Opportunity")
+  .sort((a, b) => ORDER.indexOf(a.signal) - ORDER.indexOf(b.signal) || Math.abs(b.cost_change.m3) - Math.abs(a.cost_change.m3));
+document.getElementById("actions").innerHTML = acts.map(s => {
+  const c3 = s.change.m3;
+  const why = s.group === "Currency"
+    ? `Dollar ${s.cost_change.m3 < 0 ? "up" : "down"} ${Math.abs(c3).toFixed(1)}% vs. the ${s.id === "DEXMXUS" ? "peso" : "yuan"} in 3 months.`
+    : `${c3 > 0 ? "Up" : "Down"} ${Math.abs(c3).toFixed(1)}% in 3 months, ${s.change.m12 > 0 ? "+" : ""}${s.change.m12.toFixed(1)}% over 12.`;
+  return `<div class="act">${sig(s.signal)}<div class="what"><b>${esc(s.name)}:</b> <span>${why} ${esc(s.action)}</span></div></div>`;
+}).join("") || `<p class="note">Nothing flagged right now.</p>`;
+
+/* cards */
+const groups = [...new Set(S.map(s => s.group))];
+document.getElementById("groups").innerHTML = groups.map(g => `
+  <div class="grouphead"><h2>${esc(g)}</h2><span class="note">${g === "Currency" ? "Foreign currency per US dollar · green = cheaper imports" : "Red = rising costs · green = falling costs"}</span></div>
+  <div class="cards">${S.filter(s => s.group === g).map(s => `
+    <div class="card sc" tabindex="0" role="button" data-id="${s.id}" aria-label="${esc(s.name)} details">
+      <div class="row1"><div><div class="nm">${esc(s.name)}</div><div class="note">${mLabel(s.latest_month, true)}</div></div>${sig(s.signal)}</div>
+      <div class="val">${fmtV(s)} <small>${unitLbl(s)}</small></div>
+      <div class="chg"><div><span>1 mo </span>${chg(s, "m1")}</div><div><span>3 mo </span>${chg(s, "m3")}</div><div><span>12 mo </span>${chg(s, "m12")}</div></div>
+      <div class="spark" data-spark="${s.id}"></div>
+    </div>`).join("")}</div>`).join("");
+
+function drawSparks() {
+  document.querySelectorAll("[data-spark]").forEach(el => {
+    const s = S.find(x => x.id === el.dataset.spark), pts = s.series.slice(-24).map(p => p[1]);
+    const W = el.clientWidth, H = el.clientHeight, lo = Math.min(...pts), hi = Math.max(...pts);
+    const x = i => i / (pts.length - 1) * (W - 4) + 2, y = v => H - 3 - (v - lo) / (hi - lo || 1) * (H - 6);
+    const d = pts.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1)).join("");
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linejoin="round"/>
+      <circle cx="${x(pts.length - 1)}" cy="${y(pts[pts.length - 1])}" r="3" fill="var(--accent)"/></svg>`;
+  });
+}
+
+/* detail chart */
+function drawDetail() {
+  const s = S.find(x => x.id === state.sel);
+  document.querySelectorAll(".sc").forEach(c => c.classList.toggle("sel", c.dataset.id === s.id));
+  document.getElementById("d-name").innerHTML = `${esc(s.name)} &nbsp;${sig(s.signal)}`;
+  document.getElementById("d-note").textContent = s.note;
+  const pts = s.series.slice(-state.range - 1);
+  const box = document.getElementById("fig"), W = box.clientWidth, H = box.clientHeight;
+  const narrow = W < 520, m = { l: 48, r: 12, t: 12, b: 26 };
+  const vals = pts.map(p => p[1]); let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+  const x = i => m.l + i / (pts.length - 1) * (W - m.l - m.r), y = v => m.t + (1 - (v - lo) / (hi - lo)) * (H - m.t - m.b);
+  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(s.name)} over time">`;
+  const ticks = 5;
+  for (let i = 0; i <= ticks; i++) { const v = lo + (hi - lo) * i / ticks;
+    g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end">${fmtVal(s, v)}</text>`; }
+  const step = Math.ceil(pts.length / (narrow ? 4 : 8));
+  pts.forEach((p, i) => { if ((i % step === 0 && pts.length - 1 - i >= step * 0.6) || i === pts.length - 1) g += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === pts.length - 1 ? "end" : "middle"}">${mLabel(p[0])}</text>`; });
+  const d = pts.map((p, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(p[1]).toFixed(1)).join("");
+  g += `<path d="${d} L${x(pts.length - 1)},${H - m.b} L${m.l},${H - m.b}Z" fill="var(--accent)" opacity=".08"/>`;
+  g += `<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
+  g += `<circle cx="${x(pts.length - 1)}" cy="${y(vals[vals.length - 1])}" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`;
+  g += `<line id="xh" y1="${m.t}" y2="${H - m.b}" stroke="var(--text-3)" stroke-dasharray="3 3" opacity="0"/><circle id="xd" r="5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" opacity="0"/>`;
+  g += `<rect id="hit" x="${m.l}" y="0" width="${W - m.l - m.r}" height="${H}" fill="transparent"/></svg><div class="tip" id="tip"></div>`;
+  box.innerHTML = g;
+  const svg = box.querySelector("svg"), tip = box.querySelector("#tip"), xh = svg.querySelector("#xh"), xd = svg.querySelector("#xd");
+  svg.querySelector("#hit").addEventListener("pointermove", e => {
+    const r = svg.getBoundingClientRect(), i = Math.max(0, Math.min(pts.length - 1, Math.round((e.clientX - r.left - m.l) / (W - m.l - m.r) * (pts.length - 1))));
+    const p = pts[i], prev = s.series[s.series.findIndex(q => q[0] === p[0]) - 12];
+    xh.setAttribute("x1", x(i)); xh.setAttribute("x2", x(i)); xh.setAttribute("opacity", 1);
+    xd.setAttribute("cx", x(i)); xd.setAttribute("cy", y(p[1])); xd.setAttribute("opacity", 1);
+    tip.innerHTML = `<b>${mLabel(p[0], true)}</b><br>${fmtVal(s, p[1])}${prev ? ` · ${((p[1] / prev[1] - 1) * 100).toFixed(1)}% vs. year before` : ""}`;
+    tip.style.opacity = 1;
+    tip.style.left = Math.max(0, Math.min(W - tip.offsetWidth, x(i) + 12)) + "px";
+    tip.style.top = Math.max(0, y(p[1]) - tip.offsetHeight - 10) + "px";
+  });
+  svg.querySelector("#hit").addEventListener("pointerleave", () => { tip.style.opacity = 0; xh.setAttribute("opacity", 0); xd.setAttribute("opacity", 0); });
+  const pos = s.range_pct;
+  document.getElementById("d-facts").innerHTML = [
+    ["Latest", `${fmtV(s)} (${mLabel(s.latest_month, true)})`],
+    ["12-month change", `${s.change.m12 > 0 ? "+" : ""}${s.change.m12.toFixed(1)}%`],
+    ["Range since 2021", `${fmtVal(s, s.low)} – ${fmtVal(s, s.high)}`],
+    ["Where it sits", pos >= 90 ? "Near its high since 2021" : pos <= 10 ? "Near its low since 2021" : `${pos.toFixed(0)}% of the way from low to high`],
+    ["Recommended action", esc(s.action)],
+    ["Source", `<a href="${s.source}" target="_blank" rel="noopener">FRED series ${esc(s.id)}</a>`],
+  ].map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+}
+
+/* methodology */
+const TH = { Materials: [5, 10, 2, 5, -3], "Freight & fuel": [8, 15, 3, 7, -5], Currency: [4, 8, 2, 4, -3] };
+document.getElementById("th-table").innerHTML = `<thead><tr><th>Group</th><th>Alert</th><th>Watch</th><th>Opportunity</th></tr></thead><tbody>` +
+  Object.entries(TH).map(([g, t]) => `<tr><td>${g}</td><td>3 mo ≥ +${t[0]}% or 12 mo ≥ +${t[1]}%</td><td>3 mo ≥ +${t[2]}% or 12 mo ≥ +${t[3]}%</td><td>3 mo ≤ ${t[4]}%</td></tr>`).join("") + "</tbody>";
+document.getElementById("srcs").innerHTML = S.map(s => `<li><a href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a>: ${esc(s.name)}</li>`).join("");
+
+/* events */
+document.getElementById("groups").addEventListener("click", e => { const c = e.target.closest(".sc"); if (c) { state.sel = c.dataset.id; drawDetail(); document.getElementById("detail").scrollIntoView({ behavior: "smooth", block: "nearest" }); } });
+document.getElementById("groups").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.closest(".sc")) { e.preventDefault(); e.target.click(); } });
+document.getElementById("range").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+  state.range = +b.dataset.r; document.querySelectorAll("#range button").forEach(x => x.setAttribute("aria-pressed", x === b)); drawDetail(); });
+const ro = new ResizeObserver(() => { drawSparks(); drawDetail(); });
+ro.observe(document.querySelector(".wrap"));
+drawSparks(); drawDetail();
+}
+</script>
+</body>
+</html>

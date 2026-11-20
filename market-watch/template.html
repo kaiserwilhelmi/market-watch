@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procurement Market Watch</title>
+<style>
+.mw {
+  color-scheme: light;
+  --bg: #f6f5f2; --surface: #fcfcfb; --border: #e3e1db; --grid: #ebe9e4;
+  --text: #0b0b0b; --text-2: #52514e; --text-3: #7a7974;
+  --accent: #2a78d6;
+  --good: #0ca30c; --warn: #fab219; --crit: #d03b3b; --neutral: #8a8984;
+  --good-ink: #006300; --warn-ink: #8a5a00; --crit-ink: #a52222; --neutral-ink: #52514e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .mw {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --border: #33332f; --grid: #2a2a27;
+    --text: #f0efec; --text-2: #c3c2b7; --text-3: #94938b; --accent: #3987e5; --neutral: #8f8e86;
+    --good-ink: #4cc94c; --warn-ink: #fab219; --crit-ink: #f07a7a; --neutral-ink: #c3c2b7;
+  }
+}
+:root[data-theme="dark"] .mw {
+  color-scheme: dark;
+  --bg: #121211; --surface: #1a1a19; --border: #33332f; --grid: #2a2a27;
+  --text: #f0efec; --text-2: #c3c2b7; --text-3: #94938b; --accent: #3987e5; --neutral: #8f8e86;
+  --good-ink: #4cc94c; --warn-ink: #fab219; --crit-ink: #f07a7a; --neutral-ink: #c3c2b7;
+}
+* { box-sizing: border-box; min-width: 0; }
+body { margin: 0; }
+.mw { background: var(--bg); color: var(--text); min-height: 100vh;
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 24px clamp(12px, 3vw, 40px) 48px; overflow-x: clip; }
+.wrap { max-width: 1240px; margin: 0 auto; }
+.mw h1 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.015em; text-wrap: balance; }
+.mw h2 { font-size: 16px; margin: 0 0 2px; }
+.sub { color: var(--text-2); margin: 0; }
+.note { color: var(--text-3); font-size: 13px; }
+.top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 20px; }
+.live { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-2); border: 1px solid var(--border);
+  background: var(--surface); border-radius: 999px; padding: 4px 10px; }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 25%, transparent); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.counts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 640px) { .counts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.count .n { font-size: 30px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.count .names { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.sig { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.sig .ic { width: 16px; height: 16px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 10px; color: #fff; font-weight: 700; }
+.sig.Alert { color: var(--crit-ink); } .sig.Alert .ic { background: var(--crit); }
+.sig.Watch { color: var(--warn-ink); } .sig.Watch .ic { background: var(--warn); color: #3a2a00; }
+.sig.Stable { color: var(--neutral-ink); } .sig.Stable .ic { background: var(--neutral); }
+.sig.Opportunity { color: var(--good-ink); } .sig.Opportunity .ic { background: var(--good); }
+.actions { margin-bottom: 16px; }
+.act { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 16px; padding: 10px 0; border-top: 1px solid var(--grid); }
+.act:first-of-type { border-top: 0; }
+.act .what b { font-weight: 600; }
+.act .what span { color: var(--text-2); }
+@media (max-width: 600px) { .act { grid-template-columns: 1fr; } }
+.grouphead { display: flex; align-items: baseline; gap: 10px; margin: 22px 0 10px; }
+.grouphead h2 { font-size: 15px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+.sc { cursor: pointer; transition: border-color .15s; position: relative; }
+.sc:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
+.sc.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.sc:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sc .row1 { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.sc .nm { font-weight: 600; }
+.sc .val { font-size: 26px; font-weight: 650; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin: 6px 0 0; line-height: 1.1; }
+.sc .val small { font-size: 13px; color: var(--text-3); font-weight: 400; letter-spacing: 0; }
+.chg { display: flex; gap: 14px; font-size: 13px; font-variant-numeric: tabular-nums; margin-top: 6px; }
+.chg span { color: var(--text-3); }
+.chg b { font-weight: 600; }
+.up { color: var(--crit-ink); } .dn { color: var(--good-ink); } .fl { color: var(--text-2); }
+.spark { height: 44px; margin-top: 10px; }
+.spark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.detail { margin-top: 20px; }
+.dhead { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 13px; padding: 7px 12px; cursor: pointer; min-height: 36px; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.fig { position: relative; height: 300px; }
+.fig svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fig text { fill: var(--text-2); font-size: 11px; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; transition: opacity .1s; white-space: nowrap; z-index: 3; }
+.dfacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 14px; }
+.dfacts div { border-top: 1px solid var(--grid); padding-top: 8px; }
+.dfacts .k { font-size: 12px; color: var(--text-3); }
+.dfacts .v { font-weight: 500; font-variant-numeric: tabular-nums; }
+.method { margin-top: 16px; }
+.method p { color: var(--text-2); margin: 8px 0; }
+.method table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+.method th, .method td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--grid); }
+.method th:first-child, .method td:first-child { text-align: left; }
+.method th { color: var(--text-2); font-weight: 600; font-size: 12px; }
+.scroll { overflow-x: auto; }
+.mw a { color: var(--accent); }
+.srcs { columns: 2 260px; padding-left: 18px; margin: 8px 0; color: var(--text-2); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="mw"><div class="wrap">
+
+  <div class="top">
+    <div>
+      <h1 id="headline">Procurement Market Watch</h1>
+      <p class="sub">Tracks the material, freight and currency costs behind an office-supply buyer's prices and flags when to act.</p>
+    </div>
+    <span class="live"><i></i><span id="updated"></span></span>
+  </div>
+
+  <div class="counts" id="counts"></div>
+
+  <div class="card actions">
+    <h2>What to do now</h2>
+    <span class="note">Cost drivers flagged Alert or Opportunity, with the recommended buyer response</span>
+    <div id="actions" style="margin-top:8px"></div>
+  </div>
+
+  <div id="groups"></div>
+
+  <div class="card detail" id="detail">
+    <div class="dhead">
+      <div><h2 id="d-name"></h2><span class="note" id="d-note"></span></div>
+      <div class="seg" id="range" role="group" aria-label="Time range">
+        <button data-r="12">1Y</button><button data-r="36" aria-pressed="true">3Y</button><button data-r="999">Since 2021</button>
+      </div>
+    </div>
+    <div class="fig" id="fig"></div>
+    <div class="dfacts" id="d-facts"></div>
+  </div>
+
+  <div class="card method">
+    <h2>How signals work</h2>
+    <p>Each series is converted to its <b>cost impact</b>: for prices, a rise means higher costs; for currencies (foreign units per dollar), a rise means a stronger dollar and cheaper imports. Signals use the 3-month and 12-month cost impact:</p>
+    <div class="scroll"><table id="th-table"></table></div>
+    <p><b>Order of checks:</b> Alert first, then Opportunity (a sharp recent drop outranks an older 12-month rise), then Watch, otherwise Stable. Producer price indexes are published with a lag of about one to two months, so "latest" shows the most recent month available.</p>
+    <p><b>Updates:</b> a scheduled job downloads fresh data from the Federal Reserve Bank of St. Louis (FRED) every morning, recalculates every signal and republishes this page.</p>
+    <h2 style="margin-top:14px">Sources</h2>
+    <ul class="srcs" id="srcs"></ul>
+    <p class="note">Data: U.S. Bureau of Labor Statistics (producer price indexes), U.S. Energy Information Administration (diesel), Federal Reserve Board (exchange rates), via FRED. Signals and actions are illustrative guidance, not financial advice.</p>
+  </div>
+
+</div></div>
+
+<script>
+{
+const DATA = /*__DATA__*/null;
+const S = DATA.series;
+const top = [...S].sort((a, b) => b.cost_change.m3 - a.cost_change.m3)[0];
+const state = { sel: top.id, range: 36 };
+const ICON = { Alert: "!", Watch: "▲", Stable: "–", Opportunity: "✓" };
+const ORDER = ["Alert", "Watch", "Opportunity", "Stable"];
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const mLabel = (m, long) => new Date(m + "-15").toLocaleString("en-US", { month: long ? "long" : "short", year: long ? "numeric" : "2-digit" });
+const sig = s => `<span class="sig ${s}"><span class="ic" aria-hidden="true">${ICON[s]}</span>${s}</span>`;
+const fmtV = s => s.unit === "$/gal" ? "$" + s.latest.toFixed(2) : s.unit === "index" ? s.latest.toFixed(1) : s.latest.toFixed(2);
+const unitLbl = s => s.unit === "index" ? "index" : s.unit === "$/gal" ? "per gallon" : s.unit + " per USD";
+const fmtVal = (s, v) => s.unit === "$/gal" ? "$" + v.toFixed(2) : v.toFixed(s.unit === "index" ? 1 : 2);
+function chg(s, k) {
+  const v = s.change[k]; if (v === null) return `<b class="fl">—</b>`;
+  const cost = s.cost_change[k], cls = cost > 0.25 ? "up" : cost < -0.25 ? "dn" : "fl";
+  return `<b class="${cls}">${v > 0 ? "+" : ""}${v.toFixed(1)}%</b>`;
+}
+const list = arr => arr.length <= 2 ? arr.join(" and ") : arr.slice(0, -1).join(", ") + " and " + arr[arr.length - 1];
+
+/* header + counts */
+const alerts = S.filter(s => s.signal === "Alert");
+document.getElementById("headline").textContent = alerts.length
+  ? `${alerts.length} of ${S.length} cost drivers on Alert: ${list(alerts.sort((a, b) => b.cost_change.m3 - a.cost_change.m3).map(s => s.name.replace(" (US retail)", "")))}`
+  : "No cost drivers on Alert";
+document.getElementById("updated").textContent = "Updated " + DATA.built;
+document.getElementById("counts").innerHTML = ORDER.map(k => {
+  const xs = S.filter(s => s.signal === k);
+  return `<div class="card count">${sig(k)}<div class="n">${xs.length}</div><div class="names">${xs.map(s => esc(s.name)).join(" · ") || "None"}</div></div>`;
+}).join("");
+
+/* actions */
+const acts = S.filter(s => s.signal === "Alert" || s.signal === "Opportunity")
+  .sort((a, b) => ORDER.indexOf(a.signal) - ORDER.indexOf(b.signal) || Math.abs(b.cost_change.m3) - Math.abs(a.cost_change.m3));
+document.getElementById("actions").innerHTML = acts.map(s => {
+  const c3 = s.change.m3;
+  const why = s.group === "Currency"
+    ? `Dollar ${s.cost_change.m3 < 0 ? "up" : "down"} ${Math.abs(c3).toFixed(1)}% vs. the ${s.id === "DEXMXUS" ? "peso" : "yuan"} in 3 months.`
+    : `${c3 > 0 ? "Up" : "Down"} ${Math.abs(c3).toFixed(1)}% in 3 months, ${s.change.m12 > 0 ? "+" : ""}${s.change.m12.toFixed(1)}% over 12.`;
+  return `<div class="act">${sig(s.signal)}<div class="what"><b>${esc(s.name)}:</b> <span>${why} ${esc(s.action)}</span></div></div>`;
+}).join("") || `<p class="note">Nothing flagged right now.</p>`;
+
+/* cards */
+const groups = [...new Set(S.map(s => s.group))];
+document.getElementById("groups").innerHTML = groups.map(g => `
+  <div class="grouphead"><h2>${esc(g)}</h2><span class="note">${g === "Currency" ? "Foreign currency per US dollar · green = cheaper imports" : "Red = rising costs · green = falling costs"}</span></div>
+  <div class="cards">${S.filter(s => s.group === g).map(s => `
+    <div class="card sc" tabindex="0" role="button" data-id="${s.id}" aria-label="${esc(s.name)} details">
+      <div class="row1"><div><div class="nm">${esc(s.name)}</div><div class="note">${mLabel(s.latest_month, true)}</div></div>${sig(s.signal)}</div>
+      <div class="val">${fmtV(s)} <small>${unitLbl(s)}</small></div>
+      <div class="chg"><div><span>1 mo </span>${chg(s, "m1")}</div><div><span>3 mo </span>${chg(s, "m3")}</div><div><span>12 mo </span>${chg(s, "m12")}</div></div>
+      <div class="spark" data-spark="${s.id}"></div>
+    </div>`).join("")}</div>`).join("");
+
+function drawSparks() {
+  document.querySelectorAll("[data-spark]").forEach(el => {
+    const s = S.find(x => x.id === el.dataset.spark), pts = s.series.slice(-24).map(p => p[1]);
+    const W = el.clientWidth, H = el.clientHeight, lo = Math.min(...pts), hi = Math.max(...pts);
+    const x = i => i / (pts.length - 1) * (W - 4) + 2, y = v => H - 3 - (v - lo) / (hi - lo || 1) * (H - 6);
+    const d = pts.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1)).join("");
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.75" stroke-linejoin="round"/>
+      <circle cx="${x(pts.length - 1)}" cy="${y(pts[pts.length - 1])}" r="3" fill="var(--accent)"/></svg>`;
+  });
+}
+
+/* detail chart */
+function drawDetail() {
+  const s = S.find(x => x.id === state.sel);
+  document.querySelectorAll(".sc").forEach(c => c.classList.toggle("sel", c.dataset.id === s.id));
+  document.getElementById("d-name").innerHTML = `${esc(s.name)} &nbsp;${sig(s.signal)}`;
+  document.getElementById("d-note").textContent = s.note;
+  const pts = s.series.slice(-state.range - 1);
+  const box = document.getElementById("fig"), W = box.clientWidth, H = box.clientHeight;
+  const narrow = W < 520, m = { l: 48, r: 12, t: 12, b: 26 };
+  const vals = pts.map(p => p[1]); let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+  const x = i => m.l + i / (pts.length - 1) * (W - m.l - m.r), y = v => m.t + (1 - (v - lo) / (hi - lo)) * (H - m.t - m.b);
+  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(s.name)} over time">`;
+  const ticks = 5;
+  for (let i = 0; i <= ticks; i++) { const v = lo + (hi - lo) * i / ticks;
+    g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end">${fmtVal(s, v)}</text>`; }
+  const step = Math.ceil(pts.length / (narrow ? 4 : 8));
+  pts.forEach((p, i) => { if ((i % step === 0 && pts.length - 1 - i >= step * 0.6) || i === pts.length - 1) g += `<text x="${x(i)}" y="${H - 6}" text-anchor="${i === pts.length - 1 ? "end" : "middle"}">${mLabel(p[0])}</text>`; });
+  const d = pts.map((p, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(p[1]).toFixed(1)).join("");
+  g += `<path d="${d} L${x(pts.length - 1)},${H - m.b} L${m.l},${H - m.b}Z" fill="var(--accent)" opacity=".08"/>`;
+  g += `<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
+  g += `<circle cx="${x(pts.length - 1)}" cy="${y(vals[vals.length - 1])}" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`;
+  g += `<line id="xh" y1="${m.t}" y2="${H - m.b}" stroke="var(--text-3)" stroke-dasharray="3 3" opacity="0"/><circle id="xd" r="5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" opacity="0"/>`;
+  g += `<rect id="hit" x="${m.l}" y="0" width="${W - m.l - m.r}" height="${H}" fill="transparent"/></svg><div class="tip" id="tip"></div>`;
+  box.innerHTML = g;
+  const svg = box.querySelector("svg"), tip = box.querySelector("#tip"), xh = svg.querySelector("#xh"), xd = svg.querySelector("#xd");
+  svg.querySelector("#hit").addEventListener("pointermove", e => {
+    const r = svg.getBoundingClientRect(), i = Math.max(0, Math.min(pts.length - 1, Math.round((e.clientX - r.left - m.l) / (W - m.l - m.r) * (pts.length - 1))));
+    const p = pts[i], prev = s.series[s.series.findIndex(q => q[0] === p[0]) - 12];
+    xh.setAttribute("x1", x(i)); xh.setAttribute("x2", x(i)); xh.setAttribute("opacity", 1);
+    xd.setAttribute("cx", x(i)); xd.setAttribute("cy", y(p[1])); xd.setAttribute("opacity", 1);
+    tip.innerHTML = `<b>${mLabel(p[0], true)}</b><br>${fmtVal(s, p[1])}${prev ? ` · ${((p[1] / prev[1] - 1) * 100).toFixed(1)}% vs. year before` : ""}`;
+    tip.style.opacity = 1;
+    tip.style.left = Math.max(0, Math.min(W - tip.offsetWidth, x(i) + 12)) + "px";
+    tip.style.top = Math.max(0, y(p[1]) - tip.offsetHeight - 10) + "px";
+  });
+  svg.querySelector("#hit").addEventListener("pointerleave", () => { tip.style.opacity = 0; xh.setAttribute("opacity", 0); xd.setAttribute("opacity", 0); });
+  const pos = s.range_pct;
+  document.getElementById("d-facts").innerHTML = [
+    ["Latest", `${fmtV(s)} (${mLabel(s.latest_month, true)})`],
+    ["12-month change", `${s.change.m12 > 0 ? "+" : ""}${s.change.m12.toFixed(1)}%`],
+    ["Range since 2021", `${fmtVal(s, s.low)} – ${fmtVal(s, s.high)}`],
+    ["Where it sits", pos >= 90 ? "Near its high since 2021" : pos <= 10 ? "Near its low since 2021" : `${pos.toFixed(0)}% of the way from low to high`],
+    ["Recommended action", esc(s.action)],
+    ["Source", `<a href="${s.source}" target="_blank" rel="noopener">FRED series ${esc(s.id)}</a>`],
+  ].map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+}
+
+/* methodology */
+const TH = { Materials: [5, 10, 2, 5, -3], "Freight & fuel": [8, 15, 3, 7, -5], Currency: [4, 8, 2, 4, -3] };
+document.getElementById("th-table").innerHTML = `<thead><tr><th>Group</th><th>Alert</th><th>Watch</th><th>Opportunity</th></tr></thead><tbody>` +
+  Object.entries(TH).map(([g, t]) => `<tr><td>${g}</td><td>3 mo ≥ +${t[0]}% or 12 mo ≥ +${t[1]}%</td><td>3 mo ≥ +${t[2]}% or 12 mo ≥ +${t[3]}%</td><td>3 mo ≤ ${t[4]}%</td></tr>`).join("") + "</tbody>";
+document.getElementById("srcs").innerHTML = S.map(s => `<li><a href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a>: ${esc(s.name)}</li>`).join("");
+
+/* events */
+document.getElementById("groups").addEventListener("click", e => { const c = e.target.closest(".sc"); if (c) { state.sel = c.dataset.id; drawDetail(); document.getElementById("detail").scrollIntoView({ behavior: "smooth", block: "nearest" }); } });
+document.getElementById("groups").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.closest(".sc")) { e.preventDefault(); e.target.click(); } });
+document.getElementById("range").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+  state.range = +b.dataset.r; document.querySelectorAll("#range button").forEach(x => x.setAttribute("aria-pressed", x === b)); drawDetail(); });
+const ro = new ResizeObserver(() => { drawSparks(); drawDetail(); });
+ro.observe(document.querySelector(".wrap"));
+drawSparks(); drawDetail();
+}
+</script>
+</body>
+</html>
