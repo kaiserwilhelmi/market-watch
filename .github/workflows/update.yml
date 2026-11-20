@@ -20,6 +20,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Download latest data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python fetch_data.py
       - name: Rebuild dashboard
         run: python build.py
