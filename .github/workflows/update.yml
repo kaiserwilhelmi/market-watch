@@ -1,0 +1,32 @@
+# Refreshes the dashboard every morning: downloads new FRED data, recalculates
+# signals, rebuilds index.html and commits the result. GitHub Pages then
+# republishes the site automatically.
+name: Update market data
+
+on:
+  schedule:
+    - cron: "17 14 * * *"     # every day at 14:17 UTC (about 6-7 AM Pacific)
+  workflow_dispatch:           # adds a "Run workflow" button for manual refreshes
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download latest data
+        run: python fetch_data.py
+      - name: Rebuild dashboard
+        run: python build.py
+      - name: Commit changes
+        run: |
+          git config user.name "market-watch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data index.html
+          git diff --cached --quiet || git commit -m "Daily data update $(date -u +%Y-%m-%d)"
+          git push
