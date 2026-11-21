@@ -247,7 +247,7 @@ function hsBlock(h) {
 }
 function fedBlock(n) {
   const W = 320, H = 120, m = { l: 4, r: 4, t: 8, b: 18 }, rows = n.monthly, mx = Math.max(...rows.map(r => r[1])) || 1, bw = (W - m.l - m.r) / rows.length;
-  const bars = rows.map((r, i) => { const h = r[1] / mx * (H - m.t - m.b);
+  const bars = rows.map((r, i) => { const h = Math.max(0, r[1]) / mx * (H - m.t - m.b); /* net deobligations (negative months) draw as zero; tooltip keeps the real value */
     return `<rect x="${(m.l + i * bw + 1).toFixed(1)}" y="${(H - m.b - h).toFixed(1)}" width="${(bw - 2).toFixed(1)}" height="${h.toFixed(1)}" fill="var(--accent)" opacity="${r[2] ? 0.3 : 0.85}"><title>${mLabel(r[0])}: ${bn(r[1])}${r[2] ? " (still being reported)" : ""}</title></rect>`; }).join("");
   const ticks = rows.map((r, i) => r[0].endsWith("-01") ? `<text x="${(m.l + i * bw).toFixed(1)}" y="${H - 4}">${r[0].slice(0, 4)}</text>` : "").join("");
   return `<div class="hs fed"><h3>NAICS ${esc(n.code)} · ${esc(n.label)}</h3>
