@@ -45,6 +45,9 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .sub { color: var(--text-2); max-width: 75ch; }
 .note { color: var(--text-3); font-size: 12.5px; }
 .crumb { font-size: 13px; }
+.home { max-width: 1240px; margin: 0 auto 16px; }
+.home a { font-weight: 700; font-size: 15px; color: var(--text); text-decoration: none; }
+.home a:hover { color: var(--accent); }
 .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
 .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
 .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
@@ -131,6 +134,7 @@ input[type=search] { width: 220px; max-width: 100%; }
 </style>
 </head>
 <body>
+<nav class="home"><a href="/">Dawson Wilhelmi</a></nav>
 <div class="wrap" id="app"></div>
 <script>
 {
