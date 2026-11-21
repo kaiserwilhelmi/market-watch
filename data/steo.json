@@ -1,0 +1,17 @@
+{
+ "release": "2026-11",
+ "release_label": "November 2026",
+ "source": "U.S. Energy Information Administration, Short-Term Energy Outlook, November 2026, Table 2 (Energy Prices)",
+ "url": "https://www.eia.gov/outlooks/steo/tables/pdf/2tab.pdf",
+ "how": "Snapshot typed from the published Table 2 PDF (quarterly). The daily workflow replaces it with monthly values from the EIA API when EIA_API_KEY works.",
+ "freq": "Q",
+ "current": "2026Q4",
+ "series": {
+  "WTI":      {"name": "WTI spot", "unit": "$/bbl", "values": {"2026Q4": 97.32, "2027Q1": 88.90, "2027Q2": 84.00, "2027Q3": 78.03, "2027Q4": 71.94}},
+  "BRENT":    {"name": "Brent spot", "unit": "$/bbl", "values": {"2026Q4": 109.13, "2027Q1": 94.90, "2027Q2": 89.00, "2027Q3": 83.03, "2027Q4": 76.94}},
+  "HH":       {"name": "Henry Hub spot", "unit": "$/MMBtu", "values": {"2026Q4": 2.84, "2027Q1": 2.94, "2027Q2": 2.42, "2027Q3": 2.79, "2027Q4": 3.39}},
+  "DIESEL":   {"name": "On-highway diesel, retail", "unit": "$/gal", "values": {"2026Q4": 6.05, "2027Q1": 5.37, "2027Q2": 5.03, "2027Q3": 4.91, "2027Q4": 4.80}},
+  "JET":      {"name": "Jet fuel, wholesale", "unit": "$/gal", "values": {"2026Q4": 4.09, "2027Q1": 3.71, "2027Q2": 3.45, "2027Q3": 3.38, "2027Q4": 3.28}},
+  "ELEC_IND": {"name": "Electricity, industrial", "unit": "¢/kWh", "values": {"2026Q4": 8.71, "2027Q1": 9.12, "2027Q2": 9.08, "2027Q3": 9.65, "2027Q4": 8.77}}
+ }
+}

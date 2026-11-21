@@ -168,15 +168,6 @@ INDUSTRIES = [
 
 # Signal thresholds on the cost-adjusted % change (% change x direction)
 #            alert 3m, alert 12m, watch 3m, watch 12m, opportunity 3m
-THRESHOLDS = {
-    "Materials":          (5.0, 10.0, 2.0, 5.0, -3.0),
-    "Commodities":        (10.0, 20.0, 4.0, 8.0, -6.0),
-    "Energy":             (12.0, 25.0, 5.0, 10.0, -8.0),
-    "Freight & services": (8.0, 15.0, 3.0, 7.0, -5.0),
-    "Labor":              (2.0, 5.0, 1.0, 3.5, -1.0),
-    "Currency":           (4.0, 8.0, 2.0, 4.0, -3.0),
-}
-
 def fred_url(series_id, start="2018-01-01"):
     url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}&cosd={start}"
     if series_id.startswith(NON_MONTHLY):

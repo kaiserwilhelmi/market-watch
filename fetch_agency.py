@@ -144,6 +144,34 @@ for key, (name, unit, freq, src, spec, *_rest) in SPOT.items():
     time.sleep(0.4)
 save("spot.json", spot)
 
+# EIA Short-Term Energy Outlook (monthly history + 18-24 month forecast), used for the
+# outlook behind buying advice. All six series must arrive; otherwise the last good
+# data/steo.json is kept (context.py ignores it once it is more than 4 months old).
+STEO_IDS = {"WTI": ("WTIPUUS", "WTI spot", "$/bbl"), "BRENT": ("BREPUUS", "Brent spot", "$/bbl"),
+            "HH": ("NGHHUUS", "Henry Hub spot", "$/MMBtu"), "DIESEL": ("DSRTUUS", "On-highway diesel, retail", "$/gal"),
+            "JET": ("JKTCUUS", "Jet fuel", "$/gal"), "ELEC_IND": ("ESICUUS", "Electricity, industrial", "¢/kWh")}
+if KEY["EIA_API_KEY"]:
+    try:
+        cur = TODAY.strftime("%Y-%m")
+        series = {}
+        for k, (code, nm, unit) in STEO_IDS.items():
+            q = [("api_key", KEY["EIA_API_KEY"]), ("frequency", "monthly"), ("data[0]", "value"),
+                 ("facets[seriesId][]", code), ("start", f"{TODAY.year - 1}-01"),
+                 ("sort[0][column]", "period"), ("sort[0][direction]", "asc"), ("length", "5000")]
+            j = get("https://api.eia.gov/v2/steo/data/?" + urllib.parse.urlencode(q))
+            vals = {r["period"][:7]: num(r["value"]) for r in j["response"]["data"] if num(r["value"]) is not None}
+            if cur not in vals or sum(1 for p in vals if p > cur) < 12:
+                raise ValueError(f"{code}: no current month or fewer than 12 forecast months")
+            series[k] = {"name": nm, "unit": unit, "code": code, "values": vals}
+        steo = {"release": cur, "release_label": f"latest, retrieved {TODAY.isoformat()}",
+                "source": "U.S. Energy Information Administration, Short-Term Energy Outlook (API v2, route steo)",
+                "url": "https://www.eia.gov/outlooks/steo/", "freq": "M", "current": cur, "series": series}
+        (OUT.parent / "steo.json").write_text(json.dumps(steo, indent=1))
+        log.append(f"ok   STEO {len(series)} series, current {cur}")
+    except Exception as e:
+        failed.append("STEO")
+        log.append(f"FAIL STEO kept previous data/steo.json: {scrub(str(e))}")
+
 # Daily exchange rates (Federal Reserve H.10 via FRED)
 fx = load("fx.json")
 if KEY["FRED_API_KEY"]:

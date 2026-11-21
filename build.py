@@ -6,7 +6,7 @@ single self-contained HTML file with its data embedded.
 import json
 from pathlib import Path
 
-from series import INDUSTRIES, THRESHOLDS
+from series import INDUSTRIES
 
 HERE = Path(__file__).parent
 A = json.loads((HERE / "data" / "analytics.json").read_text())
@@ -37,7 +37,7 @@ def slim(s, keep=24):
     return {**s, "series": s["series"][-keep:]}
 
 
-hub = dict(page="hub", built=A["built"], thresholds=THRESHOLDS, industries=A["industries"],
+hub = dict(page="hub", built=A["built"], industries=A["industries"],
            series={k: slim(v) for k, v in A["series"].items()},
            latest=latest_for(set(A["series"])), hub_spot=[G["spot"][k] for k in G["hub_spot"]],
            agency_pubs=sorted({tuple(v) for v in G["publishers"].values()}))
@@ -56,7 +56,7 @@ for ind in A["industries"]:
         used.add(G["publishers"]["USASPENDING"][0])
     lt = latest_for(set(ind["series"]))
     used |= {v["publisher"] for v in lt.values()}
-    payload = dict(page="industry", built=A["built"], thresholds=THRESHOLDS, industry=ind,
+    payload = dict(page="industry", built=A["built"], industry=ind,
                    series={i: A["series"][i] for i in ind["series"]}, latest=lt, extras=extras,
                    agency_pubs=sorted({tuple(v) for v in G["publishers"].values() if v[0] in used}))
     out = HERE / ind["slug"] / "index.html"
