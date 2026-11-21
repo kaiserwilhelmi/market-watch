@@ -14,7 +14,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 A = json.load(open(HERE / "data" / "analytics.json"))
 sys.path.insert(0, str(HERE))
-from series import SERIES, INDUSTRIES, THRESHOLDS  # noqa: E402
+from series import SERIES, INDUSTRIES  # noqa: E402
 
 bad = []
 def check(cond, msg):
@@ -63,13 +63,6 @@ for sid, (name, group, unit, direction, pub) in SERIES.items():
         check(close(s["change"][key], mine), f"{sid} change {key}: {s['change'][key]} vs {mine}")
         cost = None if mine is None else mine * direction
         check(close(s["cost_change"][key], cost), f"{sid} cost {key}")
-    # signal
-    a3, a12, w3, w12, opp = THRESHOLDS[group]
-    c3, c12 = s["cost_change"]["m3"], s["cost_change"]["m12"]
-    sig = ("Alert" if c3 >= a3 or (c12 is not None and c12 >= a12) else
-           "Opportunity" if c3 <= opp else
-           "Watch" if c3 >= w3 or (c12 is not None and c12 >= w12) else "Stable")
-    check(s["signal"] == sig, f"{sid} signal {s['signal']} vs {sig}")
     vals = [v for _, v in read(sid) if v is not None]
     check(close(s["low"], min(vals)) and close(s["high"], max(vals)), f"{sid} range")
     # naive backtest MAPE, plain Python
@@ -146,6 +139,71 @@ for ind, (slug, name, blurb, ids) in zip(A["industries"], INDUSTRIES):
         pairs = [(x[months_add(m, -ll["lag"])], y[m]) for m in y if months_add(m, -ll["lag"]) in x]
         r = pearson([p[0] for p in pairs], [p[1] for p in pairs])
         check(abs(r - ll["r"]) < 1e-9 and len(pairs) == ll["n"], f"{slug} leadlag {ll['lead']}->{ll['follow']} {ll['r']} vs {r}")
+
+
+# ---- signal context, recomputed in plain Python (no pandas, no context.py) ----
+STEO = json.load(open(HERE / "data" / "steo.json"))
+from datetime import date  # noqa: E402
+_ry, _rm = map(int, STEO["release"][:7].split("-")) if "-" in STEO["release"] else (0, 0)
+STEO_OK = (date.today().year * 12 + date.today().month) - (_ry * 12 + _rm) <= 4
+STEO_MAP = {"DCOILWTICO": "WTI", "MHHNGSP": "HH", "GASDESW": "DIESEL", "DJFUELUSGULF": "JET", "WPU0543": "ELEC_IND"}
+def read_long(sid):
+    rows = list(csv.DictReader(open(HERE / "data" / "long" / f"{sid}.csv")))
+    obs = fill([(r["date"][:7], float(r["value"]) if r["value"] not in ("", ".") else None) for r in rows])
+    return [(m, v) for m, v in obs if v is not None]
+def prank(xs, x):
+    return 100.0 * sum(1 for v in xs if v <= x) / len(xs)
+cpi = dict(read_long("CPIAUCSL"))
+cpi_last = cpi[max(cpi)]
+n_ctx = 0
+for sid, (name, group, unit, direction, pub) in SERIES.items():
+    s = A["series"][sid]; c = s["context"]
+    obs = read_long(sid); d = dict(obs); ms = [m for m, _ in obs]
+    c3, c12 = s["cost_change"]["m3"], s["cost_change"]["m12"]
+    def ch(k):
+        return [(d[m] / d[months_add(m, -k)] - 1) * 100 * direction for m in ms if months_add(m, -k) in d]
+    p3 = prank(ch(3), c3) if c3 is not None and len(ch(3)) >= 60 else None
+    p12 = prank(ch(12), c12) if c12 is not None and len(ch(12)) >= 60 else None
+    check(close(c["p3"], p3) and close(c["p12"], p12), f"{sid} move ranks {c['p3']},{c['p12']} vs {p3},{p12}")
+    lvl = None
+    if group != "Labor" and len(obs) >= 120:
+        if group == "Currency":
+            lv = [v * direction for _, v in obs]
+        else:
+            lv = [v / cpi[m] * cpi_last * direction for m, v in obs if m in cpi]
+        lvl = prank(lv, lv[-1])
+    check(close(c["level_pct"], lvl), f"{sid} level pct {c['level_pct']} vs {lvl}")
+    out = None
+    if sid in STEO_MAP and STEO_OK:
+        vals = STEO["series"][STEO_MAP[sid]]["values"]; cur = STEO["current"]
+        nxt = sorted(p for p in vals if p > cur)[:4 if STEO["freq"] == "Q" else 12]
+        out = (sum(vals[p] for p in nxt) / len(nxt) / vals[cur] - 1) * 100 * direction
+    elif s["backtest"]["chosen"] == "ets":
+        out = s["forecast_6m_cost"]
+    check(close(c["outlook"], out), f"{sid} outlook {c['outlook']} vs {out}")
+    # signal rule
+    up = lambda cc, pp, floor, cut: cc is not None and pp is not None and cc >= floor and pp >= cut
+    if up(c3, p3, 1, 90) or up(c12, p12, 2, 90): sig = "Alert"
+    elif c3 is not None and p3 is not None and c3 <= -1 and p3 <= 10: sig = "Opportunity"
+    elif up(c3, p3, 1, 75) or up(c12, p12, 2, 75): sig = "Watch"
+    else: sig = "Stable"
+    check(s["signal"] == sig == c["signal"], f"{sid} signal {s['signal']} vs {sig}")
+    high, low = lvl is not None and lvl >= 80, lvl is not None and lvl <= 20
+    easing = out is not None and out <= -5
+    if sig in ("Alert", "Watch"):
+        st_ = ("rise_labor" if group == "Labor" else "rise_fx" if group == "Currency" else
+               "rise_high_easing" if high and easing else "rise_high" if high else "rise_easing" if easing else "rise")
+    elif sig == "Opportunity":
+        st_ = "fall_fx" if group == "Currency" else "fall_low" if low else "fall_high" if high else "fall"
+    else:
+        st_ = "stable"
+    check(c["stance"] == st_, f"{sid} stance {c['stance']} vs {st_}")
+    n_ctx += 1
+for ind in A["industries"]:
+    S = A["series"]
+    for key, sg in (("alerts", "Alert"), ("watches", "Watch"), ("opportunities", "Opportunity")):
+        check(ind[key] == sum(1 for i in ind["series"] if S[i]["signal"] == sg), f"{ind['slug']} {key} count")
+print(f"checked signal context for {n_ctx} series")
 
 print(f"checked {n_checks} series, {len(A['industries'])} industries; problems: {len(bad)}")
 for b in bad:

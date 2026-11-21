@@ -59,13 +59,28 @@ Pulled straight from the publishing agency by `fetch_agency.py`; items and per-i
 
 ## Method
 
-- **Cost impact and signals.** Each % change is multiplied by its direction (+1 for prices; −1 for foreign currency per USD, because a stronger dollar makes imports cheaper; USD per EUR stays +1). Signals (Alert, Watch, Opportunity, Stable) use 3- and 12-month cost impact with thresholds per group in `series.py`. Industry pressure is the **median** driver.
+- **Cost impact and signals.** Each % change is multiplied by its direction (+1 for prices; −1 for foreign currency per USD, because a stronger dollar makes imports cheaper; USD per EUR stays +1). Signals (Alert, Watch, Opportunity, Stable) rank each driver's 3- and 12-month cost change against its own history since 2004 (see *Signals and recommendations* below). Industry pressure is the **median** driver.
 - **Forecast.** Damped additive-trend exponential smoothing on log levels (Gardner & McKenzie, 1985; Hyndman & Athanasopoulos, 2021), via statsmodels. Benchmark: naive (no change).
 - **Backtest.** Rolling origin (Tashman, 2000): refit every month from Dec 2020, forecast 1–6 months ahead, score MAPE from Jan 2022. The published forecast uses whichever of model or naive had the lower average MAPE. Naive often wins for commodities and currencies, consistent with Meese & Rogoff (1983).
 - **80% range.** 10th–90th percentile of the chosen method's past log errors at each horizon (empirical prediction intervals; Williams & Goodman, 1971). The hit rate is tested out of sample: since Jan 2023, each range is rebuilt only from errors known at that date.
 - **Lead/lag.** Correlation of monthly log changes, X at t−k vs Y at t, k = 0…6; a pair is listed when the best lagged |r| beats the same-month |r| and exceeds 2/√n. Descriptive, not causal.
 - **Correlation.** Pearson correlation of 12-month % changes since Jan 2019.
 - **Escalation calculator.** P₁ = P₀ × [F + Σ wᵢ × Iᵢ(t₁)/Iᵢ(t₀)], the standard index-linked price adjustment, with fixed share F = 1 − Σwᵢ. Future months use forecast midpoints, with an all-components-at-range-edge stress test.
+
+## Signals and recommendations
+
+The old rule flagged any rise above a fixed % per group and said "lock in pricing". That ignores context: locking in at the peak of a war- or outage-driven spike can mean overpaying for the whole contract. `context.py` now adds three pieces of context and picks the advice from them. `verify_calcs.py` recomputes all of it in plain Python.
+
+| Step | Rule | Why |
+|---|---|---|
+| 1. How unusual is the move? | Rank the latest 3- and 12-month cost change against all of that series' own 3- and 12-month changes since Jan 2004. **Alert** ≥ 90th percentile, **Watch** ≥ 75th, **Opportunity** 3-month fall ≤ 10th. The move must also be ≥ 1% (3 mo) or ≥ 2% (12 mo). | Judge variation against the process's own normal range, as in control charts (Montgomery). Use empirical ranks, not a normal curve, because price changes are fat-tailed (Mandelbrot 1963). Cut-offs and floors are judgment calls. |
+| 2. Where is the price? | Percentile of the latest level among monthly levels since 2004, **after inflation** (CPI-U). Currencies use nominal levels, and wages are not ranked. High ≥ 80th, low ≤ 20th. | Spikes tend to be short relative to slumps (Cashin, McDermott & Scott 2002; Deaton & Laroque 1992). A high level is a reason for caution, not a forecast. |
+| 3. What does the outlook say? | Crude, natural gas, diesel, jet fuel and industrial power use EIA's Short-Term Energy Outlook: the average over the next 12 months vs the current period (≤ −5% counts as easing). Other series use the backtested forecast only where it beat "no change". | Futures and no-change forecasts are hard to beat (Alquist, Kilian & Vigfusson 2013), so outside energy no direction is assumed. EIA stopped publishing free NYMEX futures in April 2024, so futures curves are not used. |
+| 4. Advice | Rising and high, outlook easing: avoid long fixed prices and use short terms or index-linked pricing with a cap. Rising and high: cover in stages and cap rather than fix. Rising from a normal level: securing more in stages is reasonable. Labor: budget for it, with an index-linked escalator and a cap. FX: hedge, don't forecast. Falling and low: rebid and fix a larger share. Falling from high: get pass-through but stay index-linked. | Hedge to limit bad outcomes, not to beat the market (Stulz 1996). Firms gain little from timing hedges (Brown, Crabb & Haushalter 2006). Use a portfolio of fixed, capped and spot volume (Martínez-de-Albéniz & Simchi-Levi 2005). Use index-based price adjustment when markets are unstable (FAR 16.203). Wages rarely fall (Dickens et al. 2007). Category strategy still matters (Kraljic 1983; Mena, van Hoek & Christopher 2021, ch. 3, and p. 174: "keep the most options open" in volatile markets). |
+
+Each "What to do now" item shows its three context numbers and a "Why this advice" list. The EIA outlook is refreshed from the EIA API (`steo` route) by `fetch_agency.py`. If that fails, the last good `data/steo.json` is kept, and it is ignored once it is more than 4 months old. The initial file is the November 2026 STEO Table 2 (quarterly), typed from EIA's PDF.
+
+**Not automated:** the cause of a move. Kilian (2009) shows oil price rises last different lengths of time depending on whether they come from supply cuts, global demand or precautionary buying. EIA's STEO text names the drivers it sees, so check it before committing to long terms.
 
 ## Data quality checks
 
@@ -83,7 +98,7 @@ Pulled straight from the publishing agency by `fetch_agency.py`; items and per-i
 ```
 pip install -r requirements.txt
 export FRED_API_KEY=...        # free key from https://fred.stlouisfed.org/docs/api/api_key.html
-python fetch_data.py           # data/raw/*.csv
+python fetch_data.py           # data/long/*.csv (2004 on) and data/raw/*.csv (2018 on)
 python analyze.py              # data/analytics.json (about 5 minutes; refits ~5,000 models)
 python verify_calcs.py         # independent checks, exits non-zero on any mismatch
 export EIA_API_KEY=... CENSUS_API_KEY=... USDA_AMS_API_KEY=...   # optional, see Agency data
@@ -97,6 +112,21 @@ python build.py                # index.html + <industry>/index.html
 
 ## References
 
+- Alquist, R., Kilian, L., & Vigfusson, R. J. (2013). Forecasting the price of oil. In *Handbook of Economic Forecasting* (Vol. 2A, pp. 427–507). Elsevier.
+- Brown, G. W., Crabb, P. R., & Haushalter, D. (2006). Are firms successful at selective hedging? *Journal of Business*, 79(6), 2925–2949.
+- Carter, D. A., Rogers, D. A., & Simkins, B. J. (2006). Does hedging affect firm value? Evidence from the US airline industry. *Financial Management*, 35(1), 53–86.
+- Cashin, P., McDermott, C. J., & Scott, A. (2002). Booms and slumps in world commodity prices. *Journal of Development Economics*, 69(1), 277–296.
+- Deaton, A., & Laroque, G. (1992). On the behaviour of commodity prices. *Review of Economic Studies*, 59(1), 1–23.
+- Dickens, W. T., Goette, L., Groshen, E. L., Holden, S., Messina, J., Schweitzer, M. E., Turunen, J., & Ward, M. E. (2007). How wages change: Micro evidence from the International Wage Flexibility Project. *Journal of Economic Perspectives*, 21(2), 195–214.
+- Federal Acquisition Regulation, 48 CFR 16.203, Fixed-price contracts with economic price adjustment. https://www.acquisition.gov/far/16.203-2
+- Kilian, L. (2009). Not all oil price shocks are alike: Disentangling demand and supply shocks in the crude oil market. *American Economic Review*, 99(3), 1053–1069.
+- Kraljic, P. (1983). Purchasing must become supply management. *Harvard Business Review*, 61(5), 109–117.
+- Mandelbrot, B. (1963). The variation of certain speculative prices. *Journal of Business*, 36(4), 394–419.
+- Martínez-de-Albéniz, V., & Simchi-Levi, D. (2005). A portfolio approach to procurement contracts. *Production and Operations Management*, 14(1), 90–114.
+- Mena, C., van Hoek, R., & Christopher, M. (2021). *Leading Procurement Strategy: Driving Value Through the Supply Chain* (3rd ed.). Kogan Page.
+- Montgomery, D. C. *Introduction to Statistical Quality Control*. Wiley.
+- Stulz, R. M. (1996). Rethinking risk management. *Journal of Applied Corporate Finance*, 9(3), 8–25.
+- U.S. Energy Information Administration. (2026). *Short-Term Energy Outlook*, November 2026, Table 2. https://www.eia.gov/outlooks/steo/
 - Gardner, E. S., & McKenzie, E. (1985). Forecasting trends in time series. *Management Science*, 31(10), 1237–1246.
 - Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). OTexts. https://otexts.com/fpp3/
 - Rhoades, S. A. (1993). The Herfindahl-Hirschman Index. *Federal Reserve Bulletin*, 79(3), 188–189.

@@ -25,7 +25,8 @@ import numpy as np
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
-from series import SERIES, INDUSTRIES, THRESHOLDS, PUB
+from series import SERIES, INDUSTRIES, PUB
+import context as ctxmod
 
 HERE = Path(__file__).parent
 H = 6
@@ -33,6 +34,8 @@ FIRST_ORIGIN = pd.Period("2020-12", "M")     # >= 36 months of training data
 EVAL_FROM = pd.Period("2022-01", "M")        # backtest scoring window starts here
 COVER_FROM = pd.Period("2023-01", "M")       # out-of-sample range coverage test
 MIN_ERRS = 24
+STEO = ctxmod.load_steo()
+CPI = ctxmod.load_long(ctxmod.DEFLATOR)
 
 
 def load(sid):
@@ -52,19 +55,6 @@ def pct_at(s, months):
     if prev not in s.index or pd.isna(s[prev]):
         return None
     return float((s[last] / s[prev] - 1) * 100)
-
-
-def signal(group, c3, c12):
-    a3, a12, w3, w12, opp = THRESHOLDS[group]
-    if c3 is None:
-        return "Stable"
-    if c3 >= a3 or (c12 is not None and c12 >= a12):
-        return "Alert"
-    if c3 <= opp:
-        return "Opportunity"
-    if c3 >= w3 or (c12 is not None and c12 >= w12):
-        return "Watch"
-    return "Stable"
 
 
 def ets_forecast(logy):
@@ -141,8 +131,10 @@ def analyze_series(sid):
     vals = s.values
     last = float(vals[-1])
     lo, hi = float(vals.min()), float(vals.max())
-    sig = signal(group, cost["m3"], cost["m12"])
     f6 = (fc[-1]["mid"] / last - 1) * 100
+    cx = ctxmod.assess(sid, group, direction, cost["m3"], cost["m12"], chosen, f6 * direction,
+                       STEO, CPI)
+    sig = cx["signal"]
     return sid, dict(
         id=sid, name=name, group=group, unit=unit, direction=direction,
         publisher=PUB[pub][0], publisher_url=PUB[pub][1],
@@ -151,7 +143,7 @@ def analyze_series(sid):
         change=ch, cost_change=cost, signal=sig,
         low=lo, high=hi, range_pct=(last - lo) / (hi - lo) * 100 if hi > lo else 50.0,
         forecast=fc, forecast_6m_pct=f6, forecast_6m_cost=f6 * direction,
-        backtest=bt,
+        backtest=bt, context=cx,
         gaps=[str(p) for p, v in raw.loc[s.index[0]:].items() if pd.isna(v)],
         series=[[str(p), (None if pd.isna(v) else float(v))] for p, v in raw.items()],
     )
