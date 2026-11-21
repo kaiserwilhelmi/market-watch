@@ -70,7 +70,8 @@ FX_DAILY = ["DEXMXUS", "DEXJPUS", "DEXUSEU", "DEXTAUS", "DEXKOUS", "DEXCHUS", "D
 # ------------------------------------------------------- per-industry extras
 # spot: SPOT keys shown in the "Latest spot prices" card
 # hs:   (HS4 code, label) imported products for the sourcing card (Census)
-# naics: (code, label) federal contract obligations (USAspending)
+# naics: (code, label[, 4- or 6-digit codes]) federal contract obligations (USAspending;
+#        the API takes 2-, 4- or 6-digit NAICS, so 3-digit sectors list their 4-digit parts)
 EXTRAS = {
     "aerospace-defense": dict(spot=["JET", "BRENT"],
                               hs=[("8411", "Turbojets & gas turbines"), ("8803", "Aircraft parts"), ("7502", "Unwrought nickel")],
@@ -85,7 +86,7 @@ EXTRAS = {
                                hs=[("3901", "Polyethylene & ethylene polymers"), ("2902", "Cyclic hydrocarbons"), ("3907", "Polyesters & epoxides")]),
     "construction": dict(spot=["DIESEL_US"],
                          hs=[("4407", "Sawn lumber"), ("7214", "Steel bars & rebar"), ("2523", "Cement")],
-                         naics=[("236", "Construction of buildings"), ("237", "Heavy & civil engineering")]),
+                         naics=[("236", "Construction of buildings", ["2361", "2362"]), ("237", "Heavy & civil engineering", ["2371", "2372", "2373", "2379"])]),
     "electric-utilities": dict(spot=["HH", "ELEC_IND", "ELEC_COM"],
                                hs=[("8504", "Transformers & power supplies"), ("8544", "Insulated wire & cable"), ("8541", "Solar cells & diodes")]),
     "food-beverage-mfg": dict(spot=["DIESEL_US", "BEEF_CH", "EGGS"],

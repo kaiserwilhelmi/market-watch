@@ -10,6 +10,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date, timedelta
@@ -25,15 +26,35 @@ TODAY = date.today()
 log, failed = [], []
 
 
+def scrub(t):
+    for k in KEY.values():
+        if k:
+            t = t.replace(k, "***")
+    return " ".join(t.split())[:160]
+
+
 def get(url, headers=None, data=None, timeout=60, tries=3):
     for i in range(tries):
         try:
             req = urllib.request.Request(url, headers={**UA, **(headers or {})}, data=data)
-            return json.loads(urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8"))
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                body, status = r.read().decode("utf-8", "replace"), r.status
+            if status == 204 or not body.strip():
+                raise ValueError(f"HTTP {status}, empty response (no data for this query)")
+            try:
+                return json.loads(body)
+            except json.JSONDecodeError:
+                raise ValueError(f"HTTP {status}, not JSON: {scrub(body)}")
+        except urllib.error.HTTPError as e:
+            msg = f"HTTP {e.code}: {scrub(e.read().decode('utf-8', 'replace'))}"
+            if e.code in (400, 401, 403, 404) or i == tries - 1:
+                raise ValueError(msg) from None
+        except ValueError:
+            raise
         except Exception:
             if i == tries - 1:
                 raise
-            time.sleep(3 * (i + 1))
+        time.sleep(3 * (i + 1))
 
 
 def load(name):
@@ -164,6 +185,9 @@ if KEY["CENSUS_API_KEY"]:
         except Exception as e:
             failed.append("HS" + hs)
             log.append(f"FAIL HS{hs:9s} {e}")
+            if sum(f.startswith("HS") for f in failed) >= 3 and len(census) == 0:
+                log.append("stop Census: first 3 codes failed, skipping the rest")
+                break
         time.sleep(0.5)
     save("census.json", census)
 else:
@@ -171,11 +195,12 @@ else:
 
 # USAspending contract obligations by NAICS (no key)
 usa = load("usaspending.json")
-for code in sorted({c for x in EXTRAS.values() for c, _ in x.get("naics", [])}):
+naics = {n[0]: (n[2] if len(n) > 2 else [n[0]]) for x in EXTRAS.values() for n in x.get("naics", [])}
+for code, parts in sorted(naics.items()):
     try:
         body = json.dumps({"group": "month", "filters": {
             "time_period": [{"start_date": USA_START, "end_date": TODAY.isoformat()}],
-            "award_type_codes": ["A", "B", "C", "D"], "naics_codes": {"require": [code]}}}).encode()
+            "award_type_codes": ["A", "B", "C", "D"], "naics_codes": {"require": parts}}}).encode()
         j = get("https://api.usaspending.gov/api/v2/search/spending_over_time/", data=body,
                 headers={"Content-Type": "application/json"}, timeout=120)
         rows = []

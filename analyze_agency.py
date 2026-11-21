@@ -136,7 +136,7 @@ def main():
         inds[slug] = dict(
             spot=[k for k in x.get("spot", []) if k in spot],
             hs=[dict(code=h, label=l, **({"data": True} if h in census else {"data": False})) for h, l in x.get("hs", [])],
-            naics=[dict(code=c, label=l, data=c in usa) for c, l in x.get("naics", [])])
+            naics=[dict(code=n[0], label=n[1], data=n[0] in usa) for n in x.get("naics", [])])
     payload = dict(spot=spot, fx=fx, census=census, usaspending=usa, industries=inds, hub_spot=[k for k in HUB_SPOT if k in spot],
                    publishers={k: list(v) for k, v in AGENCY_PUB.items()})
     (HERE / "data" / "agency_analytics.json").write_text(json.dumps(payload, indent=1))
