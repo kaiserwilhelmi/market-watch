@@ -33,10 +33,29 @@ Series IDs, names, units and publishers are in `series.py`.
 Credited to the original publisher; FRED (Federal Reserve Bank of St. Louis) is the delivery layer.
 
 - U.S. Bureau of Labor Statistics: Producer Price Index, Consumer Price Index and average price data, Current Employment Statistics (average hourly earnings)
-- U.S. Energy Information Administration: WTI crude, Henry Hub natural gas, US retail diesel, US Gulf Coast jet fuel
+- U.S. Energy Information Administration: WTI crude, Henry Hub natural gas, US retail diesel, US Gulf Coast jet fuel (monthly via FRED; daily and weekly direct, see Agency data)
 - International Monetary Fund: Primary Commodity Prices (metals, grains, softs, beef)
 - Board of Governors of the Federal Reserve System: H.10 foreign exchange rates
 - Cass Information Systems: Cass Freight Index (shipments and expenditures)
+
+## Agency data (daily, weekly and sourcing)
+
+Pulled straight from the publishing agency by `fetch_agency.py`; items and per-industry assignments are in `agency.py`.
+
+| Source | Publisher | What it adds | Key |
+| --- | --- | --- | --- |
+| EIA Open Data API | U.S. Energy Information Administration | Daily crude (WTI, Brent), Henry Hub, jet fuel and ULSD spot; weekly retail diesel by PADD region; monthly industrial/commercial electricity and industrial natural gas prices | `EIA_API_KEY` |
+| LMR DataMart | USDA Agricultural Marketing Service | Daily boxed beef cutout (Choice, Select; report LM_XB403) | none |
+| My Market News API | USDA Agricultural Marketing Service | Daily shell egg index (report 2843), weekly chicken parts (report 3646) | `USDA_AMS_API_KEY` |
+| International Trade API | U.S. Census Bureau | Monthly general imports by 4-digit HS code and country | `CENSUS_API_KEY` |
+| USAspending API | U.S. Department of the Treasury | Monthly federal contract obligations by NAICS code | none |
+| FRED API (H.10) | Board of Governors of the Federal Reserve System | Daily exchange rates for the "Daily/weekly" column | `FRED_API_KEY` |
+
+- **Daily/weekly column.** For FRED rows with a faster source (WTI, Henry Hub, jet fuel, diesel, FX), the newest value is shown against last month's average, which is what the monthly series will print next. Forecasts stay monthly.
+- **Import sourcing.** Latest 12 months of general imports vs the prior 12; top 5 countries by share; concentration is the Herfindahl-Hirschman Index of country shares (Rhoades, 1993), labeled with the U.S. DOJ/FTC (2023) Merger Guidelines cut-offs (1,000 and 1,800) as a yardstick.
+- **Federal demand.** Trailing 12 complete months of contract obligations vs the prior 12. The latest 3 months are shown but excluded, because agencies (DoD with a 90-day delay) are still reporting them.
+- Census is refreshed on Mondays (it is monthly and a full pull takes about 10 minutes); other sources refresh daily.
+- A source whose key is missing is skipped and its card is hidden; a failed download keeps the previous values. `verify_agency.py` recomputes every change, share, HHI and total with separate plain-Python code, and the workflow stops if any differ.
 
 ## Method
 
@@ -67,15 +86,21 @@ export FRED_API_KEY=...        # free key from https://fred.stlouisfed.org/docs/
 python fetch_data.py           # data/raw/*.csv
 python analyze.py              # data/analytics.json (about 5 minutes; refits ~5,000 models)
 python verify_calcs.py         # independent checks, exits non-zero on any mismatch
+export EIA_API_KEY=... CENSUS_API_KEY=... USDA_AMS_API_KEY=...   # optional, see Agency data
+python fetch_agency.py         # data/agency/*.json
+python analyze_agency.py       # data/agency_analytics.json
+python verify_agency.py        # independent checks of the agency numbers
 python build.py                # index.html + <industry>/index.html
 ```
 
-`.github/workflows/update.yml` runs the same steps daily and needs the `FRED_API_KEY` repository secret.
+`.github/workflows/update.yml` runs the same steps daily and needs the `FRED_API_KEY` repository secret, plus `EIA_API_KEY`, `CENSUS_API_KEY` and `USDA_AMS_API_KEY` for the agency data.
 
 ## References
 
 - Gardner, E. S., & McKenzie, E. (1985). Forecasting trends in time series. *Management Science*, 31(10), 1237–1246.
 - Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). OTexts. https://otexts.com/fpp3/
+- Rhoades, S. A. (1993). The Herfindahl-Hirschman Index. *Federal Reserve Bulletin*, 79(3), 188–189.
+- U.S. Department of Justice & Federal Trade Commission. (2023). *Merger Guidelines*. https://www.justice.gov/atr/2023-merger-guidelines
 - Meese, R. A., & Rogoff, K. (1983). Empirical exchange rate models of the seventies: Do they fit out of sample? *Journal of International Economics*, 14(1–2), 3–24.
 - Tashman, L. J. (2000). Out-of-sample tests of forecasting accuracy: An analysis and review. *International Journal of Forecasting*, 16(4), 437–450.
 - Williams, W. H., & Goodman, M. L. (1971). A simple method for the construction of empirical confidence limits for economic forecasts. *Journal of the American Statistical Association*, 66(336), 752–754.
