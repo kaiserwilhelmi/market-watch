@@ -130,7 +130,7 @@ input[type=search] { width: 220px; max-width: 100%; }
 .method li { margin: 3px 0; }
 .heat td.c { min-width: 52px; text-align: center; }
 .heat th.rot { white-space: normal; min-width: 52px; max-width: 80px; font-size: 11px; text-align: center; vertical-align: bottom; }
-.three { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.three { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; }
 .hs h3 { font-size: 14px; margin: 0 0 2px; }
 .hs .note b { color: var(--text-2); }
 .bar { display: inline-block; height: 8px; border-radius: 2px; background: var(--accent); vertical-align: middle; }
@@ -256,9 +256,9 @@ function hsBlock(h) {
   return `<div class="hs"><h3>HS ${esc(h.code)} · ${esc(h.label)}</h3>
     <p class="note"><b>${bn(h.total)}</b> imported, ${mLabel(h.first)}–${mLabel(h.last)} · <span class="${cls(h.yoy)}">${pct(h.yoy)}</span> vs prior 12 mo · ${h.countries} countries</p>
     <p style="margin:6px 0">${hhiFlag(h.hhi)}</p>
-    <table class="t"><thead><tr><th class="l">Country</th><th class="l">Share</th><th>12 mo</th><th>YoY</th></tr></thead><tbody>
+    <div class="scroll"><table class="t"><thead><tr><th class="l">Country</th><th class="l">Share</th><th>12 mo</th><th>YoY</th></tr></thead><tbody>
     ${h.top.map(c => `<tr><td class="l">${esc(c.name)}</td><td class="l"><span class="bar" style="width:${Math.max(2, c.share * 0.8).toFixed(0)}px"></span> ${c.share.toFixed(1)}%</td><td>${bn(c.value)}</td><td class="${cls(c.yoy)}">${c.yoy === null ? "new" : pct(c.yoy)}</td></tr>`).join("")}
-    </tbody></table></div>`;
+    </tbody></table></div></div>`;
 }
 function fedBlock(n) {
   const W = 320, H = 120, m = { l: 4, r: 4, t: 8, b: 18 }, rows = n.monthly, mx = Math.max(...rows.map(r => r[1])) || 1, bw = (W - m.l - m.r) / rows.length;
