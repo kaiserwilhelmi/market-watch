@@ -167,8 +167,14 @@ else:
 
 # Census imports by HS4 and country
 census = load("census.json")
-if KEY["CENSUS_API_KEY"]:
-    codes = sorted({h for x in EXTRAS.values() for h, _ in x.get("hs", [])})
+# Census releases monthly (about 5 weeks after month end) and a full pull takes ~10 minutes,
+# so refresh weekly (Mondays) or when codes are missing.
+want = {h for x in EXTRAS.values() for h, _ in x.get("hs", [])}
+census_due = TODAY.weekday() == 0 or not want <= set(census) or os.environ.get("CENSUS_FORCE")
+if KEY["CENSUS_API_KEY"] and not census_due:
+    log.append("skip Census imports: refreshed weekly on Mondays")
+elif KEY["CENSUS_API_KEY"]:
+    codes = sorted(want if TODAY.weekday() == 0 or os.environ.get("CENSUS_FORCE") else want - set(census))
     for hs in codes:
         try:
             q = [("get", "CTY_CODE,CTY_NAME,GEN_VAL_MO"), ("I_COMMODITY", hs), ("COMM_LVL", "HS4"),

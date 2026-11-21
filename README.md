@@ -54,6 +54,7 @@ Pulled straight from the publishing agency by `fetch_agency.py`; items and per-i
 - **Daily/weekly column.** For FRED rows with a faster source (WTI, Henry Hub, jet fuel, diesel, FX), the newest value is shown against last month's average, which is what the monthly series will print next. Forecasts stay monthly.
 - **Import sourcing.** Latest 12 months of general imports vs the prior 12; top 5 countries by share; concentration is the Herfindahl-Hirschman Index of country shares (Rhoades, 1993), labeled with the U.S. DOJ/FTC (2023) Merger Guidelines cut-offs (1,000 and 1,800) as a yardstick.
 - **Federal demand.** Trailing 12 complete months of contract obligations vs the prior 12. The latest 3 months are shown but excluded, because agencies (DoD with a 90-day delay) are still reporting them.
+- Census is refreshed on Mondays (it is monthly and a full pull takes about 10 minutes); other sources refresh daily.
 - A source whose key is missing is skipped and its card is hidden; a failed download keeps the previous values. `verify_agency.py` recomputes every change, share, HHI and total with separate plain-Python code, and the workflow stops if any differ.
 
 ## Method
