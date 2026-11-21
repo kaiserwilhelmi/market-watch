@@ -1,4 +1,4 @@
-# Refreshes the Industry Market Watch every morning: downloads new FRED data,
+# Refreshes the Industry Market Watch every morning: downloads new FRED and agency data,
 # re-runs forecasts and backtests, checks the numbers, rebuilds the pages and
 # commits the result. GitHub Pages then republishes the site.
 name: Update industry data
@@ -25,10 +25,21 @@ jobs:
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python fetch_data.py
+      - name: Download agency data (EIA, USDA AMS, Census, USAspending)
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          USDA_AMS_API_KEY: ${{ secrets.USDA_AMS_API_KEY }}
+        run: python fetch_agency.py
       - name: Forecasts, backtests, lead/lag
         run: python analyze.py
+      - name: Agency summaries
+        run: python analyze_agency.py
       - name: Independent check of computed numbers
-        run: python verify_calcs.py
+        run: |
+          python verify_calcs.py
+          python verify_agency.py
       - name: Build pages
         run: python build.py
       - name: Commit changes
