@@ -3,6 +3,7 @@
 Output: index.html (hub) and <slug>/index.html for each industry. Each page is a
 single self-contained HTML file with its data embedded.
 """
+import csv
 import json
 from pathlib import Path
 
@@ -25,6 +26,40 @@ def latest_for(ids):
         if sid in ids:
             out[sid] = {**f, "freq": "daily", "publisher": G["publishers"]["FRB"][0]}
     return out
+
+
+def long_hist(sid):
+    """2004+ monthly history from data/long (same FRED values as data/raw from 2018 on),
+    compact: first month + values; leading blanks trimmed, inside gaps kept as null."""
+    rows = [(r["date"][:7], None if r["value"] in ("", ".") else float(r["value"]))
+            for r in csv.DictReader((HERE / "data" / "long" / f"{sid}.csv").open())]
+    while rows and rows[0][1] is None:
+        rows.pop(0)
+    vals = [v for _, v in rows if v is not None]
+    lo, hi = min(vals), max(vals)
+    lo_m = next(m for m, v in rows if v == lo)
+    hi_m = next(m for m, v in rows if v == hi)
+    last = vals[-1]
+    return dict(start=rows[0][0], v=[v for _, v in rows], low=lo, low_m=lo_m, high=hi, high_m=hi_m,
+                pos=(last - lo) / (hi - lo) * 100 if hi > lo else 50.0)
+
+
+USED_IN = {}
+RELATED = {}
+for _ind in A["industries"]:
+    for _sid in _ind["series"]:
+        USED_IN.setdefault(_sid, []).append(dict(slug=_ind["slug"], name=_ind["name"]))
+    for _ll in _ind["leadlag"]:
+        for _sid in (_ll["lead"], _ll["follow"]):
+            RELATED.setdefault(_sid, {})[(_ll["lead"], _ll["follow"])] = _ll
+for _sid, _s in A["series"].items():
+    _s["used_in"] = USED_IN.get(_sid, [])
+    _s["related"] = [dict(r, lead_name=A["series"][r["lead"]]["name"], follow_name=A["series"][r["follow"]]["name"])
+                     for r in sorted(RELATED.get(_sid, {}).values(), key=lambda r: -abs(r["r"]))]
+    _s["hist"] = long_hist(_sid)
+    _obs = [(m, v) for m, v in _s["series"] if v is not None]
+    _s["low_m"] = next(m for m, v in _obs if v == _s["low"])
+    _s["high_m"] = next(m for m, v in _obs if v == _s["high"])
 
 
 def render(title, payload):
