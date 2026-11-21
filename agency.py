@@ -74,7 +74,7 @@ FX_DAILY = ["DEXMXUS", "DEXJPUS", "DEXUSEU", "DEXTAUS", "DEXKOUS", "DEXCHUS", "D
 #        the API takes 2-, 4- or 6-digit NAICS, so 3-digit sectors list their 4-digit parts)
 EXTRAS = {
     "aerospace-defense": dict(spot=["JET", "BRENT"],
-                              hs=[("8411", "Turbojets & gas turbines"), ("8803", "Aircraft parts"), ("7502", "Unwrought nickel")],
+                              hs=[("8411", "Turbojets & gas turbines"), ("8807", "Aircraft parts"), ("7502", "Unwrought nickel")],
                               naics=[("3364", "Aerospace products & parts")]),
     "automotive": dict(spot=["DIESEL_US"],
                        hs=[("8708", "Motor vehicle parts"), ("4011", "New rubber tires"), ("8544", "Insulated wire & harnesses")]),
@@ -103,7 +103,7 @@ EXTRAS = {
     "trucking-freight": dict(spot=["DIESEL_US", "DIESEL_R10", "DIESEL_R20", "DIESEL_R30", "DIESEL_R40", "DIESEL_R50", "ULSD_GULF"],
                              hs=[("4011", "New rubber tires"), ("8704", "Trucks")]),
     "air-ocean": dict(spot=["JET", "BRENT", "ULSD_NYH"],
-                      hs=[("8411", "Turbojets & gas turbines"), ("8803", "Aircraft parts")]),
+                      hs=[("8411", "Turbojets & gas turbines"), ("8807", "Aircraft parts")]),
     "agriculture": dict(spot=["DIESEL_US", "HH"],
                         hs=[("3102", "Nitrogen fertilizers"), ("3104", "Potash fertilizers"), ("3808", "Pesticides & herbicides")]),
     "oil-gas": dict(spot=["WTI", "BRENT", "HH"],
