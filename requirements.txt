@@ -1,3 +1,5 @@
-pandas>=2.2
-numpy>=1.26
-statsmodels>=0.14
+# Exact versions used by the daily run (Nov 2026). Upgrade on purpose, then re-run verify_calcs.py.
+pandas==3.1.1
+numpy==2.5.5
+statsmodels==0.15.0
+scipy==1.18.1

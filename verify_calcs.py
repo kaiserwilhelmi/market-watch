@@ -170,7 +170,8 @@ for sid, (name, group, unit, direction, pub) in SERIES.items():
         if group == "Currency":
             lv = [v * direction for _, v in obs]
         else:
-            lv = [v / cpi[m] * cpi_last * direction for m, v in obs if m in cpi]
+            cpi_at = lambda m: cpi[m] if m in cpi else (cpi_last if m > max(cpi) else None)  # latest CPI carried forward
+            lv = [v / cpi_at(m) * cpi_last * direction for m, v in obs if cpi_at(m)]
         lvl = prank(lv, lv[-1])
     check(close(c["level_pct"], lvl), f"{sid} level pct {c['level_pct']} vs {lvl}")
     out = None

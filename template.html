@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>/*__TITLE__*/</title>
+/*__META__*/
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: one 1240px column; summary strip, then dense master tables, then analyst tools. Matches the Market Watch palette. */
 :root {
   color-scheme: dark;
   --bg: #0b0c0e; --surface: #141518; --border: #26282d; --grid: #1e2024;
-  --text: #ecedef; --text-2: #b4b7bd; --text-3: #8b8f97;
+  --text: #ecedef; --text-2: #b4b7bd; --text-3: #959aa2;
   --accent: #4c9aff; --accent-soft: rgba(76,154,255,.18);
   --good: #2fb344; --warn: #f2b01e; --crit: #e5534b; --neutral: #7d828a;
   --good-ink: #4cc94c; --warn-ink: #f2b01e; --crit-ink: #f07a7a; --neutral-ink: #b4b7bd;
@@ -73,7 +74,7 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-
 .spark svg { display: block; width: 96px; height: 24px; }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 12.5px; cursor: pointer; min-height: 30px; }
-.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #0b0c0e; }
 input[type=search], input[type=number], select { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; min-height: 32px; }
 input[type=search] { width: 220px; max-width: 100%; }
 .acts { display: grid; gap: 0; }
@@ -87,7 +88,7 @@ input[type=search] { width: 220px; max-width: 100%; }
 .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 12.5px; padding: 6px 11px; cursor: pointer; min-height: 32px; }
 .seg button + button { border-left: 1px solid var(--border); }
-.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #0b0c0e; }
 .fig { position: relative; height: 320px; }
 .fig svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .fig text { fill: var(--text-2); font-size: 11px; }
@@ -404,7 +405,7 @@ function detailHTML(s, o) {
         ${meter("3-month move", pct(s.cost_change.m3), c.p3, "m3")}
         ${meter("12-month move", pct(s.cost_change.m12), c.p12, "m12")}
         ${lvl !== null && lvl !== undefined ? meter(c.level_basis === "real" ? "Price after inflation" : "Level in cost terms", "", lvl, "level") : `<p class="note">${s.group === "Labor" ? "Wage levels are not ranked: they rise over time and rarely fall, so a high level is normal." : "Not enough history to rank the price level."}</p>`}
-        ${c.steo ? `<p><b>EIA outlook:</b> next-12-month average ${pct(c.steo.pct, 0)} vs the current quarter (${esc(c.steo.name)}, Short-Term Energy Outlook, ${esc(c.steo.release)}).</p>` : ""}
+        ${c.steo ? `<p><b>EIA outlook:</b> next-12-month average ${pct(c.steo.pct, 0)} vs ${esc(c.steo.basis || "the current period")} (${esc(c.steo.name)}, Short-Term Energy Outlook, ${esc(c.steo.release)}).</p>` : ""}
         <p class="note">Each move is ranked against this driver's own ${s.group === "Currency" ? "cost-terms " : ""}moves since ${mLabel(c.window_start, true)}. Alert: rise above the 90th percentile; Watch: above the 75th; Opportunity: a 3-month fall below the 10th. A move must also be at least 1% over 3 months or 2% over 12 to count.</p>
       </section>
       <section><h3>Forecast accuracy</h3>
