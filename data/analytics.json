@@ -1,5 +1,5 @@
 {
- "built": "2026-11-22 03:33 UTC",
+ "built": "2026-11-22 20:56 UTC",
  "series": {
   "PCU336413336413": {
    "id": "PCU336413336413",
@@ -24140,7 +24140,7 @@
      "avg_next12": 82.58333333333333,
      "key": "WTI",
      "name": "WTI spot",
-     "release": "latest, retrieved 2026-11-21",
+     "release": "latest, retrieved 2026-11-22",
      "basis": "this month's estimate"
     },
     "signal": "Alert",
@@ -24150,7 +24150,7 @@
      "3-month move +26.9% (cost terms) is at the 91st percentile of 3-month moves since 2004.",
      "12-month move +67.6% is at the 91st percentile of 12-month moves.",
      "Price level after inflation is at the 61st percentile of monthly levels since 2004.",
-     "EIA (latest, retrieved 2026-11-21 outlook, WTI spot): next-12-month average -15% vs this month's estimate."
+     "EIA (latest, retrieved 2026-11-22 outlook, WTI spot): next-12-month average -15% vs this month's estimate."
     ]
    },
    "gaps": [],
@@ -24683,7 +24683,7 @@
      "avg_next12": 2.8174352499999995,
      "key": "HH",
      "name": "Henry Hub spot",
-     "release": "latest, retrieved 2026-11-21",
+     "release": "latest, retrieved 2026-11-22",
      "basis": "this month's estimate"
     },
     "signal": "Stable",
@@ -24693,7 +24693,7 @@
      "3-month move +3.5% (cost terms) is at the 54th percentile of 3-month moves since 2004.",
      "12-month move -6.3% is at the 40th percentile of 12-month moves.",
      "Price level after inflation is at the 15th percentile of monthly levels since 2004.",
-     "EIA (latest, retrieved 2026-11-21 outlook, Henry Hub spot): next-12-month average +6% vs this month's estimate."
+     "EIA (latest, retrieved 2026-11-22 outlook, Henry Hub spot): next-12-month average +6% vs this month's estimate."
     ]
    },
    "gaps": [],
@@ -25226,7 +25226,7 @@
      "avg_next12": 511.71343333333334,
      "key": "DIESEL",
      "name": "On-highway diesel, retail",
-     "release": "latest, retrieved 2026-11-21",
+     "release": "latest, retrieved 2026-11-22",
      "basis": "this month's estimate"
     },
     "signal": "Alert",
@@ -25236,7 +25236,7 @@
      "3-month move +26.2% (cost terms) is at the 97th percentile of 3-month moves since 2004.",
      "12-month move +69.9% is at the 99th percentile of 12-month moves.",
      "Price level after inflation is at the 96th percentile of monthly levels since 2004.",
-     "EIA (latest, retrieved 2026-11-21 outlook, On-highway diesel, retail): next-12-month average -16% vs this month's estimate."
+     "EIA (latest, retrieved 2026-11-22 outlook, On-highway diesel, retail): next-12-month average -16% vs this month's estimate."
     ]
    },
    "gaps": [],
@@ -25769,7 +25769,7 @@
      "avg_next12": 350.4761833333334,
      "key": "JET",
      "name": "Jet fuel",
-     "release": "latest, retrieved 2026-11-21",
+     "release": "latest, retrieved 2026-11-22",
      "basis": "this month's estimate"
     },
     "signal": "Alert",
@@ -25779,7 +25779,7 @@
      "3-month move +31.7% (cost terms) is at the 92nd percentile of 3-month moves since 2004.",
      "12-month move +108.1% is at the 96th percentile of 12-month moves.",
      "Price level after inflation is at the 90th percentile of monthly levels since 2004.",
-     "EIA (latest, retrieved 2026-11-21 outlook, Jet fuel): next-12-month average -12% vs this month's estimate."
+     "EIA (latest, retrieved 2026-11-22 outlook, Jet fuel): next-12-month average -12% vs this month's estimate."
     ]
    },
    "gaps": [],
@@ -26847,7 +26847,7 @@
      "avg_next12": 9.139614583333334,
      "key": "ELEC_IND",
      "name": "Electricity, industrial",
-     "release": "latest, retrieved 2026-11-21",
+     "release": "latest, retrieved 2026-11-22",
      "basis": "this month's estimate"
     },
     "signal": "Opportunity",
@@ -26857,7 +26857,7 @@
      "3-month move -9.1% (cost terms) is at the 1st percentile of 3-month moves since 2004.",
      "12-month move -2.0% is at the 10th percentile of 12-month moves.",
      "Price level after inflation is at the 59th percentile of monthly levels since 2004.",
-     "EIA (latest, retrieved 2026-11-21 outlook, Electricity, industrial): next-12-month average +8% vs this month's estimate."
+     "EIA (latest, retrieved 2026-11-22 outlook, Electricity, industrial): next-12-month average +8% vs this month's estimate."
     ]
    },
    "gaps": [],
