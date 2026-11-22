@@ -77,7 +77,8 @@ def steo_outlook(sid, steo):
         return None
     avg = sum(vals[p] for p in ahead) / n
     return dict(pct=(avg / vals[cur] - 1) * 100, current=vals[cur], avg_next12=avg,
-                key=key, name=steo["series"][key]["name"], release=steo["release_label"])
+                key=key, name=steo["series"][key]["name"], release=steo["release_label"],
+                basis="the current quarter" if steo["freq"] == "Q" else "this month's estimate")
 
 
 def assess(sid, group, direction, cost_m3, cost_m12, backtest_chosen, f6_cost, steo, cpi):
@@ -97,7 +98,9 @@ def assess(sid, group, direction, cost_m3, cost_m12, backtest_chosen, f6_cost, s
                 lv = s.copy()
                 out["level_basis"] = "nominal"
             else:
-                c = cpi.reindex(s.index)
+                # CPI comes out mid-month, after the month's average of daily prices is
+                # ready: carry the latest CPI forward so the newest month is not dropped.
+                c = cpi.reindex(s.index).ffill()
                 lv = (s / c * cpi.iloc[-1]).dropna()
                 out["level_basis"] = "real"
             lv = lv * direction           # cost terms: for X-per-USD, a weak dollar ranks high
@@ -185,7 +188,7 @@ def reasons(group, c3, c12, ctx, chosen):
         r.append(f"Price level {basis} is at the {ordinal(ctx['level_pct'])} percentile of monthly levels since {since}.")
     if ctx["steo"]:
         st = ctx["steo"]
-        r.append(f"EIA ({st['release']} outlook, {st['name']}): next-12-month average {st['pct']:+.0f}% vs the current quarter.")
+        r.append(f"EIA ({st['release']} outlook, {st['name']}): next-12-month average {st['pct']:+.0f}% vs {st['basis']}.")
     elif chosen == "ets":
         r.append(f"Backtested model expects {ctx['outlook']:+.1f}% cost change over 6 months.")
     elif group != "Labor":

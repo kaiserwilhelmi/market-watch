@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
@@ -48,4 +48,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add data index.html */index.html
           git diff --cached --quiet || git commit -m "Daily data update $(date -u +%Y-%m-%d)"
+          # a PR may have been merged while this ran: put the data commit on top of it (a conflict stops
+          # the run; the next day's run rebuilds everything from the new main)
+          git pull --rebase origin main
           git push

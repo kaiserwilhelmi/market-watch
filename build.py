@@ -4,6 +4,7 @@ Output: index.html (hub) and <slug>/index.html for each industry. Each page is a
 single self-contained HTML file with its data embedded.
 """
 import csv
+import html
 import json
 from pathlib import Path
 
@@ -62,9 +63,24 @@ for _sid, _s in A["series"].items():
     _s["high_m"] = next(m for m, v in _obs if v == _s["high"])
 
 
-def render(title, payload):
+def head_meta(title, desc, path):
+    """Search description, site icon and link-preview (Open Graph) tags."""
+    e = lambda s: html.escape(s, quote=True)
+    url = "https://dawsonwilhelmi.com/market-watch/" + path
+    return "\n".join([
+        f'<meta name="description" content="{e(desc)}">',
+        '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+        '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Dawson Wilhelmi">',
+        f'<meta property="og:title" content="{e(title)}">', f'<meta property="og:description" content="{e(desc)}">',
+        f'<meta property="og:url" content="{url}">', '<meta property="og:image" content="https://dawsonwilhelmi.com/og.png">',
+        '<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">',
+        '<meta name="twitter:card" content="summary_large_image">'])
+
+
+def render(title, payload, desc, path=""):
     blob = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
-    return TEMPLATE.replace("/*__TITLE__*/", title).replace("/*__DATA__*/null", blob)
+    return (TEMPLATE.replace("/*__TITLE__*/", html.escape(title, quote=False)).replace("/*__META__*/", head_meta(title, desc, path))
+            .replace("/*__DATA__*/null", blob))
 
 
 def slim(s, keep=24):
@@ -76,7 +92,8 @@ hub = dict(page="hub", built=A["built"], industries=A["industries"],
            series={k: slim(v) for k, v in A["series"].items()},
            latest=latest_for(set(A["series"])), hub_spot=[G["spot"][k] for k in G["hub_spot"]],
            agency_pubs=sorted({tuple(v) for v in G["publishers"].values()}))
-(HERE / "index.html").write_text(render("Industry Market Watch", hub))
+(HERE / "index.html").write_text(render("Industry Market Watch", hub,
+    f"Input-cost signals for {len(A['industries'])} industries from published price, wage, freight and currency data, updated daily."))
 
 for ind in A["industries"]:
     x = G["industries"].get(ind["slug"], dict(spot=[], hs=[], naics=[]))
@@ -96,7 +113,7 @@ for ind in A["industries"]:
                    agency_pubs=sorted({tuple(v) for v in G["publishers"].values() if v[0] in used}))
     out = HERE / ind["slug"] / "index.html"
     out.parent.mkdir(exist_ok=True)
-    out.write_text(render(f"{ind['name']} Market Watch", payload))
+    out.write_text(render(f"{ind['name']} Market Watch", payload, f"{ind['name']}: input-cost drivers, buying signals and 6-month forecasts. {ind['blurb']}", ind["slug"] + "/"))
 
 print(f"built index.html + {len(A['industries'])} industry pages")
 assert len(A["industries"]) == len(INDUSTRIES)
