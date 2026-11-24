@@ -3183,20 +3183,16 @@
    "source": "https://www.eia.gov/petroleum/gasdiesel/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 5.937,
-   "latest_date": "2026-11-16",
-   "chg_short": -5.4015296367112775,
-   "short_from": "2026-10-19",
-   "chg_year": 53.49017580144779,
-   "year_from": "2025-11-17",
+   "latest": 5.695,
+   "latest_date": "2026-11-23",
+   "chg_short": -10.343198992443325,
+   "short_from": "2026-10-26",
+   "chg_year": 48.65570347167842,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 6.2515,
-   "vs_prev_month": -5.030792609773648,
+   "vs_prev_month": -8.901863552747336,
    "series": [
-    [
-     "2026-05-25",
-     5.523
-    ],
     [
      "2026-06-01",
      5.35
@@ -3296,6 +3292,10 @@
     [
      "2026-11-16",
      5.937
+    ],
+    [
+     "2026-11-23",
+     5.695
     ]
    ]
   },
@@ -3308,20 +3308,16 @@
    "source": "https://www.eia.gov/petroleum/gasdiesel/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 5.782,
-   "latest_date": "2026-11-16",
-   "chg_short": -3.375668449197855,
-   "short_from": "2026-10-19",
-   "chg_year": 49.948132780082986,
-   "year_from": "2025-11-17",
+   "latest": 5.619,
+   "latest_date": "2026-11-23",
+   "chg_short": -7.567034051653232,
+   "short_from": "2026-10-26",
+   "chg_year": 45.494562402900044,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 5.9805,
-   "vs_prev_month": -3.31912047487668,
+   "vs_prev_month": -6.044645096563839,
    "series": [
-    [
-     "2026-05-25",
-     5.394
-    ],
     [
      "2026-06-01",
      5.237
@@ -3421,6 +3417,10 @@
     [
      "2026-11-16",
      5.782
+    ],
+    [
+     "2026-11-23",
+     5.619
     ]
    ]
   },
@@ -3433,20 +3433,16 @@
    "source": "https://www.eia.gov/petroleum/gasdiesel/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 5.967,
-   "latest_date": "2026-11-16",
-   "chg_short": -6.061083123425703,
-   "short_from": "2026-10-19",
-   "chg_year": 52.491694352159456,
-   "year_from": "2025-11-17",
+   "latest": 5.671,
+   "latest_date": "2026-11-23",
+   "chg_short": -12.484567901234566,
+   "short_from": "2026-10-26",
+   "chg_year": 47.2987012987013,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 6.34425,
-   "vs_prev_month": -5.946329353351465,
+   "vs_prev_month": -10.611971470228942,
    "series": [
-    [
-     "2026-05-25",
-     5.623
-    ],
     [
      "2026-06-01",
      5.392
@@ -3546,6 +3542,10 @@
     [
      "2026-11-16",
      5.967
+    ],
+    [
+     "2026-11-23",
+     5.671
     ]
    ]
   },
@@ -3558,20 +3558,16 @@
    "source": "https://www.eia.gov/petroleum/gasdiesel/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 5.547,
-   "latest_date": "2026-11-16",
-   "chg_short": -6.030831780450619,
-   "short_from": "2026-10-19",
-   "chg_year": 58.93982808022922,
-   "year_from": "2025-11-17",
+   "latest": 5.294,
+   "latest_date": "2026-11-23",
+   "chg_short": -11.040161317425646,
+   "short_from": "2026-10-26",
+   "chg_year": 53.0500144550448,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 5.8705,
-   "vs_prev_month": -5.510603866791586,
+   "vs_prev_month": -9.82028788007836,
    "series": [
-    [
-     "2026-05-25",
-     5.045
-    ],
     [
      "2026-06-01",
      4.9
@@ -3671,6 +3667,10 @@
     [
      "2026-11-16",
      5.547
+    ],
+    [
+     "2026-11-23",
+     5.294
     ]
    ]
   },
@@ -3683,20 +3683,16 @@
    "source": "https://www.eia.gov/petroleum/gasdiesel/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 6.011,
-   "latest_date": "2026-11-16",
-   "chg_short": -6.399875428215507,
-   "short_from": "2026-10-19",
-   "chg_year": 57.644899029635454,
-   "year_from": "2025-11-17",
+   "latest": 5.772,
+   "latest_date": "2026-11-23",
+   "chg_short": -11.4859684097531,
+   "short_from": "2026-10-26",
+   "chg_year": 55.0362610797744,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 6.378,
-   "vs_prev_month": -5.754154907494513,
+   "vs_prev_month": -9.501411100658508,
    "series": [
-    [
-     "2026-05-25",
-     5.493
-    ],
     [
      "2026-06-01",
      5.331
@@ -3796,6 +3792,10 @@
     [
      "2026-11-16",
      6.011
+    ],
+    [
+     "2026-11-23",
+     5.772
     ]
    ]
   },
@@ -3808,20 +3808,16 @@
    "source": "https://www.eia.gov/petroleum/gasdiesel/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 6.948,
-   "latest_date": "2026-11-16",
-   "chg_short": -6.031917771165807,
-   "short_from": "2026-10-19",
-   "chg_year": 52.40184250932223,
-   "year_from": "2025-11-17",
+   "latest": 6.709,
+   "latest_date": "2026-11-23",
+   "chg_short": -8.45954427616319,
+   "short_from": "2026-10-26",
+   "chg_year": 48.62649534780681,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 7.298,
-   "vs_prev_month": -4.79583447519868,
+   "vs_prev_month": -8.070704302548648,
    "series": [
-    [
-     "2026-05-25",
-     6.5
-    ],
     [
      "2026-06-01",
      6.398
@@ -3921,6 +3917,10 @@
     [
      "2026-11-16",
      6.948
+    ],
+    [
+     "2026-11-23",
+     6.709
     ]
    ]
   },
@@ -3933,20 +3933,16 @@
    "source": "https://www.eia.gov/electricity/monthly/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 9.64,
-   "latest_date": "2026-08",
-   "chg_short": -1.3306038894575156,
-   "short_from": "2026-07",
-   "chg_year": 7.349665924276172,
-   "year_from": "2025-08",
+   "latest": 9.52,
+   "latest_date": "2026-09",
+   "chg_short": -1.2448132780083054,
+   "short_from": "2026-08",
+   "chg_year": 6.966292134831442,
+   "year_from": "2025-09",
    "prev_month": null,
    "prev_month_avg": null,
    "vs_prev_month": null,
    "series": [
-    [
-     "2024-09",
-     8.45
-    ],
     [
      "2024-10",
      8.11
@@ -4038,6 +4034,10 @@
     [
      "2026-08",
      9.64
+    ],
+    [
+     "2026-09",
+     9.52
     ]
    ]
   },
@@ -4050,20 +4050,16 @@
    "source": "https://www.eia.gov/electricity/monthly/",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 14.47,
-   "latest_date": "2026-08",
-   "chg_short": -0.4129387474191226,
-   "short_from": "2026-07",
-   "chg_year": 4.325883201153569,
-   "year_from": "2025-08",
+   "latest": 14.27,
+   "latest_date": "2026-09",
+   "chg_short": -1.3821700069108545,
+   "short_from": "2026-08",
+   "chg_year": 2.514367816091956,
+   "year_from": "2025-09",
    "prev_month": null,
    "prev_month_avg": null,
    "vs_prev_month": null,
    "series": [
-    [
-     "2024-09",
-     13.23
-    ],
     [
      "2024-10",
      12.89
@@ -4155,6 +4151,10 @@
     [
      "2026-08",
      14.47
+    ],
+    [
+     "2026-09",
+     14.27
     ]
    ]
   },
@@ -4284,20 +4284,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 355.62,
-   "latest_date": "2026-11-23",
-   "chg_short": -3.7407968817669945,
-   "short_from": "2026-10-26",
-   "chg_year": -4.013603606035254,
-   "year_from": "2025-11-24",
+   "latest": 359.91,
+   "latest_date": "2026-11-24",
+   "chg_short": -3.3071839234861122,
+   "short_from": "2026-10-27",
+   "chg_year": -2.7506822664757125,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 372.76454545454544,
-   "vs_prev_month": -4.599296167944178,
+   "vs_prev_month": -3.448435644240444,
    "series": [
-    [
-     "2026-05-26",
-     392.9
-    ],
     [
      "2026-05-27",
      394.72
@@ -4805,6 +4801,10 @@
     [
      "2026-11-23",
      355.62
+    ],
+    [
+     "2026-11-24",
+     359.91
     ]
    ]
   },
@@ -4817,20 +4817,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 342.36,
-   "latest_date": "2026-11-23",
-   "chg_short": -4.251034791363684,
-   "short_from": "2026-10-26",
-   "chg_year": -3.6989114230260745,
-   "year_from": "2025-11-24",
+   "latest": 346.0,
+   "latest_date": "2026-11-24",
+   "chg_short": -3.580883377455768,
+   "short_from": "2026-10-27",
+   "chg_year": -2.7898744135082754,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 354.9831818181819,
-   "vs_prev_month": -3.555994330077117,
+   "vs_prev_month": -2.530593638879197,
    "series": [
-    [
-     "2026-05-26",
-     390.3
-    ],
     [
      "2026-05-27",
      389.29
@@ -5338,6 +5334,10 @@
     [
      "2026-11-23",
      342.36
+    ],
+    [
+     "2026-11-24",
+     346.0
     ]
    ]
   },
@@ -5350,20 +5350,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2843",
    "publisher": "USDA Agricultural Marketing Service, My Market News",
    "publisher_url": "https://mymarketnews.ams.usda.gov/",
-   "latest": 130.96,
-   "latest_date": "2026-11-23",
-   "chg_short": 354.40666204024984,
-   "short_from": "2026-10-26",
-   "chg_year": -42.12224333760551,
-   "year_from": "2025-11-24",
+   "latest": 137.7,
+   "latest_date": "2026-11-24",
+   "chg_short": 342.3385801477674,
+   "short_from": "2026-10-27",
+   "chg_year": -39.34455114086865,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 35.95761904761905,
-   "vs_prev_month": 264.2065394445843,
+   "vs_prev_month": 282.9508283561335,
    "series": [
-    [
-     "2026-05-26",
-     32.89
-    ],
     [
      "2026-05-27",
      29.06
@@ -5859,6 +5855,10 @@
     [
      "2026-11-23",
      130.96
+    ],
+    [
+     "2026-11-24",
+     137.7
     ]
    ]
   },
@@ -12655,9 +12655,9 @@
   },
   "3364": {
    "code": "3364",
-   "t12": 179973035822.91,
+   "t12": 180037343337.56,
    "p12": 118186647967.76,
-   "yoy": 52.278653229935635,
+   "yoy": 52.33306505712234,
    "through": "2026-07",
    "window": [
     "2025-08",
@@ -12776,7 +12776,7 @@
     ],
     [
      "2026-05",
-     15682076976.0,
+     15682000572.33,
      false
     ],
     [
@@ -12786,12 +12786,12 @@
     ],
     [
      "2026-07",
-     10805407625.04,
+     10869791543.36,
      false
     ],
     [
      "2026-08",
-     1406245302.6,
+     1407282158.05,
      true
     ],
     [
