@@ -4284,15 +4284,15 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 352.84,
-   "latest_date": "2026-11-20",
-   "chg_short": -3.54028267585228,
-   "short_from": "2026-10-23",
-   "chg_year": -5.017766770754828,
-   "year_from": "2025-11-21",
+   "latest": 355.62,
+   "latest_date": "2026-11-23",
+   "chg_short": -3.7407968817669945,
+   "short_from": "2026-10-26",
+   "chg_year": -4.013603606035254,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 372.76454545454544,
-   "vs_prev_month": -5.345075248572706,
+   "vs_prev_month": -4.599296167944178,
    "series": [
     [
      "2026-05-26",
@@ -4801,6 +4801,10 @@
     [
      "2026-11-20",
      352.84
+    ],
+    [
+     "2026-11-23",
+     355.62
     ]
    ]
   },
@@ -4813,15 +4817,15 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 342.92,
-   "latest_date": "2026-11-20",
-   "chg_short": -2.770138081601403,
-   "short_from": "2026-10-23",
-   "chg_year": -3.9385959997758957,
-   "year_from": "2025-11-21",
+   "latest": 342.36,
+   "latest_date": "2026-11-23",
+   "chg_short": -4.251034791363684,
+   "short_from": "2026-10-26",
+   "chg_year": -3.6989114230260745,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 354.9831818181819,
-   "vs_prev_month": -3.3982403775851266,
+   "vs_prev_month": -3.555994330077117,
    "series": [
     [
      "2026-05-26",
@@ -5330,6 +5334,10 @@
     [
      "2026-11-20",
      342.92
+    ],
+    [
+     "2026-11-23",
+     342.36
     ]
    ]
   },
@@ -5342,15 +5350,15 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2843",
    "publisher": "USDA Agricultural Marketing Service, My Market News",
    "publisher_url": "https://mymarketnews.ams.usda.gov/",
-   "latest": 118.32,
-   "latest_date": "2026-11-20",
-   "chg_short": 329.31785195936135,
-   "short_from": "2026-10-23",
-   "chg_year": -46.65223860408495,
-   "year_from": "2025-11-21",
+   "latest": 130.96,
+   "latest_date": "2026-11-23",
+   "chg_short": 354.40666204024984,
+   "short_from": "2026-10-26",
+   "chg_year": -42.12224333760551,
+   "year_from": "2025-11-24",
    "prev_month": "2026-10",
    "prev_month_avg": 35.95761904761905,
-   "vs_prev_month": 229.05404510601102,
+   "vs_prev_month": 264.2065394445843,
    "series": [
     [
      "2026-05-26",
@@ -5847,6 +5855,10 @@
     [
      "2026-11-20",
      118.32
+    ],
+    [
+     "2026-11-23",
+     130.96
     ]
    ]
   },
@@ -6103,53 +6115,53 @@
  },
  "fx": {
   "DEXMXUS": {
-   "latest": 18.569,
-   "latest_date": "2026-11-13",
+   "latest": 19.038,
+   "latest_date": "2026-11-20",
    "prev_month": "2026-10",
    "prev_month_avg": 18.446357142857142,
-   "vs_prev_month": 0.6648622066300458
+   "vs_prev_month": 3.2073696316345934
   },
   "DEXJPUS": {
-   "latest": 159.93,
-   "latest_date": "2026-11-13",
+   "latest": 158.76,
+   "latest_date": "2026-11-20",
    "prev_month": "2026-10",
    "prev_month_avg": 157.9747619047619,
-   "vs_prev_month": 1.2376901675071883
+   "vs_prev_month": 0.497065534880492
   },
   "DEXUSEU": {
-   "latest": 1.1034,
-   "latest_date": "2026-11-13",
+   "latest": 1.0981,
+   "latest_date": "2026-11-20",
    "prev_month": "2026-10",
    "prev_month_avg": 1.1197666666666666,
-   "vs_prev_month": -1.4616140267317612
+   "vs_prev_month": -1.9349269192986518
   },
   "DEXTAUS": {
-   "latest": 32.87,
-   "latest_date": "2026-11-13",
+   "latest": 32.97,
+   "latest_date": "2026-11-20",
    "prev_month": "2026-10",
    "prev_month_avg": 32.269523809523804,
-   "vs_prev_month": 1.8608151580438603
+   "vs_prev_month": 2.1707050733406286
   },
   "DEXKOUS": {
-   "latest": 1336.58,
-   "latest_date": "2026-11-13",
+   "latest": 1342.41,
+   "latest_date": "2026-11-20",
    "prev_month": "2026-10",
    "prev_month_avg": 1337.3604761904762,
-   "vs_prev_month": -0.058359447910372175
+   "vs_prev_month": 0.37757387775565476
   },
   "DEXCHUS": {
-   "latest": 6.671,
-   "latest_date": "2026-11-13",
+   "latest": 6.677,
+   "latest_date": "2026-11-20",
    "prev_month": "2026-10",
    "prev_month_avg": 6.684371428571428,
-   "vs_prev_month": -0.2000401790102968
+   "vs_prev_month": -0.11027856022363114
   },
   "DEXCAUS": {
-   "latest": 1.4256,
-   "latest_date": "2026-11-13",
+   "latest": 1.4323,
+   "latest_date": "2026-11-20",
    "prev_month": "2026-10",
    "prev_month_avg": 1.4134666666666669,
-   "vs_prev_month": 0.858409584001496
+   "vs_prev_month": 1.332421469672651
   }
  },
  "census": {
@@ -12643,9 +12655,9 @@
   },
   "3364": {
    "code": "3364",
-   "t12": 180009745732.63,
+   "t12": 179973035822.91,
    "p12": 118186647967.76,
-   "yoy": 52.30971419185582,
+   "yoy": 52.278653229935635,
    "through": "2026-07",
    "window": [
     "2025-08",
@@ -12744,7 +12756,7 @@
     ],
     [
      "2026-01",
-     7798864941.8,
+     7765486425.08,
      false
     ],
     [
@@ -12754,7 +12766,7 @@
     ],
     [
      "2026-03",
-     23777127480.61,
+     23773796087.61,
      false
     ],
     [
@@ -12779,7 +12791,7 @@
     ],
     [
      "2026-08",
-     1406185968.15,
+     1406245302.6,
      true
     ],
     [
@@ -12796,9 +12808,9 @@
   },
   "3391": {
    "code": "3391",
-   "t12": 2467271548.59,
+   "t12": 2467272251.33,
    "p12": 3251647381.83,
-   "yoy": -24.12241369168878,
+   "yoy": -24.1223920798743,
    "through": "2026-07",
    "window": [
     "2025-08",
@@ -12927,12 +12939,12 @@
     ],
     [
      "2026-07",
-     161468165.69,
+     161468868.43,
      false
     ],
     [
      "2026-08",
-     167028022.59,
+     167335568.34,
      true
     ],
     [
