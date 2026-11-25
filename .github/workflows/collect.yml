@@ -33,6 +33,8 @@ jobs:
     if: github.event_name != 'push' || github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '[run-collector]')
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    outputs:
+      deploy: ${{ steps.run.outputs.publish == 'true' && github.ref == 'refs/heads/main' }}
     env:
       LIVE: ${{ github.ref == 'refs/heads/main' }}
       BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
@@ -54,18 +56,24 @@ jobs:
           echo "MW_OUT_DIR=$PWD/_site" >> "$GITHUB_ENV"
       - name: Plan (what is due right now)
         id: plan
-        run: python3 collect.py --plan ${{ (inputs.all || github.event_name == 'push') && '--all' || '' }}
+        run: |
+          # everything: asked for by hand, or a test run on a working branch. A code change on main
+          # rebuilds the pages from the data already held and calls only the publishers that are due.
+          ARGS="${{ (inputs.all || (github.event_name == 'push' && env.LIVE != 'true')) && '--all --rebuild' || (github.event_name == 'push' && '--rebuild' || '') }}"
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+          python3 collect.py --plan $(echo "$ARGS" | grep -o -- '--all' || true)
+          [ -n "$ARGS" ] && echo "go=true" >> "$GITHUB_OUTPUT" || true
       - uses: actions/setup-python@v6
-        if: steps.plan.outputs.calls != '0'
+        if: steps.plan.outputs.calls != '0' || steps.plan.outputs.go == 'true'
         with:
           python-version: "3.12"
           cache: pip
       - name: Collect, recalculate, check, build
         id: run
-        if: steps.plan.outputs.calls != '0'
+        if: steps.plan.outputs.calls != '0' || steps.plan.outputs.go == 'true'
         run: |
           pip install -q -r requirements.txt
-          python run.py ${{ (inputs.all || github.event_name == 'push') && '--all --rebuild' || '' }}
+          python run.py ${{ steps.plan.outputs.args }}
       - name: Save data
         if: steps.run.outputs.publish == 'true'
         run: |
@@ -86,8 +94,19 @@ jobs:
         if: steps.run.outputs.publish == 'true' && env.LIVE == 'true'
         with:
           path: _site
-      - uses: actions/deploy-pages@v4
-        if: steps.run.outputs.publish == 'true' && env.LIVE == 'true'
       - name: Fail the run if a publisher keeps failing (the pages above already say so)
-        if: steps.plan.outputs.calls != '0'
+        if: steps.plan.outputs.calls != '0' || steps.plan.outputs.go == 'true'
         run: python check_refresh.py
+
+  # Deploying in its own job: the Pages artifact uploaded above is not visible to a deploy step in the same job.
+  deploy:
+    needs: collect
+    if: always() && needs.collect.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,7 +1,23 @@
 {
  "agency": {
-  "checked": "2026-11-25 10:32 UTC",
-  "failed": [],
+  "checked": "2026-11-25 19:53 UTC",
+  "failed": [
+   "BRENT",
+   "DIESEL_R10",
+   "DIESEL_R20",
+   "DIESEL_R30",
+   "DIESEL_R40",
+   "DIESEL_R50",
+   "DIESEL_US",
+   "ELEC_COM",
+   "ELEC_IND",
+   "HH",
+   "JET",
+   "NG_IND",
+   "STEO",
+   "ULSD_GULF",
+   "ULSD_NYH"
+  ],
   "tried": 69
  }
 }

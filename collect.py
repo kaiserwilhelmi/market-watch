@@ -62,7 +62,15 @@ def scrub(t):
     return " ".join(t.split())[:200]
 
 
+SLOW = set()   # hosts that already timed out or answered 5xx in this run
+
+
 def http(url, data=None, headers=None, timeout=60, tries=3, binary=False):
+    """GET or POST with retries. Once a host has failed every try, later calls to it in the same
+    run get one short try, so a publisher having a bad day costs minutes and not the whole run."""
+    host = urllib.parse.urlsplit(url).netloc
+    if host in SLOW:
+        timeout, tries = min(timeout, 20), 1
     last = None
     for i in range(tries):
         try:
@@ -73,10 +81,12 @@ def http(url, data=None, headers=None, timeout=60, tries=3, binary=False):
         except urllib.error.HTTPError as e:
             last = ValueError(f"HTTP {e.code}: {scrub(e.read()[:300].decode('utf-8', 'replace'))}")
             if e.code in (400, 401, 403, 404):
-                break
+                raise last from None
         except Exception as e:  # timeouts, resets
             last = e
-        time.sleep(3 * (i + 1))
+        if i < tries - 1:
+            time.sleep(3 * (i + 1))
+    SLOW.add(host)
     raise last
 
 
