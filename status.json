@@ -27,7 +27,7 @@
    "ok": true
   }
  },
- "run": "2026-11-25T22:23:05Z",
+ "run": "2026-11-25T22:45:16Z",
  "schema": 1,
  "series": {
   "APU0000708111": {
@@ -1468,5 +1468,5 @@
    "url": "https://www.worldbank.org/en/research/commodity-markets"
   }
  },
- "version": "b5a6ac5b8999"
+ "version": "b6e2bd1706cf"
 }
