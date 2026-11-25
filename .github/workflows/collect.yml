@@ -16,8 +16,8 @@ on:
         description: "Call every publisher now and rebuild everything"
         type: boolean
         default: false
-  push:                      # test runs: a working branch can ask for one run with [run-collector] in the commit message
-    branches: ["claude/**"]
+  push:                      # main: any code change rebuilds and redeploys the site.
+    branches: ["main", "claude/**"]   # working branches: one test run when the commit message has [run-collector]
 
 permissions:
   contents: write
@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   collect:
-    if: github.event_name != 'push' || contains(github.event.head_commit.message, '[run-collector]')
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '[run-collector]')
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
