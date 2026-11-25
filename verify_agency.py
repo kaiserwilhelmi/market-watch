@@ -9,11 +9,12 @@ from datetime import date, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).parent
+from paths import DATA
 sys.path.insert(0, str(HERE))
 from agency import SPOT, USA_LAG_MONTHS, TOP_N  # noqa: E402
 
-A = json.loads((HERE / "data" / "agency_analytics.json").read_text())
-raw = {n: json.loads(p.read_text()) if (p := HERE / "data" / "agency" / f"{n}.json").exists() else {}
+A = json.loads((DATA / "agency_analytics.json").read_text())
+raw = {n: json.loads(p.read_text()) if (p := DATA / "agency" / f"{n}.json").exists() else {}
        for n in ("spot", "fx", "census", "usaspending")}
 bad = []
 

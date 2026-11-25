@@ -23,7 +23,8 @@ import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).parent
-LONG = HERE / "data" / "long"
+from paths import DATA
+LONG = DATA / "long"
 DEFLATOR = "CPIAUCSL"            # CPI-U, all items (BLS), to put levels in today's dollars
 MIN_MONTHS = 120                 # need 10+ years for a level percentile
 
@@ -198,7 +199,7 @@ def reasons(group, c3, c12, ctx, chosen):
 
 def load_steo(today=None):
     """The EIA outlook, or None if missing or more than 4 months old (stale advice is worse than none)."""
-    p = HERE / "data" / "steo.json"
+    p = DATA / "steo.json"
     if not p.exists():
         return None
     st = json.loads(p.read_text())

@@ -1,7 +1,11 @@
-"""Download agency data (EIA, USDA AMS, Census trade, USAspending, daily FX) into data/agency/.
+"""Download agency data (EIA, USDA AMS, Census trade, USAspending) into data/agency/.
+
+Called by collect.py, which decides when each group is due and passes it in MW_GROUPS
+(spot, steo, census, usa). Run by hand it fetches every group. Daily exchange rates come
+from the Federal Reserve directly in collect.py.
 
 Standard library only. Keys come from repository secrets:
-  EIA_API_KEY, CENSUS_API_KEY, USDA_AMS_API_KEY, FRED_API_KEY (daily FX).
+  EIA_API_KEY, CENSUS_API_KEY, USDA_AMS_API_KEY.
 A source with no key is skipped. Any item that fails keeps its previous values,
 so one agency outage never blanks the page.
 """
@@ -16,12 +20,14 @@ import urllib.request
 from datetime import date, timedelta
 from pathlib import Path
 
-from agency import SPOT, FX_DAILY, EXTRAS, CENSUS_START, USA_START
+from agency import SPOT, EXTRAS, CENSUS_START, USA_START
 
-OUT = Path(__file__).parent / "data" / "agency"
+DATA = Path(os.environ.get("MW_DATA_DIR") or Path(__file__).parent / "data")
+OUT = DATA / "agency"
+GROUPS = set(filter(None, os.environ.get("MW_GROUPS", "spot,steo,census,usa").split(",")))
 OUT.mkdir(parents=True, exist_ok=True)
-KEY = {k: os.environ.get(k, "").strip() for k in ("EIA_API_KEY", "CENSUS_API_KEY", "USDA_AMS_API_KEY", "FRED_API_KEY")}
-UA = {"User-Agent": "industry-market-watch/1.0 (+https://github.com/)"}
+KEY = {k: os.environ.get(k, "").strip() for k in ("EIA_API_KEY", "CENSUS_API_KEY", "USDA_AMS_API_KEY")}
+UA = {"User-Agent": "industry-market-watch/2.0 (static site data collector)"}
 TODAY = date.today()
 log, failed = [], []
 
@@ -127,7 +133,7 @@ def ams(src, spec):
 
 # ------------------------------------------------------------------ run
 spot = load("spot.json")
-for key, (name, unit, freq, src, spec, *_rest) in SPOT.items():
+for key, (name, unit, freq, src, spec, *_rest) in (SPOT.items() if "spot" in GROUPS else ()):
     need = "EIA_API_KEY" if src == "EIA" else "USDA_AMS_API_KEY" if src == "AMS-MMN" else None
     if need and not KEY[need]:
         log.append(f"skip {key:11s} no {need}")
@@ -150,7 +156,7 @@ save("spot.json", spot)
 STEO_IDS = {"WTI": ("WTIPUUS", "WTI spot", "$/bbl"), "BRENT": ("BREPUUS", "Brent spot", "$/bbl"),
             "HH": ("NGHHUUS", "Henry Hub spot", "$/MMBtu"), "DIESEL": ("DSRTUUS", "On-highway diesel, retail", "$/gal"),
             "JET": ("JKTCUUS", "Jet fuel", "$/gal"), "ELEC_IND": ("ESICUUS", "Electricity, industrial", "¢/kWh")}
-if KEY["EIA_API_KEY"]:
+if KEY["EIA_API_KEY"] and "steo" in GROUPS:
     try:
         cur = TODAY.strftime("%Y-%m")
         series = {}
@@ -166,32 +172,11 @@ if KEY["EIA_API_KEY"]:
         steo = {"release": cur, "release_label": f"latest, retrieved {TODAY.isoformat()}",
                 "source": "U.S. Energy Information Administration, Short-Term Energy Outlook (API v2, route steo)",
                 "url": "https://www.eia.gov/outlooks/steo/", "freq": "M", "current": cur, "series": series}
-        (OUT.parent / "steo.json").write_text(json.dumps(steo, indent=1))
+        (DATA / "steo.json").write_text(json.dumps(steo, indent=1))
         log.append(f"ok   STEO {len(series)} series, current {cur}")
     except Exception as e:
         failed.append("STEO")
         log.append(f"FAIL STEO kept previous data/steo.json: {scrub(str(e))}")
-
-# Daily exchange rates (Federal Reserve H.10 via FRED)
-fx = load("fx.json")
-if KEY["FRED_API_KEY"]:
-    for sid in FX_DAILY:
-        try:
-            q = {"series_id": sid, "api_key": KEY["FRED_API_KEY"], "file_type": "json",
-                 "observation_start": (TODAY - timedelta(days=120)).isoformat()}
-            j = get("https://api.stlouisfed.org/fred/series/observations?" + urllib.parse.urlencode(q))
-            rows = [[o["date"], num(o["value"])] for o in j["observations"] if num(o["value"]) is not None]
-            if len(rows) < 20:
-                raise ValueError(f"only {len(rows)} rows")
-            fx[sid] = rows
-            log.append(f"ok   {sid:11s} daily FX {len(rows)} rows, latest {rows[-1][0]} {rows[-1][1]}")
-        except Exception as e:
-            failed.append(sid)
-            log.append(f"FAIL {sid:11s} {e}")
-        time.sleep(0.6)
-    save("fx.json", fx)
-else:
-    log.append("skip daily FX: no FRED_API_KEY")
 
 # Census imports by HS4 and country
 census = load("census.json")
@@ -199,7 +184,9 @@ census = load("census.json")
 # so refresh weekly (Mondays) or when codes are missing.
 want = {h for x in EXTRAS.values() for h, _ in x.get("hs", [])}
 census_due = TODAY.weekday() == 0 or not want <= set(census) or os.environ.get("CENSUS_FORCE")
-if KEY["CENSUS_API_KEY"] and not census_due:
+if "census" not in GROUPS:
+    pass
+elif KEY["CENSUS_API_KEY"] and not census_due:
     log.append("skip Census imports: refreshed weekly on Mondays")
 elif KEY["CENSUS_API_KEY"]:
     codes = sorted(want if TODAY.weekday() == 0 or os.environ.get("CENSUS_FORCE") else want - set(census))
@@ -230,7 +217,7 @@ else:
 # USAspending contract obligations by NAICS (no key)
 usa = load("usaspending.json")
 naics = {n[0]: (n[2] if len(n) > 2 else [n[0]]) for x in EXTRAS.values() for n in x.get("naics", [])}
-for code, parts in sorted(naics.items()):
+for code, parts in (sorted(naics.items()) if "usa" in GROUPS else ()):
     try:
         body = json.dumps({"group": "month", "filters": {
             "time_period": [{"start_date": USA_START, "end_date": TODAY.isoformat()}],
@@ -259,7 +246,7 @@ save("usaspending.json", usa)
 print("\n".join(log))
 print(f"agency fetch done; {len(failed)} failed: {', '.join(failed) or 'none'}")
 # record what kept old data, for check_refresh.py (skipped sources with no key are not counted)
-STATUS = OUT.parent / "refresh_status.json"
+STATUS = DATA / "refresh_status.json"
 status = json.loads(STATUS.read_text()) if STATUS.exists() else {}
 status["agency"] = dict(checked=time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),
                         tried=sum(line.startswith(("ok", "FAIL")) for line in log), failed=sorted(failed))

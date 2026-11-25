@@ -12,7 +12,8 @@ import warnings
 from pathlib import Path
 
 HERE = Path(__file__).parent
-A = json.load(open(HERE / "data" / "analytics.json"))
+from paths import DATA
+A = json.load(open(DATA / "analytics.json"))
 sys.path.insert(0, str(HERE))
 from series import SERIES, INDUSTRIES  # noqa: E402
 
@@ -32,7 +33,7 @@ def months_add(ym, k):
     return f"{t // 12:04d}-{t % 12 + 1:02d}"
 
 def read(sid):
-    rows = list(csv.DictReader(open(HERE / "data" / "raw" / f"{sid}.csv")))
+    rows = list(csv.DictReader(open(DATA / "raw" / f"{sid}.csv")))
     return [(r["date"][:7], float(r["value"]) if r["value"] not in ("", ".") else None) for r in rows]
 
 def fill(obs):
@@ -142,13 +143,13 @@ for ind, (slug, name, blurb, ids) in zip(A["industries"], INDUSTRIES):
 
 
 # ---- signal context, recomputed in plain Python (no pandas, no context.py) ----
-STEO = json.load(open(HERE / "data" / "steo.json"))
+STEO = json.load(open(DATA / "steo.json"))
 from datetime import date  # noqa: E402
 _ry, _rm = map(int, STEO["release"][:7].split("-")) if "-" in STEO["release"] else (0, 0)
 STEO_OK = (date.today().year * 12 + date.today().month) - (_ry * 12 + _rm) <= 4
 STEO_MAP = {"DCOILWTICO": "WTI", "MHHNGSP": "HH", "GASDESW": "DIESEL", "DJFUELUSGULF": "JET", "WPU0543": "ELEC_IND"}
 def read_long(sid):
-    rows = list(csv.DictReader(open(HERE / "data" / "long" / f"{sid}.csv")))
+    rows = list(csv.DictReader(open(DATA / "long" / f"{sid}.csv")))
     obs = fill([(r["date"][:7], float(r["value"]) if r["value"] not in ("", ".") else None) for r in rows])
     return [(m, v) for m, v in obs if v is not None]
 def prank(xs, x):

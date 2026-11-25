@@ -216,6 +216,20 @@ details > summary { min-height: 24px; padding: 2px 0; }
 .dw-site a:focus-visible { outline: 2px solid #9cc0dc; outline-offset: 3px; border-radius: 2px; }
 main:focus { outline: none; }
 .dw-site { padding-top: 0; margin-bottom: 20px; }
+
+/* freshness: per-series stamps, state tags, publisher table, new-data notice */
+.stamps { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px 16px; margin: 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+.stamps dt { font-size: 12px; color: var(--text-3); }
+.stamps dd { margin: 0; font-size: 14px; }
+.st { display: inline-block; font-size: 11.5px; line-height: 1.5; border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; margin-left: 6px; color: var(--text-2); white-space: nowrap; vertical-align: 1px; }
+.st.due { border-color: var(--accent); color: var(--accent); }
+.st.late { border-color: var(--warn); color: var(--warn-ink); }
+.st.bad { border-color: var(--crit); color: var(--crit-ink); }
+.fresh summary { cursor: pointer; }
+.fresh .line { color: var(--text-2); }
+.fresh table { margin-top: 10px; }
+.newdata { position: sticky; top: 8px; z-index: 5; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; border: 1px solid var(--accent); background: var(--surface); border-radius: 8px; padding: 10px 14px; }
+.newdata[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -339,11 +353,11 @@ const methodHTML = ids => `
     <p><b>Forecasts.</b> Each series gets a damped-trend exponential smoothing model on log prices (Gardner and McKenzie, 1985; Hyndman and Athanasopoulos, <i>Forecasting: Principles and Practice</i>, 3rd ed., ch. 8). It is tested against the naive forecast (no change from the latest value) in a rolling-origin backtest (Tashman, 2000): the model is refit every month since December 2020 and scored on what actually happened 1 to 6 months later, using mean absolute percentage error (MAPE) from January 2022. Where the naive forecast was more accurate, the page publishes the naive forecast, which is common for commodity prices and exchange rates (Meese and Rogoff, 1983).</p>
     <p><b>Ranges.</b> The 80% range is the 10th to 90th percentile of the chosen method's past errors at each horizon (Williams and Goodman, 1971). "Hit rate" tests it honestly: for each month since January 2023, the range is rebuilt from errors known at the time and checked against the actual outcome. A well-calibrated range hits about 80%.</p>
     <p><b>Lead/lag and correlation.</b> Lead/lag compares monthly log changes of one driver with another 0 to 6 months later and lists pairs where a lagged correlation beats the same-month one and clears a rough significance screen of |r| &gt; 2/√n. Correlations use 12-month % changes since January 2019. Both describe history, not cause and effect.</p>
-    <p><b>Data handling.</b> Daily and weekly series (exchange rates, crude oil, jet fuel, diesel) are averaged to monthly. IMF commodity prices are released about a month after BLS data. October 2025 is missing for two BLS consumer price series because collection stopped during the federal government shutdown (<a href="https://www.bls.gov/cpi/additional-resources/2025-federal-government-shutdown-impact-cpi.htm" target="_blank" rel="noopener">BLS</a>); that month is interpolated for calculations and drawn as a dotted bridge in charts. Every value was cross-checked against FRED's own annual and quarterly averages.</p>
+    <p><b>Data handling.</b> Daily and weekly series (exchange rates, crude oil, jet fuel, diesel) are averaged to monthly. World Bank commodity prices are published in the first week of the following month. Recent BLS values are preliminary and can be revised for four months; they are tagged "Prelim." until then. October 2025 is missing for two BLS consumer price series because collection stopped during the federal government shutdown (<a href="https://www.bls.gov/cpi/additional-resources/2025-federal-government-shutdown-impact-cpi.htm" target="_blank" rel="noopener">BLS</a>); that month is interpolated for calculations and drawn as a dotted bridge in charts. Every value was cross-checked against FRED's own annual and quarterly averages.</p>
     <p><b>Daily, weekly and agency data.</b> The "Daily/weekly" column and the spot-price tables show the newest value from the publishing agency (EIA, USDA AMS, Federal Reserve) and compare it with last month's average, which is what the monthly series will show next; forecasts stay monthly. Import sourcing uses Census general imports by 4-digit HS code over the latest 12 months; concentration is the Herfindahl-Hirschman Index of country shares, labeled with the U.S. DOJ/FTC 2023 Merger Guidelines cut-offs (1,000 and 1,800) as a yardstick only. Federal demand is USAspending contract obligations by NAICS code; the latest ${3} months are shown lighter and left out of the comparison because agencies, including the Department of Defense with its 90-day delay, are still reporting them.</p>
     <h2 style="margin-top:6px">Data publishers</h2>
     <ul>${pubList(ids).map(([n, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${esc(n)}</a></li>`).join("")}</ul>
-    <p class="note">Monthly series retrieved through FRED, Federal Reserve Bank of St. Louis; agency data retrieved from each publisher's API. Series links are in the tables. Signals, forecasts and actions are illustrative analysis for purchasing decisions, not financial advice.</p>
+    <p class="note">Every series is pulled directly from its publisher, with no intermediary. World Bank data is used under the Creative Commons Attribution 4.0 licence; U.S. government data is in the public domain. Series links are in the tables. Signals, forecasts and actions are illustrative analysis for purchasing decisions, not financial advice.</p>
   </details>`;
 
 const app = document.getElementById("app");
@@ -369,14 +383,69 @@ function fedBlock(n) {
 
 /* --------------------------- DRIVER DETAIL --------------------------- */
 /* One renderer for the hub's pop-up and the industry page's panel, so both show the same facts. */
+
+/* ---- freshness: every number says which period it covers, when it was first seen here, when its publisher
+   was last called and when the next release is expected. The page re-reads data/status.json every minute. ---- */
+const SRC = D.sources || {};
+const when = t => { const d = new Date(t); return isNaN(d) ? "" : d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); };
+const dayOnly = t => { const d = new Date(t); return isNaN(d) ? "" : d.toLocaleString(undefined, { month: "short", day: "numeric" }); };
+const ago = t => { const m = Math.max(0, Math.round((Date.now() - new Date(t)) / 60000)); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 2880 ? `${Math.round(m / 60)} hr ago` : `${Math.round(m / 1440)} days ago`; };
+const agoSpan = t => t ? `<span data-ago="${t}" title="${esc(when(t))}">${ago(t)}</span>` : "not yet";
+const STATE = { current: ["Current", "ok"], due: ["Release due", "due"], late: ["Late", "late"], failed: ["Not updating", "bad"] };
+const stateTag = f => !f || f.state === "current" ? "" : `<span class="st ${STATE[f.state][1]}">${STATE[f.state][0]}</span>`;
+const prelimTag = f => f && f.preliminary ? `<span class="st" title="The publisher may still revise this value">Prelim.</span>` : "";
+function stamps(s) {
+  const f = s.fresh; if (!f) return "";
+  const src = SRC[f.src] || {};
+  return `<dl class="stamps" aria-label="Freshness of this series">
+    <div><dt>Covers</dt><dd>${mLabel(f.period, true)}${f.preliminary ? " · preliminary" : ""}</dd></div>
+    <div><dt>First seen here</dt><dd>${f.first_seen ? when(f.first_seen) : `before tracking began on ${dayOnly(f.tracked_since)}`}</dd></div>
+    <div><dt>Publisher last called</dt><dd data-src="${f.src}">${agoSpan(src.checked)}${src.ok === false ? " · failed, last good value shown" : ""}</dd></div>
+    <div><dt>Next release</dt><dd>${mLabel(f.next_period, true)}, from ${dayOnly(f.next_from)}${f.state === "late" ? " · late" : f.state === "due" ? " · due now" : ""}</dd></div>
+  </dl>`;
+}
+function freshCard(ids) {
+  const fs = ids.map(i => D.series[i].fresh).filter(Boolean);
+  if (!fs.length) return "";
+  const n = st => fs.filter(f => f.state === st).length;
+  const used = [...new Set(fs.map(f => f.src))].filter(k => SRC[k]);
+  const last = used.map(k => SRC[k].checked).filter(Boolean).sort().pop();
+  const nextUp = used.map(k => [SRC[k].next_check, SRC[k].name]).filter(x => x[0]).sort()[0];
+  const bits = [`${n("current")} of ${fs.length} series current`, n("due") ? `${n("due")} with a release due` : "", n("late") ? `${n("late")} late` : "", n("failed") ? `${n("failed")} not updating` : ""].filter(Boolean);
+  return `<details class="card fresh" id="fresh"${document.getElementById("fresh")?.open ? " open" : ""}>
+    <summary><span class="head"><h2>Data freshness</h2><span class="note">${bits.join(" · ")}</span></span></summary>
+    <p class="line">A publisher was last called ${agoSpan(last)}.${nextUp ? ` Next planned call: ${esc(nextUp[1])}, ${when(nextUp[0])}.` : ""} Each series updates when its publisher releases new data; this page looks for changes every minute.</p>
+    <div class="scroll"><table class="t"><thead><tr><th class="l">Publisher</th><th>Series</th><th class="l">Last called</th><th class="l">Result</th><th class="l">Next planned call</th><th class="l ph">Rights</th></tr></thead><tbody>
+    ${used.map(k => { const x = SRC[k]; return `<tr><td class="l"><a href="${x.url}" target="_blank" rel="noopener">${esc(x.name)}</a><br><span class="rng">${esc(x.api)}</span></td><td>${fs.filter(f => f.src === k).length}</td><td class="l">${agoSpan(x.checked)}</td><td class="l">${x.ok === false ? `<span class="st bad" style="margin:0">Failed</span>` : x.ok ? "OK" : "—"}</td><td class="l">${x.next_check ? when(x.next_check) : "—"}</td><td class="l ph">${esc(x.rights)}</td></tr>`; }).join("")}
+    </tbody></table></div>
+  </details>`;
+}
+let FRESH_IDS = [];
+function drawFresh() { const el = document.getElementById("fresh"); if (el) el.outerHTML = freshCard(FRESH_IDS); }
+async function pollStatus() {
+  if (!D.status_url || !/^https?:$/.test(location.protocol)) return;
+  try {
+    const r = await fetch(`${D.status_url}?t=${Math.floor(Date.now() / 60000)}`, { cache: "no-store" });
+    if (!r.ok) return;
+    const st = await r.json();
+    for (const k in st.sources || {}) SRC[k] = { ...(SRC[k] || {}), ...st.sources[k] };
+    for (const id in st.series || {}) if (D.series[id]) D.series[id].fresh = { ...(D.series[id].fresh || {}), ...st.series[id] };
+    drawFresh();
+    const nd = document.getElementById("newdata");
+    if (nd && st.version && D.version && st.version !== D.version && nd.hidden) { nd.hidden = false; nd.querySelector("span").textContent = `New data was published ${when(st.run)}.`; }
+  } catch (e) { /* offline or blocked: keep what is on the page */ }
+}
+setInterval(() => { document.querySelectorAll("[data-ago]").forEach(e => { e.textContent = ago(e.dataset.ago); }); }, 30000);
+setInterval(pollStatus, 60000);
+
 const GAP_NOTES = {
   "2025-10": `BLS did not collect October 2025 prices during the federal government shutdown, so that month was never published (<a href="https://www.bls.gov/cpi/additional-resources/2025-federal-government-shutdown-impact-cpi.htm" target="_blank" rel="noopener">BLS notice</a>). Calculations use the midpoint of September and November, and the chart bridges the gap with a dotted line.`
 };
 const DAILY = id => id.startsWith("DEX") || ["DCOILWTICO", "DJFUELUSGULF", "GASDESW"].includes(id);
-/* market-priced series: IMF world commodity prices, EIA energy prices, exchange rates */
+/* market-priced series: World Bank world commodity prices, EIA energy prices, exchange rates */
 const marketCite = s => s.group === "Currency" ? "It is a well-documented result for exchange rates (Meese and Rogoff, 1983)."
   : s.group === "Energy" ? "It is a well-documented result for oil prices (Alquist, Kilian and Vigfusson, 2013)."
-  : /^P.*USDM$/.test(s.id) ? "" : null;
+  : /^WB/.test(s.id) ? "" : null;
 const RANGES = [["2Y", 24], ["4Y", 48], ["Since 2018", "2018"], ["All", "all"]];
 let RANGE = 48;
 const histPts = s => { const [y0, m0] = s.hist.start.split("-").map(Number);
@@ -425,9 +494,10 @@ function detailHTML(s, o) {
   return `<div class="dt">
     <div class="dt-head">
       <div><h2 id="dt-title">${esc(s.name)} ${sig(s.signal)}</h2>
-        <p class="note">${esc(s.group)} · ${esc(unitLbl(s))} · <a href="${s.publisher_url}" target="_blank" rel="noopener">${esc(s.publisher)}</a> · <a href="${s.source}" target="_blank" rel="noopener">FRED ${esc(s.id)}</a></p></div>
+        <p class="note">${esc(s.group)} · ${esc(unitLbl(s))} · <a href="${s.publisher_url}" target="_blank" rel="noopener">${esc(s.publisher)}</a> · <a href="${s.source}" target="_blank" rel="noopener">${esc(s.code || s.id)}</a>${prelimTag(s.fresh)}${stateTag(s.fresh)}</p></div>
       ${o.modal ? `<div class="dt-nav"><button type="button" data-nav="-1" aria-label="Previous driver">‹ Prev</button><button type="button" data-nav="1" aria-label="Next driver">Next ›</button><button type="button" data-close aria-label="Close">✕</button></div>` : ""}
     </div>
+    ${stamps(s)}
     <div class="tiles">${tiles.map(([k, v, d]) => `<div><div class="k">${k}</div><div class="n">${v}</div><div class="d">${d}</div></div>`).join("")}</div>
     <div class="advice ${s.signal}"><div class="k">What to do</div><p class="what">${esc(c.action)}</p>
       <ul>${c.reasons.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
@@ -468,10 +538,10 @@ function detailHTML(s, o) {
       </section>
       <section><h3>Source and notes</h3>
         <ul>
-          <li>Series <a href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a> from <a href="${s.publisher_url}" target="_blank" rel="noopener">${esc(s.publisher)}</a>, retrieved through FRED (Federal Reserve Bank of St. Louis).</li>
+          <li>Series <a href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a> from <a href="${s.publisher_url}" target="_blank" rel="noopener">${esc(s.publisher)}</a>, pulled directly from the publisher${s.fresh && SRC[s.fresh.src] ? ` (${esc(SRC[s.fresh.src].api)}). ${esc(SRC[s.fresh.src].rights)}` : ""}.</li>
           <li>${DAILY(s.id) ? "Published daily or weekly; shown as monthly averages." : "Published monthly."} Unit: ${esc(unitLbl(s))}. History from ${mLabel(H.start, true)}; latest ${mLabel(s.latest_month, true)}.</li>
           ${s.direction < 0 ? `<li>Quoted as foreign currency per dollar, so a rise means a stronger dollar and cheaper imports. Colors and signals use cost terms.</li>` : ""}
-          <li>Updated ${localTime(D.built)}.</li>
+          <li>Signals and forecasts last recalculated ${localTime(D.built)}.</li>
         </ul>
       </section>
     </div>
@@ -563,14 +633,17 @@ function hub() {
   const hot = [...inds].sort((a, b) => b.pressure_12m - a.pressure_12m);
   const nA = ALL.filter(s => s.signal === "Alert").length;
   const months = [...new Set(ALL.map(s => s.latest_month))].sort();
+  FRESH_IDS = ALL.map(s => s.id);
   app.innerHTML = `
+  <div class="newdata" id="newdata" role="status" hidden><span></span><button class="btn" type="button" onclick="location.reload()">Load it</button></div>
   <div class="top">
     <div>
       <h1>Industry Market Watch</h1>
-      <p class="sub">Input-cost pressure for ${inds.length} industries from ${ALL.length} official price, wage and currency series, with 6-month forecasts, backtested accuracy and buying signals.</p>
+      <p class="sub">Input-cost pressure for ${inds.length} industries from ${ALL.length} official price, wage and currency series, with 6-month forecasts, backtested accuracy and buying signals. Every series is pulled straight from its publisher.</p>
     </div>
-    <span class="pills"><span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
+    <span class="pills"><span class="pill"><i></i>Data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
   </div>
+  ${freshCard(FRESH_IDS)}
   <div class="kpis">
     <div class="card kpi"><div class="k">Most cost pressure, 12 mo</div><div class="n">${esc(hot[0].name)}</div><div class="d">Median driver ${pct(hot[0].pressure_12m)}</div></div>
     <div class="card kpi"><div class="k">Least cost pressure, 12 mo</div><div class="n">${esc(hot[hot.length - 1].name)}</div><div class="d">Median driver ${pct(hot[hot.length - 1].pressure_12m)}</div></div>
@@ -632,7 +705,7 @@ function hub() {
     dtb.innerHTML = rows.map(({ s }) => {
       const b = s.backtest, f = s.forecast[5], ch = b.chosen;
       return `<tr class="click" tabindex="0" data-id="${s.id}" aria-label="${esc(s.name)}: open details"><td class="l"><span class="nm">${esc(s.name)}</span><br><a class="id" href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a></td>
-      <td class="l ph">${esc(s.group)}</td><td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+      <td class="l ph">${esc(s.group)}</td><td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span>${prelimTag(s.fresh)}${stateTag(s.fresh)}</td>
       ${["m1", "m3", "m12"].map(k => `<td class="${k === "m12" ? "" : "ph "}${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
       <td class="l">${sig(s.signal)}</td>
       <td class="ph ${ch === "ets" ? cls(s.forecast_6m_cost) : "fl"}">${ch === "ets" ? pct(s.forecast_6m_pct) : "Flat"}<br><span class="rng">${fmt(s, f.lo)}–${fmt(s, f.hi)}</span></td>
@@ -645,7 +718,7 @@ function hub() {
     document.querySelectorAll("#gf .chip").forEach(c => c.setAttribute("aria-pressed", c === b)); T.refresh(filt()); });
   document.getElementById("q").addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); T.refresh(filt()); });
 
-  /* driver detail pop-up: deep-linkable as #driver=<FRED id>; Prev/Next follow the table's current filter and sort */
+  /* driver detail pop-up: deep-linkable as #driver=<series id>; Prev/Next follow the table's current filter and sort */
   const dlg = document.getElementById("dlg");
   let cur = null;
   const open = id => {
@@ -679,12 +752,15 @@ function industry() {
   const ets = S.filter(s => s.backtest.chosen === "ets");
   const LT = D.latest || {}, X = D.extras || { spot: [], hs: [], naics: [] };
   const hasLatest = S.some(s => LT[s.id]);
+  FRESH_IDS = d.series;
   app.innerHTML = `
+  <div class="newdata" id="newdata" role="status" hidden><span></span><button class="btn" type="button" onclick="location.reload()">Load it</button></div>
   <div class="crumb"><a href="../index.html">← All industries</a></div>
   <div class="top">
     <div><h1>${esc(d.name)}</h1><p class="sub">${esc(d.blurb)}</p></div>
-    <span class="pills"><span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
+    <span class="pills"><span class="pill"><i></i>Data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
   </div>
+  ${freshCard(FRESH_IDS)}
   <div class="kpis">
     <div class="card kpi"><div class="k">Median driver, 3 mo</div><div class="n ${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</div><div class="d">cost impact</div></div>
     <div class="card kpi"><div class="k">Median driver, 12 mo</div><div class="n ${cls(d.pressure_12m)}">${pct(d.pressure_12m)}</div><div class="d">cost impact</div></div>
@@ -747,7 +823,7 @@ function industry() {
       return `<tr class="click${s.id === selId ? " sel" : ""}" tabindex="0" data-id="${s.id}">
         <td class="l"><span class="nm">${esc(s.name)}</span><br><span class="id">${esc(s.id)} · ${esc(s.group)}</span></td>
         <td class="l">${sig(s.signal)}</td>
-        <td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+        <td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span>${prelimTag(s.fresh)}${stateTag(s.fresh)}</td>
         ${hasLatest ? (LT[s.id] ? `<td class="ph">${fmt(s, LT[s.id].latest)} <span class="rng">${dLabel(LT[s.id].latest_date)}</span><br><span class="${cls(LT[s.id].vs_prev_month === null ? null : LT[s.id].vs_prev_month * s.direction)}">${pct(LT[s.id].vs_prev_month)}</span> <span class="rng">vs ${mLabel(LT[s.id].prev_month)} avg</span></td>` : `<td class="fl ph">—</td>`) : ""}
         ${["m1", "m3", "m12"].map(k => `<td class="${k === "m12" ? "" : "ph "}${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
         <td class="ph">${beat ? `<span class="${cls(s.forecast_6m_cost)}">${fmt(s, f.mid)} (${pct(s.forecast_6m_pct)})</span>` : `<span class="fl">${fmt(s, f.mid)} (flat)</span>`}<br><span class="rng">${fmt(s, f.lo)} – ${fmt(s, f.hi)} by ${mLabel(f.month)}</span></td>
@@ -840,6 +916,7 @@ function industry() {
 }
 
 D.page === "hub" ? hub() : industry();
+pollStatus();
 /* folds start open on wider screens; a link to #method opens that one */
 const wide = matchMedia("(min-width: 601px)").matches;
 document.querySelectorAll("details.fold").forEach(f => { f.open = wide; });

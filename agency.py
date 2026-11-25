@@ -64,9 +64,6 @@ SPOT = {
                   "https://mymarketnews.ams.usda.gov/viewReport/3646"),
 }
 
-# Daily FX from the Federal Reserve (via FRED, existing FRED_API_KEY) for the "Latest" column.
-FX_DAILY = ["DEXMXUS", "DEXJPUS", "DEXUSEU", "DEXTAUS", "DEXKOUS", "DEXCHUS", "DEXCAUS"]
-
 # ------------------------------------------------------- per-industry extras
 # spot: SPOT keys shown in the "Latest spot prices" card
 # hs:   (HS4 code, label) imported products for the sourcing card (Census)

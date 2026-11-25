@@ -1,0 +1,94 @@
+# Collector for the Industry Market Watch.
+# Every 15 minutes it works out which publishers have a release due, calls only those,
+# recalculates what changed, checks the numbers and publishes the site to GitHub Pages.
+# Most runs find nothing due and finish in a few seconds without installing anything.
+#
+# Data lives on the `data` branch (one small commit per run that called a publisher), so the
+# main branch holds code only. Repository setting needed: Settings > Pages > Source = GitHub Actions.
+name: Collect data and publish
+
+on:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Call every publisher now and rebuild everything"
+        type: boolean
+        default: false
+  push:                      # test runs: a working branch can ask for one run with [run-collector] in the commit message
+    branches: ["claude/**"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: collect-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: github.event_name != 'push' || contains(github.event.head_commit.message, '[run-collector]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      LIVE: ${{ github.ref == 'refs/heads/main' }}
+      MW_ONLY: "WB,BTS,FRB,EIA"   # TEMPORARY while testing on the branch
+      BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+      EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+      CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+      USDA_AMS_API_KEY: ${{ secrets.USDA_AMS_API_KEY }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Attach the data branch
+        if: env.LIVE == 'true'
+        run: |
+          if git fetch origin data:data 2>/dev/null; then
+            git worktree add _data data
+          else                                  # first run: start the data branch from the copy in main
+            git worktree add --detach _data
+            cd _data && git checkout --orphan data && git rm -rfq . && cp -r ../data/. . && cd ..
+          fi
+          echo "MW_DATA_DIR=$PWD/_data" >> "$GITHUB_ENV"
+          echo "MW_OUT_DIR=$PWD/_site" >> "$GITHUB_ENV"
+      - name: Plan (what is due right now)
+        id: plan
+        run: python3 collect.py --plan ${{ (inputs.all || github.event_name == 'push') && '--all' || '' }}
+      - uses: actions/setup-python@v6
+        if: steps.plan.outputs.calls != '0'
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Collect, recalculate, check, build
+        id: run
+        if: steps.plan.outputs.calls != '0'
+        run: |
+          pip install -q -r requirements.txt
+          python run.py ${{ (inputs.all || github.event_name == 'push') && '--all --rebuild' || '' }}
+      - name: Save data
+        if: steps.run.outputs.publish == 'true'
+        run: |
+          git config --global user.name "market-watch-bot"
+          git config --global user.email "actions@users.noreply.github.com"
+          if [ "$LIVE" = "true" ]; then
+            cd _data && git add -A
+            git diff --cached --quiet || git commit -q -m "Data $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push -q origin data
+          else                                  # test run on a working branch: keep data and pages in that branch
+            git add data index.html */index.html 2>/dev/null || git add data
+            git diff --cached --quiet || git commit -q -m "Test collector run $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+      - uses: actions/configure-pages@v5
+        if: steps.run.outputs.publish == 'true' && env.LIVE == 'true'
+      - uses: actions/upload-pages-artifact@v4
+        if: steps.run.outputs.publish == 'true' && env.LIVE == 'true'
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4
+        if: steps.run.outputs.publish == 'true' && env.LIVE == 'true'
+      - name: Fail the run if a publisher keeps failing (the pages above already say so)
+        if: steps.plan.outputs.calls != '0'
+        run: python check_refresh.py

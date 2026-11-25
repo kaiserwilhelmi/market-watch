@@ -6,7 +6,7 @@ direction:  +1 = a rising value means higher costs for a US buyer
             -1 = a rising value means lower costs (foreign currency per USD:
                  a stronger dollar makes imports cheaper)
 DEXUSEU is quoted USD per EUR, so a rising value means a weaker dollar: +1.
-Cass shipments is a volume measure: rising volume tightens capacity, so +1.
+The freight services index is a volume measure: rising volume tightens capacity, so +1.
 """
 
 PUB = {
@@ -14,9 +14,9 @@ PUB = {
     "BLS-CPI": ("U.S. Bureau of Labor Statistics, Consumer Price Index", "https://www.bls.gov/cpi/"),
     "BLS-CES": ("U.S. Bureau of Labor Statistics, Current Employment Statistics", "https://www.bls.gov/ces/"),
     "EIA": ("U.S. Energy Information Administration", "https://www.eia.gov/"),
-    "IMF": ("International Monetary Fund, Primary Commodity Prices", "https://www.imf.org/en/Research/commodity-prices"),
+    "WB": ("World Bank, Commodity Price Data (The Pink Sheet)", "https://www.worldbank.org/en/research/commodity-markets"),
     "FRB": ("Board of Governors of the Federal Reserve System, H.10 Foreign Exchange Rates", "https://www.federalreserve.gov/releases/h10/"),
-    "CASS": ("Cass Information Systems, Cass Freight Index", "https://www.cassinfo.com/freight-audit-payment/cass-transportation-indexes"),
+    "BTS": ("U.S. Bureau of Transportation Statistics, Transportation Services Index", "https://www.bts.gov/transportation-services-index"),
 }
 
 # id: (short name, group, unit, direction, publisher key)
@@ -56,17 +56,17 @@ SERIES = {
     "PCU325320325320": ("Pesticides & ag chemicals", "Materials", "index", +1, "BLS-PPI"),
     "WPU02": ("Processed foods & feeds", "Materials", "index", +1, "BLS-PPI"),
     "WPU0221": ("Meats (wholesale)", "Materials", "index", +1, "BLS-PPI"),
-    # Commodities (IMF, BLS average price)
-    "PNICKUSDM": ("Nickel", "Commodities", "$/t", +1, "IMF"),
-    "PALUMUSDM": ("Aluminum", "Commodities", "$/t", +1, "IMF"),
-    "PCOPPUSDM": ("Copper", "Commodities", "$/t", +1, "IMF"),
-    "PWHEAMTUSDM": ("Wheat", "Commodities", "$/t", +1, "IMF"),
-    "PMAIZMTUSDM": ("Corn", "Commodities", "$/t", +1, "IMF"),
-    "PSOYBUSDM": ("Soybeans", "Commodities", "$/t", +1, "IMF"),
-    "PSUGAISAUSDM": ("Sugar No. 11", "Commodities", "¢/lb", +1, "IMF"),
-    "PSOILUSDM": ("Soybean oil", "Commodities", "$/t", +1, "IMF"),
-    "PCOFFOTMUSDM": ("Coffee, other mild arabica", "Commodities", "¢/lb", +1, "IMF"),
-    "PBEEFUSDM": ("Beef", "Commodities", "¢/lb", +1, "IMF"),
+    # Commodities (World Bank Pink Sheet, BLS average price)
+    "WBNICKEL": ("Nickel", "Commodities", "$/t", +1, "WB"),
+    "WBALUMINUM": ("Aluminum", "Commodities", "$/t", +1, "WB"),
+    "WBCOPPER": ("Copper", "Commodities", "$/t", +1, "WB"),
+    "WBWHEAT": ("Wheat, US hard red winter", "Commodities", "$/t", +1, "WB"),
+    "WBMAIZE": ("Corn", "Commodities", "$/t", +1, "WB"),
+    "WBSOYBEANS": ("Soybeans", "Commodities", "$/t", +1, "WB"),
+    "WBSUGAR": ("Sugar, world", "Commodities", "$/kg", +1, "WB"),
+    "WBSOYOIL": ("Soybean oil", "Commodities", "$/t", +1, "WB"),
+    "WBCOFFEE": ("Coffee, arabica", "Commodities", "$/kg", +1, "WB"),
+    "WBBEEF": ("Beef", "Commodities", "$/kg", +1, "WB"),
     "APU0000708111": ("Eggs, Grade A large", "Commodities", "$/doz", +1, "BLS-CPI"),
     # Energy
     "DCOILWTICO": ("WTI crude oil", "Energy", "$/bbl", +1, "EIA"),
@@ -86,8 +86,8 @@ SERIES = {
     "PCU518210518210": ("Data processing & hosting", "Freight & services", "index", +1, "BLS-PPI"),
     "PCU213111213111": ("Oil & gas well drilling", "Freight & services", "index", +1, "BLS-PPI"),
     "PCU213112213112": ("Oilfield support services", "Freight & services", "index", +1, "BLS-PPI"),
-    "FRGSHPUSM649NCIS": ("Cass shipments (volume)", "Freight & services", "index", +1, "CASS"),
-    "FRGEXPUSM649NCIS": ("Cass expenditures", "Freight & services", "index", +1, "CASS"),
+    "BTSTSIFREIGHT": ("Freight services index (volume)", "Freight & services", "index", +1, "BTS"),
+    "PCU484122484122": ("Less-than-truckload, long-distance", "Freight & services", "index", +1, "BLS-PPI"),
     "CUSR0000SEFV": ("CPI food away from home", "Freight & services", "index", +1, "BLS-CPI"),
     # Labor (average hourly earnings)
     "CES3000000008": ("Mfg wages, production workers", "Labor", "$/hr", +1, "BLS-CES"),
@@ -109,22 +109,22 @@ SERIES = {
     "DEXCAUS": ("Canadian dollar per USD", "Currency", "CAD", -1, "FRB"),
 }
 
-# Daily or weekly at source; averaged to monthly.
+# Daily or weekly at source; the monthly value is the average for the month.
 NON_MONTHLY = ("DEX", "DCOILWTICO", "DJFUELUSGULF", "GASDESW")
 
 INDUSTRIES = [
     ("aerospace-defense", "Aerospace & defense",
      "Long-cycle programs with specialty alloys, castings and engines. Escalation clauses usually index to PPI aircraft parts and metals.",
-     ["PCU336413336413", "PCU336412336412", "WPU1025", "PNICKUSDM", "PALUMUSDM", "DJFUELUSGULF", "CES3000000008"]),
+     ["PCU336413336413", "PCU336412336412", "WPU1025", "WBNICKEL", "WBALUMINUM", "DJFUELUSGULF", "CES3000000008"]),
     ("automotive", "Automotive",
      "High-volume parts with steel, aluminum, rubber and chips, much of it sourced in Mexico and Japan.",
-     ["PCU336390336390", "WPU1017", "PALUMUSDM", "WPU071", "PCU334413334413", "CES3000000008", "DEXMXUS", "DEXJPUS"]),
+     ["PCU336390336390", "WPU1017", "WBALUMINUM", "WPU071", "PCU334413334413", "CES3000000008", "DEXMXUS", "DEXJPUS"]),
     ("machinery-metal-fab", "Machinery & metal fabrication",
      "Steel- and copper-heavy builds; European components priced in euros.",
-     ["WPU114", "WPU1017", "PCOPPUSDM", "WPU0543", "CES3000000008", "DEXUSEU"]),
+     ["WPU114", "WPU1017", "WBCOPPER", "WPU0543", "CES3000000008", "DEXUSEU"]),
     ("electronics-semis", "Electronics & semiconductors",
      "Chips, copper and resin, with supply concentrated in Taiwan, Korea and China.",
-     ["PCU334413334413", "PCOPPUSDM", "WPU1026", "WPU066", "DEXTAUS", "DEXKOUS", "DEXCHUS"]),
+     ["PCU334413334413", "WBCOPPER", "WPU1026", "WPU066", "DEXTAUS", "DEXKOUS", "DEXCHUS"]),
     ("chemicals-plastics", "Chemicals & plastics",
      "Feedstock-driven: crude oil and natural gas flow through petrochemicals into resins within months.",
      ["DCOILWTICO", "MHHNGSP", "PCU325110325110", "WPU061", "PCU325211325211", "WPU072", "CES3000000003"]),
@@ -136,28 +136,28 @@ INDUSTRIES = [
      ["MHHNGSP", "WPU051", "WPU0543", "PCU335311335311", "WPU1026", "CES4422000003"]),
     ("food-beverage-mfg", "Food & beverage manufacturing",
      "Grains, sweeteners and oils drive ingredient cost; cans and glass drive packaging.",
-     ["PWHEAMTUSDM", "PMAIZMTUSDM", "PSUGAISAUSDM", "PSOILUSDM", "PCOFFOTMUSDM", "PCU332431332431", "PCU327213327213", "CES3000000008"]),
+     ["WBWHEAT", "WBMAIZE", "WBSUGAR", "WBSOYOIL", "WBCOFFEE", "PCU332431332431", "PCU327213327213", "CES3000000008"]),
     ("restaurants", "Restaurants & food service",
      "Protein, eggs and labor are the big three; distributor delivery fees follow diesel.",
-     ["WPU02", "WPU0221", "PBEEFUSDM", "APU0000708111", "CUSR0000SEFV", "CES7000000003", "GASDESW"]),
+     ["WPU02", "WPU0221", "WBBEEF", "APU0000708111", "CUSR0000SEFV", "CES7000000003", "GASDESW"]),
     ("retail-ecommerce", "Retail & e-commerce fulfillment",
      "Parcel, warehousing and corrugated are the controllable cost lines.",
      ["PCU492110492110", "PCU493110493110", "PCU322211322211", "WPU072", "CES4200000003", "CES4300000003"]),
     ("packaging-cpg", "Packaging & CPG",
      "Substrates (paper, resin, metal, glass) set packaging cost; aluminum drives cans.",
-     ["PCU322211322211", "WPU0915", "PCU325211325211", "PCU332431332431", "PCU327213327213", "PALUMUSDM"]),
+     ["PCU322211322211", "WPU0915", "PCU325211325211", "PCU332431332431", "PCU327213327213", "WBALUMINUM"]),
     ("healthcare", "Healthcare",
      "Drugs, devices and supplies under GPO contracts; many generics and supplies come from China.",
      ["WPU0638", "PCU339113339113", "PCU339112339112", "WPU072", "CES6500000003", "DEXCHUS"]),
     ("trucking-freight", "Trucking & freight",
-     "Diesel feeds fuel surcharges within weeks; Cass volumes flag capacity shifts.",
-     ["GASDESW", "PCU484121484121", "FRGSHPUSM649NCIS", "FRGEXPUSM649NCIS", "PCU482111482111", "WPU071", "CES4300000003"]),
+     "Diesel feeds fuel surcharges within weeks; freight volumes flag capacity shifts.",
+     ["GASDESW", "PCU484121484121", "BTSTSIFREIGHT", "PCU484122484122", "PCU482111482111", "WPU071", "CES4300000003"]),
     ("air-ocean", "Airlines, air cargo & ocean",
      "Jet fuel and ocean rates dominate; China and euro lanes carry FX exposure.",
      ["DJFUELUSGULF", "PCU481112481112", "PCU481111481111", "PCU483111483111", "CES4300000003", "DEXUSEU", "DEXCHUS"]),
     ("agriculture", "Agriculture",
      "Input buyers face fertilizer, chemicals, machinery and fuel; crop prices set what growers can absorb.",
-     ["WPU0652", "PCU325320325320", "PCU333111333111", "GASDESW", "PMAIZMTUSDM", "PSOYBUSDM", "PWHEAMTUSDM"]),
+     ["WPU0652", "PCU325320325320", "PCU333111333111", "GASDESW", "WBMAIZE", "WBSOYBEANS", "WBWHEAT"]),
     ("oil-gas", "Oil & gas",
      "Oilfield service and tubular pricing follows crude with a lag; rig activity drives the cycle.",
      ["DCOILWTICO", "MHHNGSP", "PCU213111213111", "PCU213112213112", "WPU101706", "CES1000000003"]),
@@ -165,11 +165,3 @@ INDUSTRIES = [
      "Power, servers, chips, transformers and cooling; electrical gear has the longest lead times.",
      ["WPU0543", "PCU334111334111", "PCU334413334413", "PCU335311335311", "PCU333415333415", "WPU1026", "PCU518210518210", "CES2000000003"]),
 ]
-
-# Signal thresholds on the cost-adjusted % change (% change x direction)
-#            alert 3m, alert 12m, watch 3m, watch 12m, opportunity 3m
-def fred_url(series_id, start="2018-01-01"):
-    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}&cosd={start}"
-    if series_id.startswith(NON_MONTHLY):
-        url += "&fq=Monthly&fam=avg"
-    return url
