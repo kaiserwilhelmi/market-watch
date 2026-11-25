@@ -1,7 +1,11 @@
 {
  "agency": {
-  "checked": "2026-11-25 10:32 UTC",
-  "failed": [],
+  "checked": "2026-11-25 19:21 UTC",
+  "failed": [
+   "DIESEL_R50",
+   "ELEC_COM",
+   "NG_IND"
+  ],
   "tried": 69
  }
 }

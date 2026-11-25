@@ -9,32 +9,16 @@
    "source": "https://www.eia.gov/dnav/pet/hist/RWTCD.htm",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 89.53,
-   "latest_date": "2026-11-17",
-   "chg_short": -17.017332468254697,
-   "short_from": "2026-10-20",
-   "chg_year": 45.55356852544303,
-   "year_from": "2025-11-18",
+   "latest": 82.24,
+   "latest_date": "2026-11-24",
+   "chg_short": -20.441133791235377,
+   "short_from": "2026-10-27",
+   "chg_year": 41.18454935622318,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 102.06636363636363,
-   "vs_prev_month": -12.282561256936209,
+   "vs_prev_month": -19.42497305674561,
    "series": [
-    [
-     "2026-05-20",
-     101.69
-    ],
-    [
-     "2026-05-21",
-     100.2
-    ],
-    [
-     "2026-05-22",
-     100.35
-    ],
-    [
-     "2026-05-26",
-     97.63
-    ],
     [
      "2026-05-27",
      92.35
@@ -530,6 +514,26 @@
     [
      "2026-11-17",
      89.53
+    ],
+    [
+     "2026-11-18",
+     86.81
+    ],
+    [
+     "2026-11-19",
+     86.78
+    ],
+    [
+     "2026-11-20",
+     87.59
+    ],
+    [
+     "2026-11-23",
+     81.42
+    ],
+    [
+     "2026-11-24",
+     82.24
     ]
    ]
   },
@@ -542,32 +546,16 @@
    "source": "https://www.eia.gov/dnav/pet/hist/RBRTED.htm",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 92.94,
-   "latest_date": "2026-11-17",
-   "chg_short": -19.336920673494184,
-   "short_from": "2026-10-20",
-   "chg_year": 43.293246993524505,
-   "year_from": "2025-11-18",
+   "latest": 91.8,
+   "latest_date": "2026-11-24",
+   "chg_short": -25.426482534524773,
+   "short_from": "2026-10-27",
+   "chg_year": 43.459915611814345,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 123.92727272727274,
-   "vs_prev_month": -25.004401408450715,
+   "vs_prev_month": -25.9242957746479,
    "series": [
-    [
-     "2026-05-20",
-     108.93
-    ],
-    [
-     "2026-05-21",
-     105.84
-    ],
-    [
-     "2026-05-22",
-     106.9
-    ],
-    [
-     "2026-05-26",
-     102.75
-    ],
     [
      "2026-05-27",
      97.11
@@ -1063,6 +1051,26 @@
     [
      "2026-11-17",
      92.94
+    ],
+    [
+     "2026-11-18",
+     92.88
+    ],
+    [
+     "2026-11-19",
+     95.17
+    ],
+    [
+     "2026-11-20",
+     92.76
+    ],
+    [
+     "2026-11-23",
+     91.2
+    ],
+    [
+     "2026-11-24",
+     91.8
     ]
    ]
   },
@@ -1075,32 +1083,16 @@
    "source": "https://www.eia.gov/dnav/ng/hist/rngwhhdD.htm",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 3.1,
-   "latest_date": "2026-11-17",
-   "chg_short": 0.0,
-   "short_from": "2026-10-20",
-   "chg_year": -16.216216216216218,
-   "year_from": "2025-11-18",
+   "latest": 3.3,
+   "latest_date": "2026-11-24",
+   "chg_short": 19.565217391304344,
+   "short_from": "2026-10-27",
+   "chg_year": -19.902912621359224,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 2.987727272727273,
-   "vs_prev_month": 3.7577970485318746,
+   "vs_prev_month": 10.451848471017788,
    "series": [
-    [
-     "2026-05-20",
-     3.18
-    ],
-    [
-     "2026-05-21",
-     3.14
-    ],
-    [
-     "2026-05-22",
-     2.92
-    ],
-    [
-     "2026-05-26",
-     3.1
-    ],
     [
      "2026-05-27",
      3.13
@@ -1596,6 +1588,26 @@
     [
      "2026-11-17",
      3.1
+    ],
+    [
+     "2026-11-18",
+     3.24
+    ],
+    [
+     "2026-11-19",
+     3.31
+    ],
+    [
+     "2026-11-20",
+     3.29
+    ],
+    [
+     "2026-11-23",
+     3.28
+    ],
+    [
+     "2026-11-24",
+     3.3
     ]
    ]
   },
@@ -2133,32 +2145,16 @@
    "source": "https://www.eia.gov/dnav/pet/hist/EER_EPD2DXL0_PF4_Y35NY_DPGD.htm",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 4.093,
-   "latest_date": "2026-11-17",
-   "chg_short": -22.260208926875592,
-   "short_from": "2026-10-20",
-   "chg_year": 49.21618665694496,
-   "year_from": "2025-11-18",
+   "latest": 3.793,
+   "latest_date": "2026-11-24",
+   "chg_short": -19.074034563686794,
+   "short_from": "2026-10-27",
+   "chg_year": 57.647547797173736,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 4.950045454545455,
-   "vs_prev_month": -17.313890597882487,
+   "vs_prev_month": -23.37444100605137,
    "series": [
-    [
-     "2026-05-20",
-     4.036
-    ],
-    [
-     "2026-05-21",
-     3.974
-    ],
-    [
-     "2026-05-22",
-     3.957
-    ],
-    [
-     "2026-05-26",
-     3.777
-    ],
     [
      "2026-05-27",
      3.671
@@ -2646,6 +2642,26 @@
     [
      "2026-11-17",
      4.093
+    ],
+    [
+     "2026-11-18",
+     3.999
+    ],
+    [
+     "2026-11-19",
+     4.069
+    ],
+    [
+     "2026-11-20",
+     4.024
+    ],
+    [
+     "2026-11-23",
+     3.806
+    ],
+    [
+     "2026-11-24",
+     3.793
     ]
    ]
   },
@@ -2658,32 +2674,16 @@
    "source": "https://www.eia.gov/dnav/pet/hist/EER_EPD2DXL0_PF4_RGC_DPGD.htm",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 3.943,
-   "latest_date": "2026-11-17",
-   "chg_short": -20.53607416364369,
-   "short_from": "2026-10-20",
-   "chg_year": 52.65195509097946,
-   "year_from": "2025-11-18",
+   "latest": 3.636,
+   "latest_date": "2026-11-24",
+   "chg_short": -23.72561359345501,
+   "short_from": "2026-10-27",
+   "chg_year": 63.0493273542601,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 4.780363636363636,
-   "vs_prev_month": -17.516735128556206,
+   "vs_prev_month": -23.93884071200364,
    "series": [
-    [
-     "2026-05-20",
-     3.926
-    ],
-    [
-     "2026-05-21",
-     3.869
-    ],
-    [
-     "2026-05-22",
-     3.857
-    ],
-    [
-     "2026-05-26",
-     3.694
-    ],
     [
      "2026-05-27",
      3.588
@@ -3171,6 +3171,26 @@
     [
      "2026-11-17",
      3.943
+    ],
+    [
+     "2026-11-18",
+     3.895
+    ],
+    [
+     "2026-11-19",
+     3.976
+    ],
+    [
+     "2026-11-20",
+     3.931
+    ],
+    [
+     "2026-11-23",
+     3.656
+    ],
+    [
+     "2026-11-24",
+     3.636
     ]
    ]
   },
@@ -5350,20 +5370,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2843",
    "publisher": "USDA Agricultural Marketing Service, My Market News",
    "publisher_url": "https://mymarketnews.ams.usda.gov/",
-   "latest": 137.7,
-   "latest_date": "2026-11-24",
-   "chg_short": 342.3385801477674,
-   "short_from": "2026-10-27",
-   "chg_year": -39.34455114086865,
-   "year_from": "2025-11-25",
+   "latest": 142.26,
+   "latest_date": "2026-11-25",
+   "chg_short": 329.5289855072464,
+   "short_from": "2026-10-28",
+   "chg_year": -37.117093223710384,
+   "year_from": "2025-11-26",
    "prev_month": "2026-10",
    "prev_month_avg": 35.95761904761905,
-   "vs_prev_month": 282.9508283561335,
+   "vs_prev_month": 295.63242441498585,
    "series": [
-    [
-     "2026-05-27",
-     29.06
-    ],
     [
      "2026-05-28",
      23.96
@@ -5859,6 +5875,10 @@
     [
      "2026-11-24",
      137.7
+    ],
+    [
+     "2026-11-25",
+     142.26
     ]
    ]
   },
