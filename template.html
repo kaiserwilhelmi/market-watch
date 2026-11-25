@@ -6,6 +6,9 @@
 <title>/*__TITLE__*/</title>
 /*__META__*/
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" media="print" onload="this.media='all'">
 <style>
 /* Layout: one 1240px column; summary strip, then dense master tables, then analyst tools. Matches the Market Watch palette. */
 :root {
@@ -31,9 +34,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .sub { color: var(--text-2); max-width: 75ch; }
 .note { color: var(--text-3); font-size: 12.5px; }
 .crumb { font-size: 13px; }
-.home { max-width: 1240px; margin: 0 auto 16px; }
-.home a { font-weight: 700; font-size: 15px; color: var(--text); text-decoration: none; }
-.home a:hover { color: var(--accent); }
+.site-wrap { max-width: 1240px; margin: 0 auto; }
 .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
 .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
 .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
@@ -62,6 +63,7 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-
 .t th.l, .t td.l { text-align: left; }
 .t td.wrap-ok { white-space: normal; min-width: 180px; }
 .t th[data-sort] { cursor: pointer; user-select: none; }
+.t th .sortb { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: inherit; }
 .t th[data-sort]::after { content: " ↕"; color: var(--text-3); font-weight: 400; }
 .t th[aria-sort="ascending"]::after { content: " ↑"; color: var(--accent); }
 .t th[aria-sort="descending"]::after { content: " ↓"; color: var(--accent); }
@@ -184,11 +186,29 @@ body.locked { overflow: hidden; }
 .fig:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .t tbody tr.click td a { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+/* Site header and skip link: same as the home page header */
+.dw-skip { position: absolute; left: 12px; top: -80px; z-index: 1000; padding: 10px 16px; border-radius: 4px; background: #ebe8e1; color: #161a1f; font: 600 15px/1.2 "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; text-decoration: none; }
+.dw-skip:focus { top: 12px; outline: 2px solid #9cc0dc; outline-offset: 2px; }
+.dw-site { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 22px 0 18px; margin: 0 0 20px; border-bottom: 1px solid #303741; font: 16px/1.6 "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+.dw-site .dw-me { font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-weight: 600; font-size: 19px; color: #ebe8e1; text-decoration: none; }
+.dw-site nav { display: flex; gap: 22px; font-size: 15px; }
+.dw-site nav a { color: #aeb3b9; text-decoration: none; padding: 6px 0; }
+.dw-site nav a:hover { color: #ebe8e1; }
+.dw-site nav a.on { color: #ebe8e1; box-shadow: inset 0 -2px 0 #9cc0dc; }
+.dw-site a:focus-visible { outline: 2px solid #9cc0dc; outline-offset: 3px; border-radius: 2px; }
+main:focus { outline: none; }
+.dw-site { padding-top: 0; margin-bottom: 20px; }
 </style>
 </head>
 <body>
-<nav class="home"><a href="/">Dawson Wilhelmi</a></nav>
-<div class="wrap" id="app"></div>
+<a class="dw-skip" href="#app">Skip to content</a>
+<div class="site-wrap">
+<header class="dw-site">
+  <a class="dw-me" href="/">Dawson Wilhelmi</a>
+  <nav aria-label="Site"><a href="/" class="on">Projects</a><a href="/about/">About</a></nav>
+</header>
+</div>
+<main class="wrap" id="app" tabindex="-1"></main>
 <script>
 {
 const D = /*__DATA__*/null;
@@ -253,6 +273,7 @@ function spotTable(items) {
 /* sortable tables: header cells carry data-sort="key"; rows are re-rendered by the caller */
 function sortable(table, rows, render, initial) {
   let key = initial[0], dir = initial[1];
+  table.querySelectorAll("th[data-sort]").forEach(th => { const b = document.createElement("button"); b.type = "button"; b.className = "sortb"; b.append(...th.childNodes); th.append(b); });
   const go = () => {
     const sorted = [...rows].sort((a, b) => {
       const x = a.sort[key], y = b.sort[key];
@@ -574,7 +595,7 @@ function hub() {
     }).join("");
   }, ["p12", -1]);
   itb.addEventListener("click", e => { const tr = e.target.closest("tr[data-href]"); if (tr && !e.target.closest("a")) location.href = tr.dataset.href; });
-  itb.addEventListener("keydown", e => { const tr = e.target.closest("tr[data-href]"); if (tr && e.key === "Enter") location.href = tr.dataset.href; });
+  itb.addEventListener("keydown", e => { const tr = e.target.closest("tr[data-href]"); if (tr && e.target === tr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); location.href = tr.dataset.href; } });
 
   const usedIn = {}; inds.forEach(d => d.series.forEach(i => (usedIn[i] = usedIn[i] || []).push(d)));
   const groups = ["All", ...new Set(ALL.map(s => s.group))];
