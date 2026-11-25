@@ -225,7 +225,6 @@ main:focus { outline: none; }
 .st.due { border-color: var(--accent); color: var(--accent); }
 .st.late { border-color: var(--warn); color: var(--warn-ink); }
 .st.bad { border-color: var(--crit); color: var(--crit-ink); }
-.fresh summary { cursor: pointer; }
 .fresh .line { color: var(--text-2); }
 .fresh table { margin-top: 10px; }
 .newdata { position: sticky; top: 8px; z-index: 5; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; border: 1px solid var(--accent); background: var(--surface); border-radius: 8px; padding: 10px 14px; }
@@ -412,11 +411,11 @@ function freshCard(ids) {
   const last = used.map(k => SRC[k].checked).filter(Boolean).sort().pop();
   const nextUp = used.map(k => [SRC[k].next_check, SRC[k].name]).filter(x => x[0]).sort()[0];
   const bits = [`${n("current")} of ${fs.length} series current`, n("due") ? `${n("due")} with a release due` : "", n("late") ? `${n("late")} late` : "", n("failed") ? `${n("failed")} not updating` : ""].filter(Boolean);
-  return `<details class="card fresh" id="fresh"${document.getElementById("fresh")?.open ? " open" : ""}>
+  return `<details class="card fold fresh" id="fresh"${document.getElementById("fresh")?.open ? " open" : ""}>
     <summary><span class="head"><h2>Data freshness</h2><span class="note">${bits.join(" · ")}</span></span></summary>
     <p class="line">A publisher was last called ${agoSpan(last)}.${nextUp ? ` Next planned call: ${esc(nextUp[1])}, ${when(nextUp[0])}.` : ""} Each series updates when its publisher releases new data; this page looks for changes every minute.</p>
-    <div class="scroll"><table class="t"><thead><tr><th class="l">Publisher</th><th>Series</th><th class="l">Last called</th><th class="l">Result</th><th class="l">Next planned call</th><th class="l ph">Rights</th></tr></thead><tbody>
-    ${used.map(k => { const x = SRC[k]; return `<tr><td class="l"><a href="${x.url}" target="_blank" rel="noopener">${esc(x.name)}</a><br><span class="rng">${esc(x.api)}</span></td><td>${fs.filter(f => f.src === k).length}</td><td class="l">${agoSpan(x.checked)}</td><td class="l">${x.ok === false ? `<span class="st bad" style="margin:0">Failed</span>` : x.ok ? "OK" : "—"}</td><td class="l">${x.next_check ? when(x.next_check) : "—"}</td><td class="l ph">${esc(x.rights)}</td></tr>`; }).join("")}
+    <div class="scroll"><table class="t"><thead><tr><th class="l">Publisher</th><th class="ph">Series</th><th class="l">Last called</th><th class="l">Result</th><th class="l">Next planned call</th><th class="l ph">Rights</th></tr></thead><tbody>
+    ${used.map(k => { const x = SRC[k]; return `<tr><td class="l"><a href="${x.url}" target="_blank" rel="noopener">${esc(x.name)}</a><br><span class="rng">${esc(x.api)}</span></td><td class="ph">${fs.filter(f => f.src === k).length}</td><td class="l">${agoSpan(x.checked)}</td><td class="l">${x.ok === false ? `<span class="st bad" style="margin:0">Failed</span>` : x.ok ? "OK" : "—"}</td><td class="l">${x.next_check ? when(x.next_check) : "—"}</td><td class="l ph">${esc(x.rights)}</td></tr>`; }).join("")}
     </tbody></table></div>
   </details>`;
 }
@@ -919,7 +918,7 @@ D.page === "hub" ? hub() : industry();
 pollStatus();
 /* folds start open on wider screens; a link to #method opens that one */
 const wide = matchMedia("(min-width: 601px)").matches;
-document.querySelectorAll("details.fold").forEach(f => { f.open = wide; });
+document.querySelectorAll("details.fold:not(.fresh)").forEach(f => { f.open = wide; });
 const openMethod = () => { if (location.hash === "#method") { const m = document.getElementById("method"); if (m) m.open = true; } };
 document.addEventListener("click", e => { if (e.target.closest('a[href="#method"]')) setTimeout(openMethod); });
 window.addEventListener("hashchange", openMethod); openMethod();
