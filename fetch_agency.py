@@ -39,7 +39,14 @@ def scrub(t):
     return " ".join(t.split())[:160]
 
 
+SLOW = set()   # hosts that already timed out or answered 5xx in this run
+
+
 def get(url, headers=None, data=None, timeout=60, tries=3):
+    """Once a host has failed every try, later calls to it in this run get one short try."""
+    host = urllib.parse.urlsplit(url).netloc
+    if host in SLOW:
+        timeout, tries = min(timeout, 20), 1
     for i in range(tries):
         try:
             req = urllib.request.Request(url, headers={**UA, **(headers or {})}, data=data)
@@ -53,12 +60,16 @@ def get(url, headers=None, data=None, timeout=60, tries=3):
                 raise ValueError(f"HTTP {status}, not JSON: {scrub(body)}")
         except urllib.error.HTTPError as e:
             msg = f"HTTP {e.code}: {scrub(e.read().decode('utf-8', 'replace'))}"
-            if e.code in (400, 401, 403, 404) or i == tries - 1:
+            if e.code in (400, 401, 403, 404):
+                raise ValueError(msg) from None
+            if i == tries - 1:
+                SLOW.add(host)
                 raise ValueError(msg) from None
         except ValueError:
             raise
         except Exception:
             if i == tries - 1:
+                SLOW.add(host)
                 raise
         time.sleep(3 * (i + 1))
 
