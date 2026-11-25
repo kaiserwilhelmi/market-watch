@@ -35,7 +35,7 @@ jobs:
     timeout-minutes: 40
     env:
       LIVE: ${{ github.ref == 'refs/heads/main' }}
-      MW_ONLY: "WB,BTS,FRB,EIA"   # TEMPORARY while testing on the branch
+      MW_ONLY: "FRB"   # TEMPORARY while testing on the branch
       BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
       EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
       CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}

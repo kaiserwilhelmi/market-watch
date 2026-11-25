@@ -296,8 +296,11 @@ def fetch_eia(ids, full):
 def parse_h10(text):
     """Fed H.10 CSV -> {currency code: [(YYYY-MM-DD, float)]}."""
     rows = list(csv.reader(io.StringIO(text)))
-    cur = next(r for r in rows if r and r[0].startswith("Currency"))
-    start = next(i for i, r in enumerate(rows) if r and r[0].startswith("Time Period")) + 1
+    cur = next((r for r in rows if r and r[0].startswith("Currency")), None)
+    start = next((i for i, r in enumerate(rows) if r and r[0].startswith("Time Period")), None)
+    if cur is None or start is None:
+        raise ValueError(f"H.10: not the expected CSV ({len(text)} characters): {scrub(text[:140])}")
+    start += 1
     out = {c: [] for c in cur[1:]}
     for r in rows[start:]:
         if not r or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", r[0]):
@@ -322,7 +325,7 @@ def monthly_mean(daily, upto):
 def fetch_h10(ids, full):
     now = datetime.now(ET)
     y = START_YEAR if full else now.year - 1
-    daily = parse_h10(http(H10_URL.format(y=y, y2=now.year), timeout=120))
+    daily = parse_h10(http(H10_URL.format(y=y, y2=now.year), timeout=120, headers={"Accept": "text/csv,*/*"}))
     out, tail = {}, {}
     for sid in ids:
         d = daily.get(H10[sid], [])
@@ -506,8 +509,8 @@ def main():
                 if v:
                     print(f"       {sid:18s} {len(v):4d} months  {v[0][0]} {v[0][1]:>10s}  ..  {v[-1][0]} {v[-1][1]:>10s}")
         except Exception as e:
-            st.update(ok=False, error=scrub(e), fails=st.get("fails", 0) + 1)
-            print(f"FAIL {src}: {scrub(e)}", file=sys.stderr)
+            st.update(ok=False, error=scrub(e) or type(e).__name__, fails=st.get("fails", 0) + 1)
+            print(f"FAIL {src}: {type(e).__name__} {scrub(e)}", file=sys.stderr)
 
     if groups:
         env = {**os.environ, "MW_GROUPS": ",".join(groups), "MW_DATA_DIR": str(DATA)}
