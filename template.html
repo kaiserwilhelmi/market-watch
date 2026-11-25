@@ -38,6 +38,9 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
 .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
 .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+.pills { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.pill.stale { color: var(--warn-ink); border-color: rgba(242,176,30,.45); }
+.pill.stale i { background: var(--warn); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
 .head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; }
 .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
@@ -545,6 +548,9 @@ function mountDetail(root, s, o) {
 }
 const localTime = built => { const d = new Date(String(built).replace(" UTC", "Z").replace(" ", "T"));
   return isNaN(d) ? esc(built) : d.toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }); };
+/* series whose last download failed keep their previous data; say so next to "Updated" (data/refresh_status.json) */
+const staleNote = () => { const r = D.refresh; if (!r || !r.failed.length) return "";
+  return `<span class="pill stale" title="Download failed on the last update, so these show the previous data: ${esc(r.failed.join(", "))}"><i></i>${r.failed.length} of ${r.total} series not refreshed</span>`; };
 const hashId = () => { const m = location.hash.match(/^#driver=([A-Za-z0-9]+)$/); return m && D.series[m[1]] ? m[1] : null; };
 
 /* ------------------------------ HUB ------------------------------ */
@@ -559,7 +565,7 @@ function hub() {
       <h1>Industry Market Watch</h1>
       <p class="sub">Input-cost pressure for ${inds.length} industries from ${ALL.length} official price, wage and currency series, with 6-month forecasts, backtested accuracy and buying signals.</p>
     </div>
-    <span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>
+    <span class="pills"><span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
   </div>
   <div class="kpis">
     <div class="card kpi"><div class="k">Most cost pressure, 12 mo</div><div class="n">${esc(hot[0].name)}</div><div class="d">Median driver ${pct(hot[0].pressure_12m)}</div></div>
@@ -673,7 +679,7 @@ function industry() {
   <div class="crumb"><a href="../index.html">← All industries</a></div>
   <div class="top">
     <div><h1>${esc(d.name)}</h1><p class="sub">${esc(d.blurb)}</p></div>
-    <span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>
+    <span class="pills"><span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
   </div>
   <div class="kpis">
     <div class="card kpi"><div class="k">Median driver, 3 mo</div><div class="n ${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</div><div class="d">cost impact</div></div>

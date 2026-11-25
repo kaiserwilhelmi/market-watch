@@ -15,6 +15,14 @@ A = json.loads((HERE / "data" / "analytics.json").read_text())
 TEMPLATE = (HERE / "template.html").read_text()
 AP = HERE / "data" / "agency_analytics.json"
 G = json.loads(AP.read_text()) if AP.exists() else dict(spot={}, fx={}, census={}, usaspending={}, industries={}, hub_spot=[], publishers={})
+RS = HERE / "data" / "refresh_status.json"
+STALE = set(json.loads(RS.read_text()).get("fred", {}).get("failed", [])) if RS.exists() else set()
+
+
+def refresh(ids):
+    """Series among ids whose last download failed, so the page keeps the previous data (fetch_data.py)."""
+    bad = sorted(i for i in ids if i in STALE)
+    return dict(failed=[A["series"][i]["name"] for i in bad], total=len(ids))
 
 
 def latest_for(ids):
@@ -89,7 +97,7 @@ def slim(s, keep=24):
     return {**s, "series": s["series"][-keep:]}
 
 
-hub = dict(page="hub", built=A["built"], industries=A["industries"],
+hub = dict(page="hub", built=A["built"], industries=A["industries"], refresh=refresh(list(A["series"])),
            series={k: slim(v) for k, v in A["series"].items()},
            latest=latest_for(set(A["series"])), hub_spot=[G["spot"][k] for k in G["hub_spot"]],
            agency_pubs=sorted({tuple(v) for v in G["publishers"].values()}))
@@ -109,7 +117,7 @@ for ind in A["industries"]:
         used.add(G["publishers"]["USASPENDING"][0])
     lt = latest_for(set(ind["series"]))
     used |= {v["publisher"] for v in lt.values()}
-    payload = dict(page="industry", built=A["built"], industry=ind,
+    payload = dict(page="industry", built=A["built"], industry=ind, refresh=refresh(ind["series"]),
                    series={i: A["series"][i] for i in ind["series"]}, latest=lt, extras=extras,
                    agency_pubs=sorted({tuple(v) for v in G["publishers"].values() if v[0] in used}))
     out = HERE / ind["slug"] / "index.html"
