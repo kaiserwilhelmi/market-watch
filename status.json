@@ -27,7 +27,7 @@
    "ok": true
   }
  },
- "run": "2026-11-25T21:19:31Z",
+ "run": "2026-11-25T22:23:05Z",
  "schema": 1,
  "series": {
   "APU0000708111": {
@@ -1439,11 +1439,11 @@
   },
   "FRB": {
    "api": "H.10 Data Download Program",
-   "checked": "2026-11-25T19:16:20Z",
+   "checked": "2026-11-25T22:23:05Z",
    "error": null,
    "fails": 0,
    "keyed": false,
-   "last_ok": "2026-11-25T19:16:20Z",
+   "last_ok": "2026-11-25T22:23:05Z",
    "missing": [],
    "name": "Board of Governors of the Federal Reserve System",
    "next_check": "2026-12-01T21:30:00Z",
@@ -1468,5 +1468,5 @@
    "url": "https://www.worldbank.org/en/research/commodity-markets"
   }
  },
- "version": "9371568ff1b9"
+ "version": "b5a6ac5b8999"
 }
