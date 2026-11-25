@@ -20,7 +20,7 @@ A hub page ranks 17 industries by input-cost pressure. Each industry page has a 
 | Retail & e-commerce fulfillment | PPI couriers, warehousing, corrugated boxes, plastic products; retail and transportation wages |
 | Packaging & CPG | PPI corrugated, converted paper, resin, metal cans, glass containers; aluminum |
 | Healthcare | PPI pharmaceuticals, surgical supplies, surgical instruments, plastic products; education & health wages; CNY |
-| Trucking & freight | Diesel; PPI truckload, rail, rubber; Cass shipments and expenditures; transportation wages |
+| Trucking & freight | Diesel; PPI truckload, rail, rubber; freight services index, less-than-truckload rates; transportation wages |
 | Airlines, air cargo & ocean | Jet fuel; PPI air freight, passenger air, deep sea freight; transportation wages; EUR, CNY |
 | Agriculture | PPI fertilizer, ag chemicals, farm machinery; diesel; corn, soybeans, wheat |
 | Oil & gas | WTI crude, Henry Hub gas; PPI drilling, oilfield services, steel pipe & tube; mining & logging wages |
@@ -30,13 +30,27 @@ Series IDs, names, units and publishers are in `series.py`.
 
 ## Data publishers
 
-Credited to the original publisher; FRED (Federal Reserve Bank of St. Louis) is the delivery layer.
+Every series is pulled directly from its original publisher by `collect.py`. There is no intermediary. `sources.py` lists each publisher, its usage rights and its release schedule.
 
-- U.S. Bureau of Labor Statistics: Producer Price Index, Consumer Price Index and average price data, Current Employment Statistics (average hourly earnings)
-- U.S. Energy Information Administration: WTI crude, Henry Hub natural gas, US retail diesel, US Gulf Coast jet fuel (monthly via FRED; daily and weekly direct, see Agency data)
-- International Monetary Fund: Primary Commodity Prices (metals, grains, softs, beef)
-- Board of Governors of the Federal Reserve System: H.10 foreign exchange rates
-- Cass Information Systems: Cass Freight Index (shipments and expenditures)
+| Publisher | Series | Feed | Rights | Key |
+| --- | --- | --- | --- | --- |
+| U.S. Bureau of Labor Statistics | Producer Price Index, Consumer Price Index and average prices, average hourly earnings (58 series, plus CPI-U as the deflator) | Public Data API v2 | Public domain | `BLS_API_KEY` (optional, raises the daily allowance) |
+| World Bank | Commodity Price Data, "The Pink Sheet": aluminum, copper, nickel, wheat, corn, soybeans, soybean oil, sugar, coffee, beef | Monthly workbook | CC BY 4.0 | none |
+| Board of Governors of the Federal Reserve System | H.10 foreign exchange rates, 7 currencies | Data Download Program | Public domain | none |
+| U.S. Energy Information Administration | WTI crude, Henry Hub natural gas, US retail diesel, US Gulf Coast jet fuel (monthly averages as EIA publishes them) | Open Data API v2 | Public domain | `EIA_API_KEY` |
+| U.S. Bureau of Transportation Statistics | Freight Transportation Services Index | data.bts.gov | Public domain | none |
+
+World Bank attribution: The World Bank, Commodity Price Data (The Pink Sheet). The World Bank's dataset terms note that some series within a dataset can come from third parties; the Pink Sheet page lists no such restriction for these ten.
+
+### Release-driven collection
+
+`collect.py` runs every 15 minutes but only calls a publisher when one of its releases is due:
+
+- Each series has a release window, counted in days after the end of the period it covers (for example producer prices 9 to 20 days after month end, at 8:30 Eastern). Before the window opens the publisher is not called.
+- Inside the window the publisher is polled shortly after its release time and then about hourly, within its daily allowance. A series that passes the end of its window is marked **late**; a publisher that fails three calls in a row is marked **not updating**. Previous values are always kept.
+- Every new or revised value is appended to `data/vintage/<id>.csv` with the time it was first seen, so the page can say when a number arrived and a later forecast test can use what was known at the time (Croushore and Stark, 2001).
+- `data/status.json` holds the result: per series the period, first-seen time, preliminary flag, state and next expected release; per publisher the last call, its result and the next planned call. The pages embed it and re-read it every minute.
+- On Sunday mornings each publisher's full history is pulled again to pick up revisions older than the usual window.
 
 ## Agency data (daily, weekly and sourcing)
 
@@ -49,12 +63,12 @@ Pulled straight from the publishing agency by `fetch_agency.py`; items and per-i
 | My Market News API | USDA Agricultural Marketing Service | Daily shell egg index (report 2843), weekly chicken parts (report 3646) | `USDA_AMS_API_KEY` |
 | International Trade API | U.S. Census Bureau | Monthly general imports by 4-digit HS code and country | `CENSUS_API_KEY` |
 | USAspending API | U.S. Department of the Treasury | Monthly federal contract obligations by NAICS code | none |
-| FRED API (H.10) | Board of Governors of the Federal Reserve System | Daily exchange rates for the "Daily/weekly" column | `FRED_API_KEY` |
+| H.10 Data Download | Board of Governors of the Federal Reserve System | Daily exchange rates for the "Daily/weekly" column (the Board posts them weekly) | none |
 
-- **Daily/weekly column.** For FRED rows with a faster source (WTI, Henry Hub, jet fuel, diesel, FX), the newest value is shown against last month's average, which is what the monthly series will print next. Forecasts stay monthly.
+- **Daily/weekly column.** For monthly rows with a faster source (WTI, Henry Hub, jet fuel, diesel, FX), the newest value is shown against last month's average, which is what the monthly series will print next. Forecasts stay monthly.
 - **Import sourcing.** Latest 12 months of general imports vs the prior 12; top 5 countries by share; concentration is the Herfindahl-Hirschman Index of country shares (Rhoades, 1993), labeled with the U.S. DOJ/FTC (2023) Merger Guidelines cut-offs (1,000 and 1,800) as a yardstick.
 - **Federal demand.** Trailing 12 complete months of contract obligations vs the prior 12. The latest 3 months are shown but excluded, because agencies (DoD with a 90-day delay) are still reporting them.
-- Census is refreshed on Mondays (it is monthly and a full pull takes about 10 minutes); other sources refresh daily.
+- Census is refreshed on Mondays (it is monthly and a full pull takes about 10 minutes). Spot prices are checked four times each business day, the energy outlook and federal spending once.
 - A source whose key is missing is skipped and its card is hidden; a failed download keeps the previous values. `verify_agency.py` recomputes every change, share, HHI and total with separate plain-Python code, and the workflow stops if any differ.
 
 ## Method
@@ -84,31 +98,31 @@ Each "What to do now" item shows its three context numbers and a "Why this advic
 
 ## Data quality checks
 
-- Every value (80 series, Jan 2018–Oct 2026) was cross-checked against FRED's own annual averages for 2018–2025 and quarterly averages through 2026 Q3: 640 annual and 880 quarterly comparisons. Three 2026 Q1 energy flags (WTI, jet fuel, diesel) came from daily vs. monthly weighting during the March 2026 price spike; the monthly values were re-pulled and match FRED exactly.
-- `verify_calcs.py` independently recomputes every % change, signal, range, naive backtest, industry median, correlation and lead/lag coefficient, and refits the model for a sample of series. The daily workflow stops before publishing if any check fails.
+- Migration check (Nov 25, 2026): when the series moved from FRED copies to the publishers' own feeds, every overlapping month since 2004 was compared in a separate script. All 15,681 BLS values (58 series) matched exactly, and all 1,918 monthly Federal Reserve exchange-rate averages matched within 0.01% (rounding). Henry Hub and diesel matched exactly. EIA's own monthly averages for WTI and Gulf Coast jet fuel differ from an average of daily prices in some months (largest gap 1.63% for WTI, 6.54% for jet fuel, mostly before 2018); the site now uses EIA's monthly figure. The World Bank, BTS and less-than-truckload series are new and have no earlier copy to compare.
+- `verify_calcs.py` independently recomputes every % change, signal, range, naive backtest, industry median, correlation and lead/lag coefficient, and refits the model for a sample of series. The collector run stops before publishing if any check fails.
 
 ## Limitations
 
-- Detailed industry wage series (e.g. restaurants, food manufacturing) are not on FRED, so supersector average hourly earnings are used as proxies.
-- IMF commodity prices run about one month behind BLS data. PPI values are revised for four months after release.
+- Detailed industry wage series (e.g. restaurants, food manufacturing) need the detailed BLS establishment series, which are planned for a later phase, so supersector average hourly earnings are used as proxies.
+- PPI values are revised for four months after release; the page tags them as preliminary until then.
+- GitHub runs scheduled jobs on a best-effort basis, so a 15-minute run can start several minutes late. The page shows the real time of the last publisher call.
+- Five World Bank series (wheat, soybeans, soybean oil, sugar, beef) are different benchmark quotes from the IMF series used before November 2026, so their history and signals differ somewhat. Aluminum, copper, nickel, corn and coffee are the same benchmarks.
 - October 2025 is missing for CPI food away from home and egg prices (no collection during the federal shutdown); it is interpolated for calculations.
 
 ## Run it
 
 ```
 pip install -r requirements.txt
-export FRED_API_KEY=...        # free key from https://fred.stlouisfed.org/docs/api/api_key.html
-python fetch_data.py           # data/long/*.csv (2004 on) and data/raw/*.csv (2018 on)
-python analyze.py              # data/analytics.json (about 5 minutes; refits ~5,000 models)
-python verify_calcs.py         # independent checks, exits non-zero on any mismatch
-export EIA_API_KEY=... CENSUS_API_KEY=... USDA_AMS_API_KEY=...   # optional, see Agency data
-python fetch_agency.py         # data/agency/*.json
-python analyze_agency.py       # data/agency_analytics.json
-python verify_agency.py        # independent checks of the agency numbers
-python build.py                # index.html + <industry>/index.html
+export EIA_API_KEY=... CENSUS_API_KEY=... USDA_AMS_API_KEY=...   # free keys; BLS_API_KEY is optional
+python run.py --all --rebuild  # call every publisher, recalculate, check and build
+python run.py                  # later runs: only what is due
+python collect.py --plan       # show what would be called right now, call nothing
+python -m unittest discover tests
 ```
 
-`.github/workflows/update.yml` runs the same steps daily and needs the `FRED_API_KEY` repository secret, plus `EIA_API_KEY`, `CENSUS_API_KEY` and `USDA_AMS_API_KEY` for the agency data.
+`run.py` chains `collect.py`, `analyze.py` (about 5 minutes; refits ~5,000 models), `verify_calcs.py`, `analyze_agency.py`, `verify_agency.py` and `build.py`, and skips the steps whose inputs did not change.
+
+`.github/workflows/collect.yml` runs it every 15 minutes. Data is kept on the `data` branch, the site is published straight to GitHub Pages (Settings > Pages > Source: GitHub Actions), and the main branch holds code only.
 
 ## References
 
@@ -116,6 +130,7 @@ python build.py                # index.html + <industry>/index.html
 - Brown, G. W., Crabb, P. R., & Haushalter, D. (2006). Are firms successful at selective hedging? *Journal of Business*, 79(6), 2925–2949.
 - Carter, D. A., Rogers, D. A., & Simkins, B. J. (2006). Does hedging affect firm value? Evidence from the US airline industry. *Financial Management*, 35(1), 53–86.
 - Cashin, P., McDermott, C. J., & Scott, A. (2002). Booms and slumps in world commodity prices. *Journal of Development Economics*, 69(1), 277–296.
+- Croushore, D., & Stark, T. (2001). A real-time data set for macroeconomists. *Journal of Econometrics*, 105(1), 111–130.
 - Deaton, A., & Laroque, G. (1992). On the behaviour of commodity prices. *Review of Economic Studies*, 59(1), 1–23.
 - Dickens, W. T., Goette, L., Groshen, E. L., Holden, S., Messina, J., Schweitzer, M. E., Turunen, J., & Ward, M. E. (2007). How wages change: Micro evidence from the International Wage Flexibility Project. *Journal of Economic Perspectives*, 21(2), 195–214.
 - Federal Acquisition Regulation, 48 CFR 16.203, Fixed-price contracts with economic price adjustment. https://www.acquisition.gov/far/16.203-2

@@ -1,0 +1,1466 @@
+{
+ "groups": {
+  "census": {
+   "checked": "2026-11-25T10:27:27Z",
+   "failed": [],
+   "ok": true
+  },
+  "spot": {
+   "checked": "2026-11-25T10:27:27Z",
+   "failed": [],
+   "ok": true
+  },
+  "steo": {
+   "checked": "2026-11-25T10:27:27Z",
+   "failed": [],
+   "ok": true
+  },
+  "usa": {
+   "checked": "2026-11-25T10:27:27Z",
+   "failed": [],
+   "ok": true
+  }
+ },
+ "run": "2026-11-25T10:27:27Z",
+ "schema": 1,
+ "series": {
+  "APU0000708111": {
+   "code": "APU0000708111",
+   "first_seen": null,
+   "next_by": "2026-12-24T04:59:00Z",
+   "next_from": "2026-12-08T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "2.32"
+  },
+  "BTSTSIFREIGHT": {
+   "code": "TSI freight",
+   "first_seen": null,
+   "next_by": "2027-01-05T04:59:00Z",
+   "next_from": "2026-12-05T16:00:00Z",
+   "next_period": "2026-10",
+   "period": "2026-09",
+   "preliminary": false,
+   "src": "BTS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "135.8"
+  },
+  "CES1000000003": {
+   "code": "CES1000000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "42.35"
+  },
+  "CES2000000003": {
+   "code": "CES2000000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "42.03"
+  },
+  "CES3000000003": {
+   "code": "CES3000000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "37.24"
+  },
+  "CES3000000008": {
+   "code": "CES3000000008",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "30.43"
+  },
+  "CES4200000003": {
+   "code": "CES4200000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "26.55"
+  },
+  "CES4300000003": {
+   "code": "CES4300000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "32.74"
+  },
+  "CES4422000003": {
+   "code": "CES4422000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "56.33"
+  },
+  "CES6500000003": {
+   "code": "CES6500000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "36.67"
+  },
+  "CES7000000003": {
+   "code": "CES7000000003",
+   "first_seen": null,
+   "next_by": "2026-12-16T04:59:00Z",
+   "next_from": "2026-12-02T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "23.9"
+  },
+  "CUSR0000SEFV": {
+   "code": "CUSR0000SEFV",
+   "first_seen": null,
+   "next_by": "2026-12-24T04:59:00Z",
+   "next_from": "2026-12-08T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "400.85"
+  },
+  "DCOILWTICO": {
+   "code": "RWTC",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T15:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "EIA",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "102.07"
+  },
+  "DEXCAUS": {
+   "code": "H10 CAD",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T21:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "FRB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "1.4135"
+  },
+  "DEXCHUS": {
+   "code": "H10 CNY",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T21:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "FRB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "6.6844"
+  },
+  "DEXJPUS": {
+   "code": "H10 JPY",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T21:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "FRB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "157.9748"
+  },
+  "DEXKOUS": {
+   "code": "H10 KRW",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T21:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "FRB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "1337.3605"
+  },
+  "DEXMXUS": {
+   "code": "H10 MXN",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T21:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "FRB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "18.4464"
+  },
+  "DEXTAUS": {
+   "code": "H10 TWD",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T21:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "FRB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "32.2695"
+  },
+  "DEXUSEU": {
+   "code": "H10/H10/RXI$US_N.B.EU",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T21:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "FRB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "1.1198"
+  },
+  "DJFUELUSGULF": {
+   "code": "EER_EPJK_PF4_RGC_DPG",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T15:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "EIA",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "4.483"
+  },
+  "GASDESW": {
+   "code": "EMD_EPD2D_PTE_NUS_DPG",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T15:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "EIA",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "6.252"
+  },
+  "MHHNGSP": {
+   "code": "RNGWHHD",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T15:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "EIA",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "2.99"
+  },
+  "PCU213111213111": {
+   "code": "PCU213111213111",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "407.59"
+  },
+  "PCU213112213112": {
+   "code": "PCU213112213112",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "227.575"
+  },
+  "PCU322211322211": {
+   "code": "PCU322211322211",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "506.674"
+  },
+  "PCU325110325110": {
+   "code": "PCU325110325110",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "185.112"
+  },
+  "PCU325211325211": {
+   "code": "PCU325211325211",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "335.923"
+  },
+  "PCU325320325320": {
+   "code": "PCU325320325320",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "186.664"
+  },
+  "PCU327213327213": {
+   "code": "PCU327213327213",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "306.849"
+  },
+  "PCU327310327310": {
+   "code": "PCU327310327310",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "353.235"
+  },
+  "PCU327320327320": {
+   "code": "PCU327320327320",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "402.369"
+  },
+  "PCU332431332431": {
+   "code": "PCU332431332431",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "243.8"
+  },
+  "PCU333111333111": {
+   "code": "PCU333111333111",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "304.457"
+  },
+  "PCU333415333415": {
+   "code": "PCU333415333415",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "326.064"
+  },
+  "PCU334111334111": {
+   "code": "PCU334111334111",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "103.266"
+  },
+  "PCU334413334413": {
+   "code": "PCU334413334413",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "28.852"
+  },
+  "PCU335311335311": {
+   "code": "PCU335311335311",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "483.91"
+  },
+  "PCU336390336390": {
+   "code": "PCU336390336390",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "141.61"
+  },
+  "PCU336412336412": {
+   "code": "PCU336412336412",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "278.074"
+  },
+  "PCU336413336413": {
+   "code": "PCU336413336413",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "216.725"
+  },
+  "PCU339112339112": {
+   "code": "PCU339112339112",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "163.231"
+  },
+  "PCU339113339113": {
+   "code": "PCU339113339113",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "270.567"
+  },
+  "PCU481111481111": {
+   "code": "PCU481111481111",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "403.171"
+  },
+  "PCU481112481112": {
+   "code": "PCU481112481112",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "182.539"
+  },
+  "PCU482111482111": {
+   "code": "PCU482111482111",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "272.186"
+  },
+  "PCU483111483111": {
+   "code": "PCU483111483111",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "572.968"
+  },
+  "PCU484121484121": {
+   "code": "PCU484121484121",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "230.994"
+  },
+  "PCU484122484122": {
+   "code": "PCU484122484122",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "325.613"
+  },
+  "PCU492110492110": {
+   "code": "PCU492110492110",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "403.432"
+  },
+  "PCU493110493110": {
+   "code": "PCU493110493110",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "168.507"
+  },
+  "PCU518210518210": {
+   "code": "PCU518210518210",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "126.911"
+  },
+  "WBALUMINUM": {
+   "code": "Aluminum",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "3061"
+  },
+  "WBBEEF": {
+   "code": "Beef",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "6.83"
+  },
+  "WBCOFFEE": {
+   "code": "Coffee, Arabica",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "7.4"
+  },
+  "WBCOPPER": {
+   "code": "Copper",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "14508"
+  },
+  "WBMAIZE": {
+   "code": "Maize",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "226.5"
+  },
+  "WBNICKEL": {
+   "code": "Nickel",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "15436"
+  },
+  "WBSOYBEANS": {
+   "code": "Soybeans",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "515"
+  },
+  "WBSOYOIL": {
+   "code": "Soybean oil",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "1546"
+  },
+  "WBSUGAR": {
+   "code": "Sugar, world",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "0.43"
+  },
+  "WBWHEAT": {
+   "code": "Wheat, US HRW",
+   "first_seen": null,
+   "next_by": "2026-12-14T04:59:00Z",
+   "next_from": "2026-12-01T16:00:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": false,
+   "src": "WB",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:17:26Z",
+   "value": "317"
+  },
+  "WPU02": {
+   "code": "WPU02",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "277.635"
+  },
+  "WPU0221": {
+   "code": "WPU0221",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "271.828"
+  },
+  "WPU051": {
+   "code": "WPU051",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "282.248"
+  },
+  "WPU0543": {
+   "code": "WPU0543",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "312.63"
+  },
+  "WPU061": {
+   "code": "WPU061",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "345.026"
+  },
+  "WPU0638": {
+   "code": "WPU0638",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "296.551"
+  },
+  "WPU0652": {
+   "code": "WPU0652",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "411.514"
+  },
+  "WPU066": {
+   "code": "WPU066",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "283.875"
+  },
+  "WPU071": {
+   "code": "WPU071",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "240.724"
+  },
+  "WPU072": {
+   "code": "WPU072",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "290.435"
+  },
+  "WPU081": {
+   "code": "WPU081",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "275.584"
+  },
+  "WPU0915": {
+   "code": "WPU0915",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "332.572"
+  },
+  "WPU1017": {
+   "code": "WPU1017",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "399.645"
+  },
+  "WPU101706": {
+   "code": "WPU101706",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "462.366"
+  },
+  "WPU1025": {
+   "code": "WPU1025",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "401.529"
+  },
+  "WPU1026": {
+   "code": "WPU1026",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "488.486"
+  },
+  "WPU114": {
+   "code": "WPU114",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "382.669"
+  },
+  "WPUSI012011": {
+   "code": "WPUSI012011",
+   "first_seen": null,
+   "next_by": "2026-12-26T04:59:00Z",
+   "next_from": "2026-12-09T13:30:00Z",
+   "next_period": "2026-11",
+   "period": "2026-10",
+   "preliminary": true,
+   "src": "BLS",
+   "state": "current",
+   "tracked_since": "2026-11-25T10:27:27Z",
+   "value": "381.552"
+  }
+ },
+ "sources": {
+  "BLS": {
+   "api": "BLS Public Data API v2",
+   "checked": "2026-11-25T10:27:27Z",
+   "error": null,
+   "fails": 0,
+   "keyed": false,
+   "last_ok": "2026-11-25T10:27:27Z",
+   "missing": [],
+   "name": "U.S. Bureau of Labor Statistics",
+   "next_check": "2026-12-02T13:30:00Z",
+   "ok": true,
+   "preliminary": {
+    "CES1000000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES2000000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES3000000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES3000000008": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES4200000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES4300000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES4422000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES6500000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "CES7000000003": [
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU213111213111": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU213112213112": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU322211322211": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU325110325110": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU325211325211": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU325320325320": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU327213327213": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU327310327310": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU327320327320": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU332431332431": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU333111333111": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU333415333415": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU334111334111": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU334413334413": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU335311335311": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU336390336390": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU336412336412": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU336413336413": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU339112339112": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU339113339113": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU481111481111": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU481112481112": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU482111482111": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU483111483111": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU484121484121": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU484122484122": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU492110492110": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU493110493110": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "PCU518210518210": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU02": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU0221": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU051": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU0543": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU061": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU0638": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU0652": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU066": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU071": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU072": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU081": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU0915": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU1017": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU101706": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU1025": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU1026": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPU114": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ],
+    "WPUSI012011": [
+     "2026-07",
+     "2026-08",
+     "2026-09",
+     "2026-10"
+    ]
+   },
+   "rights": "Public domain (U.S. government work)",
+   "series": 58,
+   "url": "https://www.bls.gov/developers/"
+  },
+  "BTS": {
+   "api": "Transportation Services Index, data.bts.gov",
+   "checked": "2026-11-25T10:27:27Z",
+   "error": null,
+   "fails": 0,
+   "keyed": false,
+   "last_ok": "2026-11-25T10:27:27Z",
+   "missing": [],
+   "name": "U.S. Bureau of Transportation Statistics",
+   "next_check": "2026-12-05T16:00:00Z",
+   "ok": true,
+   "rights": "Public domain (U.S. government work)",
+   "series": 1,
+   "url": "https://www.bts.gov/transportation-services-index"
+  },
+  "EIA": {
+   "api": "EIA Open Data API v2",
+   "checked": "2026-11-25T10:27:27Z",
+   "error": null,
+   "fails": 0,
+   "keyed": true,
+   "last_ok": "2026-11-25T10:27:27Z",
+   "missing": [],
+   "name": "U.S. Energy Information Administration",
+   "next_check": "2026-12-01T15:00:00Z",
+   "ok": true,
+   "rights": "Public domain (U.S. government work)",
+   "series": 4,
+   "url": "https://www.eia.gov/opendata/"
+  },
+  "FRB": {
+   "api": "H.10 Data Download Program",
+   "checked": "2026-11-25T10:27:27Z",
+   "error": null,
+   "fails": 0,
+   "keyed": false,
+   "last_ok": "2026-11-25T10:27:27Z",
+   "missing": [],
+   "name": "Board of Governors of the Federal Reserve System",
+   "next_check": "2026-12-01T21:30:00Z",
+   "ok": true,
+   "rights": "Public domain (U.S. government work)",
+   "series": 7,
+   "url": "https://www.federalreserve.gov/releases/h10/"
+  },
+  "WB": {
+   "api": "Commodity Price Data (The Pink Sheet), monthly workbook",
+   "checked": "2026-11-25T10:27:27Z",
+   "error": null,
+   "fails": 0,
+   "keyed": false,
+   "last_ok": "2026-11-25T10:27:27Z",
+   "missing": [],
+   "name": "World Bank",
+   "next_check": "2026-12-01T16:00:00Z",
+   "ok": true,
+   "rights": "Creative Commons Attribution 4.0 (CC BY 4.0)",
+   "series": 10,
+   "url": "https://www.worldbank.org/en/research/commodity-markets"
+  }
+ },
+ "version": "d4eec0a073b1"
+}

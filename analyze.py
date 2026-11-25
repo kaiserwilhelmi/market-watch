@@ -26,9 +26,11 @@ import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
 from series import SERIES, INDUSTRIES, PUB
+from sources import series_url, code_of
 import context as ctxmod
 
 HERE = Path(__file__).parent
+from paths import DATA
 H = 6
 FIRST_ORIGIN = pd.Period("2020-12", "M")     # >= 36 months of training data
 EVAL_FROM = pd.Period("2022-01", "M")        # backtest scoring window starts here
@@ -39,7 +41,7 @@ CPI = ctxmod.load_long(ctxmod.DEFLATOR)
 
 
 def load(sid):
-    df = pd.read_csv(HERE / "data" / "raw" / f"{sid}.csv")
+    df = pd.read_csv(DATA / "raw" / f"{sid}.csv")
     s = pd.Series(pd.to_numeric(df["value"], errors="coerce").values,
                   index=pd.PeriodIndex(df["date"].str[:7], freq="M"), name=sid)
     return s.sort_index()
@@ -138,7 +140,7 @@ def analyze_series(sid):
     return sid, dict(
         id=sid, name=name, group=group, unit=unit, direction=direction,
         publisher=PUB[pub][0], publisher_url=PUB[pub][1],
-        source=f"https://fred.stlouisfed.org/series/{sid}",
+        source=series_url(sid), code=code_of(sid),
         latest_month=str(s.index[-1]), latest=last,
         change=ch, cost_change=cost, signal=sig,
         low=lo, high=hi, range_pct=(last - lo) / (hi - lo) * 100 if hi > lo else 50.0,
@@ -211,7 +213,7 @@ def main():
         ))
     payload = dict(built=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
                    series=res, industries=inds)
-    (HERE / "data" / "analytics.json").write_text(json.dumps(payload, indent=1))
+    (DATA / "analytics.json").write_text(json.dumps(payload, indent=1))
     for d in inds:
         print(f"{d['name']:32s} 3m {d['pressure_3m']:+6.2f}% 12m {d['pressure_12m']:+6.2f}% "
               f"f6 {d['pressure_f6']:+6.2f}% A{d['alerts']} W{d['watches']} O{d['opportunities']}")

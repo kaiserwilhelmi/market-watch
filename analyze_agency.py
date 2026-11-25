@@ -19,10 +19,14 @@ from pathlib import Path
 
 import pandas as pd
 
-from agency import AGENCY_PUB, SPOT, FX_DAILY, EXTRAS, HUB_SPOT, TOP_N, CONC_SHARE, USA_LAG_MONTHS
+from agency import AGENCY_PUB, SPOT, EXTRAS, HUB_SPOT, TOP_N, CONC_SHARE, USA_LAG_MONTHS
 
 HERE = Path(__file__).parent
-IN = HERE / "data" / "agency"
+from paths import DATA
+from sources import H10
+
+FX_DAILY = list(H10)
+IN = DATA / "agency"
 COUNTRY = re.compile(r"^[1-7]\d{3}$")     # Census country codes; groupings use 0xxx or nXXX
 
 
@@ -139,7 +143,7 @@ def main():
             naics=[dict(code=n[0], label=n[1], data=n[0] in usa) for n in x.get("naics", [])])
     payload = dict(spot=spot, fx=fx, census=census, usaspending=usa, industries=inds, hub_spot=[k for k in HUB_SPOT if k in spot],
                    publishers={k: list(v) for k, v in AGENCY_PUB.items()})
-    (HERE / "data" / "agency_analytics.json").write_text(json.dumps(payload, indent=1))
+    (DATA / "agency_analytics.json").write_text(json.dumps(payload, indent=1))
     print(f"agency analytics: {len(spot)} spot, {len(fx)} FX, {len(census)} HS codes, {len(usa)} NAICS")
     for k, s in spot.items():
         print(f"  {k:11s} {s['latest']:10.3f} {s['latest_date']}  short {s['chg_short'] if s['chg_short'] is None else round(s['chg_short'], 2)}")
