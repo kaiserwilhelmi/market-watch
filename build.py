@@ -143,5 +143,11 @@ if SP.exists():
         (OUT / "data").mkdir(exist_ok=True)
         (OUT / "data" / "status.json").write_text(SP.read_text())
 
+# a small summary for the portfolio home page, published beside the pages (see home_summary.py)
+if OUT != HERE or DATA != HERE / "data":
+    from home_summary import summary
+    (OUT / "data").mkdir(exist_ok=True)
+    (OUT / "data" / "home.json").write_text(json.dumps(summary(A), separators=(",", ":")))
+
 print(f"built index.html + {len(A['industries'])} industry pages")
 assert len(A["industries"]) == len(INDUSTRIES)
