@@ -130,6 +130,17 @@ input[type=search] { width: 220px; max-width: 100%; }
 .method p { color: var(--text-2); max-width: 95ch; }
 .method ul { margin: 0; padding-left: 18px; color: var(--text-2); }
 .method li { margin: 3px 0; }
+/* foldable cards (Lead/lag, Correlation, Method and sources): open on wider screens, closed on phones */
+details.fold { display: block; }
+details.fold > * + * { margin-top: 10px; }
+details.fold > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 10px; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "▸"; color: var(--text-3); font-size: 13px; }
+details.fold[open] > summary::before { content: "▾"; }
+details.fold > summary .head { flex: 1; }
+details.fold > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+/* phones: the big tables keep name, signal and 12-month change; the rest is in the detail that opens on tap */
+@media (max-width: 600px) { .t th.ph, .t td.ph { display: none; } .t:has(.ph) td:first-child, .t:has(.ph) th:first-child { white-space: normal; } .mix { gap: 5px; } }
 .heat td.c { min-width: 52px; text-align: center; }
 .heat th.rot { white-space: normal; min-width: 52px; max-width: 80px; font-size: 12px; text-align: center; vertical-align: bottom; }
 .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; }
@@ -304,8 +315,8 @@ function sortable(table, rows, render, initial) {
 }
 
 const methodHTML = ids => `
-  <div class="card method" id="method">
-    <h2>Method and sources</h2>
+  <details class="card method fold" id="method">
+    <summary><h2>Method and sources</h2></summary>
     <p><b>Cost impact.</b> Every series is converted to what it means for a US buyer: for prices, a rise is a cost increase; for currencies quoted as foreign units per dollar, a rise is a stronger dollar and cheaper imports, so the sign flips (USD per euro keeps its sign). Industry figures are the <b>median</b> driver, so one volatile input such as jet fuel cannot dominate.</p>
     <p><b>Signals.</b> Each driver's latest 3-month and 12-month cost changes are ranked against all of its own 3- and 12-month changes since January 2004 (or its first month of data). <b>Alert</b> means a rise larger than 90% of past moves of that length, <b>Watch</b> larger than 75%, and <b>Opportunity</b> a 3-month fall larger than 90% of past moves. A move also has to be at least 1% over 3 months or 2% over 12 months to count. Ranking each series against itself is the idea behind control charts (Montgomery, <i>Introduction to Statistical Quality Control</i>): a 5% move is routine for jet fuel but rare for warehousing rates. Ranks use actual past moves rather than a bell curve because commodity price changes have fat tails (Mandelbrot, 1963). The 90/75/10 cut-offs and the materiality floors are judgment calls.</p>
     <p><b>Context.</b> A rising price is not by itself a reason to lock in. Prices are hard to forecast, and futures and "no change" forecasts are hard to beat (Alquist, Kilian and Vigfusson, 2013; Meese and Rogoff, 1983 for exchange rates). Commodity booms have tended to be shorter than slumps (Cashin, McDermott and Scott, 2002), spikes come when stocks are thin (Deaton and Laroque, 1992), and the cause matters for how long a rise lasts (Kilian, 2009). Each signal is therefore paired with: (1) the <b>price level</b> after inflation (CPI-U), ranked against monthly levels since 2004 (wages are not ranked, and currencies are ranked in nominal terms); and (2) the <b>outlook</b>: for crude oil, natural gas, diesel, jet fuel and industrial power, EIA's Short-Term Energy Outlook average for the next 12 months against its current-quarter value; otherwise the backtested forecast when it beat "no change". EIA stopped publishing free NYMEX futures prices in April 2024, so futures curves are not used.</p>
@@ -337,7 +348,7 @@ const methodHTML = ids => `
     <h2 style="margin-top:6px">Data publishers</h2>
     <ul>${pubList(ids).map(([n, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${esc(n)}</a></li>`).join("")}</ul>
     <p class="note">Monthly series retrieved through FRED, Federal Reserve Bank of St. Louis; agency data retrieved from each publisher's API. Series links are in the tables. Signals, forecasts and actions are illustrative analysis for purchasing decisions, not financial advice.</p>
-  </div>`;
+  </details>`;
 
 const app = document.getElementById("app");
 const ALL = Object.values(D.series);
@@ -575,8 +586,8 @@ function hub() {
     <div class="scroll"><table class="t" id="ind"><thead><tr>
       <th class="l" data-sort="name" data-first="asc">Industry</th>
       <th class="l" data-sort="alerts">Signals</th>
-      <th data-sort="p3">3 mo</th><th data-sort="p12">12 mo</th><th data-sort="f6">Next 6 mo (fcst)</th>
-      <th class="l" data-sort="topv">Biggest 12-mo riser</th><th class="l">Drivers</th></tr></thead><tbody></tbody></table></div>
+      <th class="ph" data-sort="p3">3 mo</th><th data-sort="p12">12 mo</th><th class="ph" data-sort="f6">Next 6 mo (fcst)</th>
+      <th class="l ph" data-sort="topv">Biggest 12-mo riser</th><th class="l ph">Drivers</th></tr></thead><tbody></tbody></table></div>
   </div>
 
   <div class="card">
@@ -585,9 +596,9 @@ function hub() {
     </div>
     <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><input type="search" id="q" placeholder="Search drivers or series IDs" aria-label="Search drivers"><span class="note" id="cnt"></span></div>
     <div class="scroll"><table class="t" id="drv"><thead><tr>
-      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="group" data-first="asc">Group</th><th data-sort="latest_month">Latest</th>
-      <th data-sort="m1">1 mo</th><th data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th><th class="l" data-sort="sigr">Signal</th>
-      <th data-sort="f6">6-mo fcst</th><th data-sort="mape">Backtest error, 3 mo</th><th class="l">24 mo</th><th class="l">Used in</th></tr></thead><tbody></tbody></table></div>
+      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l ph" data-sort="group" data-first="asc">Group</th><th class="ph" data-sort="latest_month">Latest</th>
+      <th class="ph" data-sort="m1">1 mo</th><th class="ph" data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th><th class="l" data-sort="sigr">Signal</th>
+      <th class="ph" data-sort="f6">6-mo fcst</th><th class="ph" data-sort="mape">Backtest error, 3 mo</th><th class="l ph">24 mo</th><th class="l ph">Used in</th></tr></thead><tbody></tbody></table></div>
     <p class="note">Changes are raw % changes; color shows cost impact. Backtest error is MAPE of the published method 3 months ahead, with the naive forecast's error alongside.</p>
   </div>
   ${methodHTML(Object.keys(D.series))}
@@ -601,8 +612,8 @@ function hub() {
       return `<tr class="click" tabindex="0" data-href="${d.slug}/index.html">
         <td class="l"><a href="${d.slug}/index.html" class="nm">${esc(d.name)}</a></td>
         <td class="l"><span class="mix"><span title="Alert"><i style="background:var(--crit)"></i>${d.alerts}</span><span title="Watch"><i style="background:var(--warn)"></i>${d.watches}</span><span title="Opportunity"><i style="background:var(--good)"></i>${d.opportunities}</span><span title="Stable"><i style="background:var(--neutral)"></i>${d.series.length - d.alerts - d.watches - d.opportunities}</span></span></td>
-        <td class="${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</td><td class="${cls(d.pressure_12m)}"><b>${pct(d.pressure_12m)}</b></td><td class="${cls(d.pressure_f6)}">${pct(d.pressure_f6)}</td>
-        <td class="l">${esc(t.name)} <span class="${cls(t.cost_change.m12)}">${pct(t.cost_change.m12)}</span></td><td class="l">${d.series.length}</td></tr>`;
+        <td class="ph ${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</td><td class="${cls(d.pressure_12m)}"><b>${pct(d.pressure_12m)}</b></td><td class="ph ${cls(d.pressure_f6)}">${pct(d.pressure_f6)}</td>
+        <td class="l ph">${esc(t.name)} <span class="${cls(t.cost_change.m12)}">${pct(t.cost_change.m12)}</span></td><td class="l ph">${d.series.length}</td></tr>`;
     }).join("");
   }, ["p12", -1]);
   itb.addEventListener("click", e => { const tr = e.target.closest("tr[data-href]"); if (tr && !e.target.closest("a")) location.href = tr.dataset.href; });
@@ -622,13 +633,13 @@ function hub() {
     dtb.innerHTML = rows.map(({ s }) => {
       const b = s.backtest, f = s.forecast[5], ch = b.chosen;
       return `<tr class="click" tabindex="0" data-id="${s.id}" aria-label="${esc(s.name)}: open details"><td class="l"><span class="nm">${esc(s.name)}</span><br><a class="id" href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a></td>
-      <td class="l">${esc(s.group)}</td><td>${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
-      ${["m1", "m3", "m12"].map(k => `<td class="${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
+      <td class="l ph">${esc(s.group)}</td><td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+      ${["m1", "m3", "m12"].map(k => `<td class="${k === "m12" ? "" : "ph "}${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
       <td class="l">${sig(s.signal)}</td>
-      <td class="${ch === "ets" ? cls(s.forecast_6m_cost) : "fl"}">${ch === "ets" ? pct(s.forecast_6m_pct) : "Flat"}<br><span class="rng">${fmt(s, f.lo)}–${fmt(s, f.hi)}</span></td>
-      <td>${b[ch].h3.toFixed(1)}%<br><span class="rng">naive ${b.naive.h3.toFixed(1)}%</span></td>
-      <td class="l">${spark(s)}</td>
-      <td class="l">${(usedIn[s.id] || []).map(d => `<a href="${d.slug}/index.html">${esc(d.name.split(/[ ,&]/)[0])}</a>`).join(", ")}</td></tr>`;
+      <td class="ph ${ch === "ets" ? cls(s.forecast_6m_cost) : "fl"}">${ch === "ets" ? pct(s.forecast_6m_pct) : "Flat"}<br><span class="rng">${fmt(s, f.lo)}–${fmt(s, f.hi)}</span></td>
+      <td class="ph">${b[ch].h3.toFixed(1)}%<br><span class="rng">naive ${b.naive.h3.toFixed(1)}%</span></td>
+      <td class="l ph">${spark(s)}</td>
+      <td class="l ph">${(usedIn[s.id] || []).map(d => `<a href="${d.slug}/index.html">${esc(d.name.split(/[ ,&]/)[0])}</a>`).join(", ")}</td></tr>`;
     }).join("");
   }, ["m12", -1]);
   document.getElementById("gf").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; g = b.dataset.g;
@@ -695,10 +706,10 @@ function industry() {
   <div class="card">
     <div class="head"><h2>Cost drivers</h2><span class="note">Click a driver for its full detail below · sort by any column</span></div>
     <div class="scroll"><table class="t" id="drv"><thead><tr>
-      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="sigr">Signal</th><th data-sort="latest_month">Latest</th>
-      ${hasLatest ? `<th data-sort="dw" title="Newest daily or weekly value vs last month's average">Daily/weekly</th>` : ""}
-      <th data-sort="m1">1 mo</th><th data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th>
-      <th data-sort="f6">6-mo forecast</th><th data-sort="mape">Error, 3 mo ahead</th><th data-sort="hit">80% range hit rate</th><th class="l">24 mo</th></tr></thead><tbody></tbody></table></div>
+      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="sigr">Signal</th><th class="ph" data-sort="latest_month">Latest</th>
+      ${hasLatest ? `<th class="ph" data-sort="dw" title="Newest daily or weekly value vs last month's average">Daily/weekly</th>` : ""}
+      <th class="ph" data-sort="m1">1 mo</th><th class="ph" data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th>
+      <th class="ph" data-sort="f6">6-mo forecast</th><th class="ph" data-sort="mape">Error, 3 mo ahead</th><th class="ph" data-sort="hit">80% range hit rate</th><th class="l ph">24 mo</th></tr></thead><tbody></tbody></table></div>
   </div>
   <div class="card" id="detail" aria-live="polite"></div>
   ${X.spot.length ? `<div class="card"><div class="head"><h2>Latest spot prices</h2><span class="note">Daily, weekly or monthly from the publishing agency · red = rising costs</span></div>${spotTable(X.spot)}</div>` : ""}
@@ -722,8 +733,8 @@ function industry() {
     </div>
   </div>
   <div class="two">
-    <div class="card"><div class="head"><h2>Lead/lag</h2><span class="note">Monthly changes, 2018 on</span></div><div id="ll"></div></div>
-    <div class="card"><div class="head"><h2>Correlation of 12-mo changes</h2><span class="note">Since Jan 2019</span></div><div class="scroll" id="corr"></div></div>
+    <details class="card fold"><summary><span class="head"><h2>Lead/lag</h2><span class="note">Monthly changes, 2018 on</span></span></summary><div id="ll"></div></details>
+    <details class="card fold"><summary><span class="head"><h2>Correlation of 12-mo changes</h2><span class="note">Since Jan 2019</span></span></summary><div class="scroll" id="corr"></div></details>
   </div>
   ${methodHTML(d.series)}`;
 
@@ -737,13 +748,13 @@ function industry() {
       return `<tr class="click${s.id === selId ? " sel" : ""}" tabindex="0" data-id="${s.id}">
         <td class="l"><span class="nm">${esc(s.name)}</span><br><span class="id">${esc(s.id)} · ${esc(s.group)}</span></td>
         <td class="l">${sig(s.signal)}</td>
-        <td>${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
-        ${hasLatest ? (LT[s.id] ? `<td>${fmt(s, LT[s.id].latest)} <span class="rng">${dLabel(LT[s.id].latest_date)}</span><br><span class="${cls(LT[s.id].vs_prev_month === null ? null : LT[s.id].vs_prev_month * s.direction)}">${pct(LT[s.id].vs_prev_month)}</span> <span class="rng">vs ${mLabel(LT[s.id].prev_month)} avg</span></td>` : `<td class="fl">—</td>`) : ""}
-        ${["m1", "m3", "m12"].map(k => `<td class="${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
-        <td>${beat ? `<span class="${cls(s.forecast_6m_cost)}">${fmt(s, f.mid)} (${pct(s.forecast_6m_pct)})</span>` : `<span class="fl">${fmt(s, f.mid)} (flat)</span>`}<br><span class="rng">${fmt(s, f.lo)} – ${fmt(s, f.hi)} by ${mLabel(f.month)}</span></td>
-        <td><span class="${beat ? "better" : ""}">${b[ch].h3.toFixed(1)}%</span><br><span class="rng">${beat ? "model; naive " + b.naive.h3.toFixed(1) + "%" : "naive; model " + b.ets.h3.toFixed(1) + "%"}</span></td>
-        <td>${b.coverage80.h3 === null ? "—" : b.coverage80.h3.toFixed(0) + "%"}<br><span class="rng">${b.coverage80.n3} tests</span></td>
-        <td class="l">${spark(s)}</td></tr>`;
+        <td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+        ${hasLatest ? (LT[s.id] ? `<td class="ph">${fmt(s, LT[s.id].latest)} <span class="rng">${dLabel(LT[s.id].latest_date)}</span><br><span class="${cls(LT[s.id].vs_prev_month === null ? null : LT[s.id].vs_prev_month * s.direction)}">${pct(LT[s.id].vs_prev_month)}</span> <span class="rng">vs ${mLabel(LT[s.id].prev_month)} avg</span></td>` : `<td class="fl ph">—</td>`) : ""}
+        ${["m1", "m3", "m12"].map(k => `<td class="${k === "m12" ? "" : "ph "}${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
+        <td class="ph">${beat ? `<span class="${cls(s.forecast_6m_cost)}">${fmt(s, f.mid)} (${pct(s.forecast_6m_pct)})</span>` : `<span class="fl">${fmt(s, f.mid)} (flat)</span>`}<br><span class="rng">${fmt(s, f.lo)} – ${fmt(s, f.hi)} by ${mLabel(f.month)}</span></td>
+        <td class="ph"><span class="${beat ? "better" : ""}">${b[ch].h3.toFixed(1)}%</span><br><span class="rng">${beat ? "model; naive " + b.naive.h3.toFixed(1) + "%" : "naive; model " + b.ets.h3.toFixed(1) + "%"}</span></td>
+        <td class="ph">${b.coverage80.h3 === null ? "—" : b.coverage80.h3.toFixed(0) + "%"}<br><span class="rng">${b.coverage80.n3} tests</span></td>
+        <td class="l ph">${spark(s)}</td></tr>`;
     }).join("");
   }, ["sigr", -1]);
   const detailEl = document.getElementById("detail");
@@ -830,6 +841,12 @@ function industry() {
 }
 
 D.page === "hub" ? hub() : industry();
+/* folds start open on wider screens; a link to #method opens that one */
+const wide = matchMedia("(min-width: 601px)").matches;
+document.querySelectorAll("details.fold").forEach(f => { f.open = wide; });
+const openMethod = () => { if (location.hash === "#method") { const m = document.getElementById("method"); if (m) m.open = true; } };
+document.addEventListener("click", e => { if (e.target.closest('a[href="#method"]')) setTimeout(openMethod); });
+window.addEventListener("hashchange", openMethod); openMethod();
 }
 </script>
 </body>
