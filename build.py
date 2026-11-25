@@ -149,5 +149,16 @@ if OUT != HERE or DATA != HERE / "data":
     (OUT / "data").mkdir(exist_ok=True)
     (OUT / "data" / "home.json").write_text(json.dumps(summary(A), separators=(",", ":")))
 
+# the monthly history and spot prices, published beside the pages for the Forecast Method Comparison
+# (dawsonwilhelmi.com/forecast-compare/ fetches data/long/<id>.csv and data/agency/spot.json when a series is picked)
+if OUT != HERE or DATA != HERE / "data":
+    import shutil
+    (OUT / "data" / "long").mkdir(parents=True, exist_ok=True)
+    for f in sorted((DATA / "long").glob("*.csv")):
+        shutil.copyfile(f, OUT / "data" / "long" / f.name)
+    if (DATA / "agency" / "spot.json").exists():
+        (OUT / "data" / "agency").mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(DATA / "agency" / "spot.json", OUT / "data" / "agency" / "spot.json")
+
 print(f"built index.html + {len(A['industries'])} industry pages")
 assert len(A["industries"]) == len(INDUSTRIES)
