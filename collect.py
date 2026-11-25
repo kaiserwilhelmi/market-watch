@@ -460,6 +460,7 @@ def main():
         status.setdefault(k, {})
     calls, groups = plan(status, now, force)
     print(f"collector run {iso(now)} ({now:%a %H:%M} Eastern)")
+    print("  keys: " + ", ".join(f"{s['key']} {'set' if KEYS.get(s['key']) else 'not set'}" for s in SOURCES.values() if s["key"]))
     for src, c in calls.items():
         print(f"  call {src:4s} {'full history' if c['full'] else 'recent'}: {c['why']}")
     for g in groups:
