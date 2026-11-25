@@ -1,6 +1,6 @@
 {
  "groups": {},
- "run": "2026-11-25T10:17:26Z",
+ "run": "2026-11-25T10:18:42Z",
  "schema": 1,
  "series": {
   "APU0000708111": {
@@ -182,7 +182,7 @@
    "preliminary": false,
    "src": "FRB",
    "state": "current",
-   "tracked_since": null,
+   "tracked_since": "2026-11-25T10:18:42Z",
    "value": "1.4135"
   },
   "DEXCHUS": {
@@ -195,7 +195,7 @@
    "preliminary": false,
    "src": "FRB",
    "state": "current",
-   "tracked_since": null,
+   "tracked_since": "2026-11-25T10:18:42Z",
    "value": "6.6844"
   },
   "DEXJPUS": {
@@ -208,8 +208,8 @@
    "preliminary": false,
    "src": "FRB",
    "state": "current",
-   "tracked_since": null,
-   "value": "157.97"
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "157.9748"
   },
   "DEXKOUS": {
    "code": "H10 KRW",
@@ -221,8 +221,8 @@
    "preliminary": false,
    "src": "FRB",
    "state": "current",
-   "tracked_since": null,
-   "value": "1337.36"
+   "tracked_since": "2026-11-25T10:18:42Z",
+   "value": "1337.3605"
   },
   "DEXMXUS": {
    "code": "H10 MXN",
@@ -234,7 +234,7 @@
    "preliminary": false,
    "src": "FRB",
    "state": "current",
-   "tracked_since": null,
+   "tracked_since": "2026-11-25T10:18:42Z",
    "value": "18.4464"
   },
   "DEXTAUS": {
@@ -247,7 +247,7 @@
    "preliminary": false,
    "src": "FRB",
    "state": "current",
-   "tracked_since": null,
+   "tracked_since": "2026-11-25T10:18:42Z",
    "value": "32.2695"
   },
   "DEXUSEU": {
@@ -260,7 +260,7 @@
    "preliminary": false,
    "src": "FRB",
    "state": "current",
-   "tracked_since": null,
+   "tracked_since": "2026-11-25T10:18:42Z",
    "value": "1.1198"
   },
   "DJFUELUSGULF": {
@@ -1074,13 +1074,15 @@
   },
   "FRB": {
    "api": "H.10 Data Download Program",
-   "checked": "2026-11-25T10:17:26Z",
-   "error": "",
-   "fails": 1,
+   "checked": "2026-11-25T10:18:42Z",
+   "error": null,
+   "fails": 0,
    "keyed": false,
+   "last_ok": "2026-11-25T10:18:42Z",
+   "missing": [],
    "name": "Board of Governors of the Federal Reserve System",
    "next_check": "2026-12-01T21:30:00Z",
-   "ok": false,
+   "ok": true,
    "rights": "Public domain (U.S. government work)",
    "series": 7,
    "url": "https://www.federalreserve.gov/releases/h10/"
