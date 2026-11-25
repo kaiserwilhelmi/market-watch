@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Data centers Market Watch</title>
+<title>Data centers Market Watch · Dawson Wilhelmi</title>
 <meta name="description" content="Data centers: input-cost drivers, buying signals and 6-month forecasts. Power, servers, chips, transformers and cooling; electrical gear has the longest lead times.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
@@ -12,57 +12,58 @@
 <meta property="og:description" content="Data centers: input-cost drivers, buying signals and 6-month forecasts. Power, servers, chips, transformers and cooling; electrical gear has the longest lead times.">
 <meta property="og:url" content="https://dawsonwilhelmi.com/market-watch/data-centers/">
 <meta property="og:image" content="https://dawsonwilhelmi.com/og.png">
+<link rel="canonical" href="https://dawsonwilhelmi.com/market-watch/data-centers/">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/fonts/fonts.css">
 <style>
-/* Layout: one 1240px column; summary strip, then dense master tables, then analyst tools. Matches the Market Watch palette. */
+/* Layout: one 1240px column; summary strip, then dense master tables, then analyst tools. Colors and fonts match the home page. */
 :root {
   color-scheme: dark;
-  --bg: #0b0c0e; --surface: #141518; --border: #26282d; --grid: #1e2024;
-  --text: #ecedef; --text-2: #b4b7bd; --text-3: #959aa2;
-  --accent: #4c9aff; --accent-soft: rgba(76,154,255,.18);
+  /* same slate, text and steel-blue link colors as the home page */
+  --bg: #161a1f; --surface: #1b2026; --border: #303741; --grid: #262c34;
+  --text: #ebe8e1; --text-2: #aeb3b9; --text-3: #8f969f;
+  --accent: #9cc0dc; --accent-soft: rgba(156,192,220,.16);
   --good: #2fb344; --warn: #f2b01e; --crit: #e5534b; --neutral: #7d828a;
   --good-ink: #4cc94c; --warn-ink: #f2b01e; --crit-ink: #f07a7a; --neutral-ink: #b4b7bd;
   --pos: 240, 110, 110; --neg: 76, 201, 76;
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --head: "Source Serif 4", Georgia, "Times New Roman", serif;
 }
 * { box-sizing: border-box; min-width: 0; }
 html, body { margin: 0; }
-body { background: var(--bg); color: var(--text); font: 14px/1.5 var(--font);
+body { background: var(--bg); color: var(--text); font: 15px/1.5 var(--font);
   padding-block: 24px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); overflow-x: clip; }
 .wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 16px; }
-h1 { font-size: clamp(24px, 3.2vw, 30px); line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.015em; text-wrap: balance; }
-h2 { font-size: 16px; margin: 0; text-wrap: balance; }
+h1 { font-family: var(--head); font-weight: 600; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+h2 { font-family: var(--head); font-weight: 600; font-size: 19px; margin: 0; text-wrap: balance; }
 p { margin: 0; }
 a { color: var(--accent); }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, tr:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sub { color: var(--text-2); max-width: 75ch; }
-.note { color: var(--text-3); font-size: 12.5px; }
+.note { color: var(--text-3); font-size: 13px; }
 .crumb { font-size: 13px; }
 .site-wrap { max-width: 1240px; margin: 0 auto; }
 .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
-.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
 .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
 .head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; }
 .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .kpi { padding: 12px 14px; }
-.kpi .k { font-size: 12px; color: var(--text-3); }
+.kpi .k { font-size: 13px; color: var(--text-3); }
 .kpi .n { font-size: 26px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.kpi .d { font-size: 12px; color: var(--text-2); }
-.sig { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
-.sig .ic { width: 15px; height: 15px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 9.5px; color: #fff; font-weight: 700; }
+.kpi .d { font-size: 13px; color: var(--text-2); }
+.sig { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.sig .ic { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 12px; line-height: 1; color: #10130f; font-weight: 700; }
 .sig.Alert { color: var(--crit-ink); } .sig.Alert .ic { background: var(--crit); }
-.sig.Watch { color: var(--warn-ink); } .sig.Watch .ic { background: var(--warn); color: #3a2a00; }
+.sig.Watch { color: var(--warn-ink); } .sig.Watch .ic { background: var(--warn); }
 .sig.Stable { color: var(--neutral-ink); } .sig.Stable .ic { background: var(--neutral); }
 .sig.Opportunity { color: var(--good-ink); } .sig.Opportunity .ic { background: var(--good); }
-.mix { display: inline-flex; gap: 8px; font-size: 12.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mix { display: inline-flex; gap: 8px; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .mix span { display: inline-flex; align-items: center; gap: 3px; }
 .mix i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 .up { color: var(--crit-ink); } .dn { color: var(--good-ink); } .fl { color: var(--text-2); }
@@ -80,12 +81,12 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-
 .t tbody tr.click { cursor: pointer; }
 .t tbody tr.click:hover, .t tbody tr.sel { background: var(--accent-soft); }
 .t .nm { font-weight: 600; }
-.t .id { color: var(--text-3); font-size: 11.5px; }
-.t .rng { color: var(--text-3); font-size: 11.5px; }
+.t .id { color: var(--text-3); font-size: 12px; }
+.t .rng { color: var(--text-3); font-size: 12px; }
 .t .better { color: var(--good-ink); font-weight: 600; }
 .spark svg { display: block; width: 96px; height: 24px; }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 12.5px; cursor: pointer; min-height: 30px; }
+.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 13px; cursor: pointer; min-height: 30px; }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #0b0c0e; }
 input[type=search], input[type=number], select { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; min-height: 32px; }
 input[type=search] { width: 220px; max-width: 100%; }
@@ -93,17 +94,17 @@ input[type=search] { width: 220px; max-width: 100%; }
 .act { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 4px 14px; padding: 9px 0; border-top: 1px solid var(--grid); }
 .act:first-child { border-top: 0; }
 .act span { color: var(--text-2); }
-.act .ctx { display: block; font-size: 12.5px; color: var(--text-3); margin-top: 3px; }
-.act ul.why { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--text-3); }
-.act details summary { cursor: pointer; font-size: 12.5px; color: var(--text-3); margin-top: 4px; }
+.act .ctx { display: block; font-size: 13px; color: var(--text-3); margin-top: 3px; }
+.act ul.why { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--text-3); }
+.act details summary { cursor: pointer; font-size: 13px; color: var(--text-3); margin-top: 4px; }
 @media (max-width: 600px) { .act { grid-template-columns: 1fr; } }
 .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 12.5px; padding: 6px 11px; cursor: pointer; min-height: 32px; }
+.seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 13px; padding: 6px 11px; cursor: pointer; min-height: 32px; }
 .seg button + button { border-left: 1px solid var(--border); }
 .seg button[aria-pressed="true"] { background: var(--accent); color: #0b0c0e; }
 .fig { position: relative; height: 320px; }
 .fig svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.fig text { fill: var(--text-2); font-size: 11px; }
+.fig text { fill: var(--text-2); font-size: 12px; }
 .tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; white-space: nowrap; z-index: 3; }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-2); }
 .legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--accent); vertical-align: middle; margin-right: 5px; }
@@ -118,10 +119,10 @@ input[type=search] { width: 220px; max-width: 100%; }
 .calc { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
 @media (max-width: 860px) { .calc { grid-template-columns: 1fr; } }
 .calc .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
-.calc label { font-size: 12.5px; color: var(--text-2); display: grid; gap: 3px; }
+.calc label { font-size: 13px; color: var(--text-2); display: grid; gap: 3px; }
 .comp { display: grid; grid-template-columns: minmax(0, 1fr) 84px 32px; gap: 6px; align-items: center; }
 .comp select { width: 100%; }
-.comp button, .btn { font: inherit; font-size: 12.5px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 32px; cursor: pointer; padding: 4px 10px; }
+.comp button, .btn { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 32px; cursor: pointer; padding: 4px 10px; }
 .out { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; display: grid; gap: 8px; }
 .out .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.1; }
 .out table { width: 100%; }
@@ -130,18 +131,18 @@ input[type=search] { width: 220px; max-width: 100%; }
 .method ul { margin: 0; padding-left: 18px; color: var(--text-2); }
 .method li { margin: 3px 0; }
 .heat td.c { min-width: 52px; text-align: center; }
-.heat th.rot { white-space: normal; min-width: 52px; max-width: 80px; font-size: 11px; text-align: center; vertical-align: bottom; }
+.heat th.rot { white-space: normal; min-width: 52px; max-width: 80px; font-size: 12px; text-align: center; vertical-align: bottom; }
 .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; }
 .hs h3 { font-size: 14px; margin: 0 0 2px; }
 .hs .note b { color: var(--text-2); }
 .bar { display: inline-block; height: 8px; border-radius: 2px; background: var(--accent); vertical-align: middle; }
-.flag { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); white-space: nowrap; }
+.flag { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); white-space: nowrap; }
 .flag.hi { color: var(--crit-ink); border-color: var(--crit); }
 .flag.mid { color: var(--warn-ink); border-color: var(--warn); }
 .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
 .strip .kpi .n { font-size: 22px; }
 .fed svg { display: block; width: 100%; max-width: 460px; height: auto; overflow: visible; }
-.fed text { fill: var(--text-3); font-size: 10.5px; }
+.fed text { fill: var(--text-3); font-size: 12px; }
 /* ---- driver detail (hub pop-up + industry panel share one renderer) ---- */
 dialog.dlg { width: min(1080px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); overflow: auto; overscroll-behavior: contain; }
 dialog.dlg:focus { outline: none; }
@@ -154,7 +155,7 @@ body.locked { overflow: hidden; }
 .dt-head h2 { font-size: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .dt-head .note a { color: var(--text-2); }
 .dt-nav { display: flex; gap: 6px; }
-.dt-nav button { font: inherit; font-size: 12.5px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 34px; min-width: 34px; padding: 4px 10px; cursor: pointer; }
+.dt-nav button { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 34px; min-width: 34px; padding: 4px 10px; cursor: pointer; }
 .dt-nav button:hover { color: var(--text); border-color: var(--text-3); }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 1px; background: var(--grid); border: 1px solid var(--grid); border-radius: 8px; overflow: hidden; }
 .tiles > div { background: var(--surface); padding: 10px 12px; }
@@ -182,17 +183,17 @@ body.locked { overflow: hidden; }
 .meter .z.crit { background: rgba(229,83,75,.42); } .meter .z.warn { background: rgba(242,176,30,.32); } .meter .z.good { background: rgba(47,179,68,.38); } .meter .z.hi { background: rgba(180,183,189,.22); }
 .meter .z:first-child { border-radius: 5px 0 0 5px; } .meter .z.end { border-radius: 0 5px 5px 0; }
 .meter .mk { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--text); box-shadow: 0 0 0 2px var(--surface); }
-.meter .tk { position: absolute; top: 12px; font-size: 10.5px; color: var(--text-3); transform: translateX(-50%); white-space: nowrap; }
+.meter .tk { position: absolute; top: 12px; font-size: 12px; color: var(--text-3); transform: translateX(-50%); white-space: nowrap; }
 .rangebar { position: relative; height: 6px; border-radius: 3px; background: var(--grid); margin: 4px 0 2px; }
 .rangebar .mk { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--surface); }
 .rangeends { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; }
 .acc { width: 100%; }
 .acc th, .acc td { padding: 6px 5px; }
 .acc td.pub { color: var(--text); font-weight: 600; }
-.tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-left: 6px; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 0 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-left: 6px; }
 .why-flat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
 .linkbtn { font: inherit; background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; text-align: left; }
-.gapnote { font-size: 12.5px; color: var(--text-3); }
+.gapnote { font-size: 13px; color: var(--text-3); }
 .fig:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .t tbody tr.click td a { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
@@ -432,7 +433,7 @@ function detailHTML(s, o) {
       ${gaps}
     </div>
     <div class="dt-grid">
-      <section><h3>How unusual is this?</h3>
+      <section><h3>Compared with its history</h3>
         ${meter("3-month move", pct(s.cost_change.m3), c.p3, "m3")}
         ${meter("12-month move", pct(s.cost_change.m12), c.p12, "m12")}
         ${lvl !== null && lvl !== undefined ? meter(c.level_basis === "real" ? "Price after inflation" : "Level in cost terms", "", lvl, "level") : `<p class="note">${s.group === "Labor" ? "Wage levels are not ranked: they rise over time and rarely fall, so a high level is normal." : "Not enough history to rank the price level."}</p>`}
@@ -452,7 +453,7 @@ function detailHTML(s, o) {
           <div class="meter-row"><span class="lab">${k}</span><span class="val">${p.toFixed(0)}% of the way from low to high</span></div>
           <div class="rangebar" role="img" aria-label="${k}: ${p.toFixed(0)}% of the way from low to high"><span class="mk" style="left:${Math.max(1, Math.min(99, p))}%"></span></div>
           <div class="rangeends"><span>Low ${fmt(s, lo)}${lm ? " · " + mLabel(lm) : ""}</span><span>High ${fmt(s, hi)}${hm ? " · " + mLabel(hm) : ""}</span></div></div>`).join("")}
-        <p class="note">Not adjusted for inflation. ${lvl !== null && lvl !== undefined ? "The after-inflation rank is under \"How unusual is this?\"." : ""}</p>
+        <p class="note">Not adjusted for inflation. ${lvl !== null && lvl !== undefined ? "The after-inflation rank is under \"Compared with its history\"." : ""}</p>
       </section>
       <section><h3>Related drivers and industries</h3>
         ${rel ? `<ul>${rel}</ul><p class="note">Correlation of monthly changes since 2018. History, not cause and effect; use as an early-warning hint.</p>` : `<p class="note">No lead/lag pair with this driver passed the significance screen.</p>`}

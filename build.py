@@ -73,13 +73,14 @@ def head_meta(title, desc, path):
         '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Dawson Wilhelmi">',
         f'<meta property="og:title" content="{e(title)}">', f'<meta property="og:description" content="{e(desc)}">',
         f'<meta property="og:url" content="{url}">', '<meta property="og:image" content="https://dawsonwilhelmi.com/og.png">',
+        f'<link rel="canonical" href="{url}">',
         '<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">',
         '<meta name="twitter:card" content="summary_large_image">'])
 
 
 def render(title, payload, desc, path=""):
     blob = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
-    return (TEMPLATE.replace("/*__TITLE__*/", html.escape(title, quote=False)).replace("/*__META__*/", head_meta(title, desc, path))
+    return (TEMPLATE.replace("/*__TITLE__*/", html.escape(title + " · Dawson Wilhelmi", quote=False)).replace("/*__META__*/", head_meta(title, desc, path))
             .replace("/*__DATA__*/null", blob))
 
 
