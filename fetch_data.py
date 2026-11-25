@@ -5,7 +5,9 @@ Uses only the Python standard library.
   the public CSV endpoint often times out from cloud runners).
 - Otherwise it falls back to FRED's public CSV download.
 Daily and weekly series are averaged to monthly, and the current, incomplete
-month is dropped. If a download fails, the previous file is kept.
+month is dropped. If a download fails, the previous file is kept, and the series is
+listed in data/refresh_status.json so the pages can say it was not refreshed
+(check_refresh.py then fails the daily run if too many failed).
 
 History from January 2004 goes to data/long/ (used to rank moves and price levels,
 see context.py); data/raw/ keeps January 2018 on for forecasts and charts. CPI-U
@@ -71,6 +73,13 @@ for sid, (name, *_rest) in {**SERIES, **EXTRA}.items():
         failed.append(sid)
         print(f"FAIL {sid:18s} {name:34s} {e}", file=sys.stderr)
     time.sleep(0.6)
+
+# record which series kept old data, for the pages and for check_refresh.py
+STATUS = Path(__file__).parent / "data" / "refresh_status.json"
+status = json.loads(STATUS.read_text()) if STATUS.exists() else {}
+status["fred"] = dict(checked=time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()), tried=len(SERIES), failed=sorted(f for f in failed if f in SERIES),
+                      extra_failed=sorted(f for f in failed if f not in SERIES))
+STATUS.write_text(json.dumps(status, indent=1, sort_keys=True) + "\n")
 
 if len(failed) >= len(SERIES):
     sys.exit("All downloads failed; leaving data unchanged. Add FRED_API_KEY as a repository secret.")

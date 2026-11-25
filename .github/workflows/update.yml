@@ -52,3 +52,5 @@ jobs:
           # the run; the next day's run rebuilds everything from the new main)
           git pull --rebase origin main
           git push
+      - name: Fail the run if too many downloads failed (the pages above already say so)
+        run: python check_refresh.py

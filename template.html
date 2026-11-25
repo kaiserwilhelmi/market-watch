@@ -6,52 +6,57 @@
 <title>/*__TITLE__*/</title>
 /*__META__*/
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="/fonts/fonts.css">
 <style>
-/* Layout: one 1240px column; summary strip, then dense master tables, then analyst tools. Matches the Market Watch palette. */
+/* Layout: one 1240px column; summary strip, then dense master tables, then analyst tools. Colors and fonts match the home page. */
 :root {
   color-scheme: dark;
-  --bg: #0b0c0e; --surface: #141518; --border: #26282d; --grid: #1e2024;
-  --text: #ecedef; --text-2: #b4b7bd; --text-3: #959aa2;
-  --accent: #4c9aff; --accent-soft: rgba(76,154,255,.18);
+  /* same slate, text and steel-blue link colors as the home page */
+  --bg: #161a1f; --surface: #1b2026; --border: #303741; --grid: #262c34;
+  --text: #ebe8e1; --text-2: #aeb3b9; --text-3: #8f969f;
+  --accent: #9cc0dc; --accent-soft: rgba(156,192,220,.16);
   --good: #2fb344; --warn: #f2b01e; --crit: #e5534b; --neutral: #7d828a;
   --good-ink: #4cc94c; --warn-ink: #f2b01e; --crit-ink: #f07a7a; --neutral-ink: #b4b7bd;
   --pos: 240, 110, 110; --neg: 76, 201, 76;
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --head: "Source Serif 4", Georgia, "Times New Roman", serif;
 }
 * { box-sizing: border-box; min-width: 0; }
 html, body { margin: 0; }
-body { background: var(--bg); color: var(--text); font: 14px/1.5 var(--font);
+body { background: var(--bg); color: var(--text); font: 15px/1.5 var(--font);
   padding-block: 24px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); overflow-x: clip; }
 .wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 16px; }
-h1 { font-size: clamp(24px, 3.2vw, 30px); line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.015em; text-wrap: balance; }
-h2 { font-size: 16px; margin: 0; text-wrap: balance; }
+h1 { font-family: var(--head); font-weight: 600; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+h2 { font-family: var(--head); font-weight: 600; font-size: 19px; margin: 0; text-wrap: balance; }
 p { margin: 0; }
 a { color: var(--accent); }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, tr:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sub { color: var(--text-2); max-width: 75ch; }
-.note { color: var(--text-3); font-size: 12.5px; }
+.note { color: var(--text-3); font-size: 13px; }
 .crumb { font-size: 13px; }
-.home { max-width: 1240px; margin: 0 auto 16px; }
-.home a { font-weight: 700; font-size: 15px; color: var(--text); text-decoration: none; }
-.home a:hover { color: var(--accent); }
+.crumb a { display: inline-block; padding: 4px 0; }
+.site-wrap { max-width: 1240px; margin: 0 auto; }
 .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
-.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
 .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+.pills { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.pill.stale { color: var(--warn-ink); border-color: rgba(242,176,30,.45); }
+.pill.stale i { background: var(--warn); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
 .head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; }
 .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .kpi { padding: 12px 14px; }
-.kpi .k { font-size: 12px; color: var(--text-3); }
+.kpi .k { font-size: 13px; color: var(--text-3); }
 .kpi .n { font-size: 26px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.kpi .d { font-size: 12px; color: var(--text-2); }
-.sig { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
-.sig .ic { width: 15px; height: 15px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 9.5px; color: #fff; font-weight: 700; }
+.kpi .d { font-size: 13px; color: var(--text-2); }
+.sig { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.sig .ic { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 12px; line-height: 1; color: #10130f; font-weight: 700; }
 .sig.Alert { color: var(--crit-ink); } .sig.Alert .ic { background: var(--crit); }
-.sig.Watch { color: var(--warn-ink); } .sig.Watch .ic { background: var(--warn); color: #3a2a00; }
+.sig.Watch { color: var(--warn-ink); } .sig.Watch .ic { background: var(--warn); }
 .sig.Stable { color: var(--neutral-ink); } .sig.Stable .ic { background: var(--neutral); }
 .sig.Opportunity { color: var(--good-ink); } .sig.Opportunity .ic { background: var(--good); }
-.mix { display: inline-flex; gap: 8px; font-size: 12.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mix { display: inline-flex; gap: 8px; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .mix span { display: inline-flex; align-items: center; gap: 3px; }
 .mix i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 .up { color: var(--crit-ink); } .dn { color: var(--good-ink); } .fl { color: var(--text-2); }
@@ -62,18 +67,19 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-
 .t th.l, .t td.l { text-align: left; }
 .t td.wrap-ok { white-space: normal; min-width: 180px; }
 .t th[data-sort] { cursor: pointer; user-select: none; }
+.t th .sortb { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: inherit; min-height: 24px; display: inline-flex; align-items: center; }
 .t th[data-sort]::after { content: " ↕"; color: var(--text-3); font-weight: 400; }
 .t th[aria-sort="ascending"]::after { content: " ↑"; color: var(--accent); }
 .t th[aria-sort="descending"]::after { content: " ↓"; color: var(--accent); }
 .t tbody tr.click { cursor: pointer; }
 .t tbody tr.click:hover, .t tbody tr.sel { background: var(--accent-soft); }
 .t .nm { font-weight: 600; }
-.t .id { color: var(--text-3); font-size: 11.5px; }
-.t .rng { color: var(--text-3); font-size: 11.5px; }
+.t .id { color: var(--text-3); font-size: 12px; }
+.t .rng { color: var(--text-3); font-size: 12px; }
 .t .better { color: var(--good-ink); font-weight: 600; }
 .spark svg { display: block; width: 96px; height: 24px; }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 12.5px; cursor: pointer; min-height: 30px; }
+.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 13px; cursor: pointer; min-height: 30px; }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #0b0c0e; }
 input[type=search], input[type=number], select { font: inherit; font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; min-height: 32px; }
 input[type=search] { width: 220px; max-width: 100%; }
@@ -81,17 +87,17 @@ input[type=search] { width: 220px; max-width: 100%; }
 .act { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 4px 14px; padding: 9px 0; border-top: 1px solid var(--grid); }
 .act:first-child { border-top: 0; }
 .act span { color: var(--text-2); }
-.act .ctx { display: block; font-size: 12.5px; color: var(--text-3); margin-top: 3px; }
-.act ul.why { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--text-3); }
-.act details summary { cursor: pointer; font-size: 12.5px; color: var(--text-3); margin-top: 4px; }
+.act .ctx { display: block; font-size: 13px; color: var(--text-3); margin-top: 3px; }
+.act ul.why { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--text-3); }
+.act details summary { cursor: pointer; font-size: 13px; color: var(--text-3); margin-top: 4px; }
 @media (max-width: 600px) { .act { grid-template-columns: 1fr; } }
 .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 12.5px; padding: 6px 11px; cursor: pointer; min-height: 32px; }
+.seg button { border: 0; background: var(--surface); color: var(--text-2); font: inherit; font-size: 13px; padding: 6px 11px; cursor: pointer; min-height: 32px; }
 .seg button + button { border-left: 1px solid var(--border); }
 .seg button[aria-pressed="true"] { background: var(--accent); color: #0b0c0e; }
 .fig { position: relative; height: 320px; }
 .fig svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.fig text { fill: var(--text-2); font-size: 11px; }
+.fig text { fill: var(--text-2); font-size: 12px; }
 .tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; white-space: nowrap; z-index: 3; }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-2); }
 .legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--accent); vertical-align: middle; margin-right: 5px; }
@@ -106,10 +112,10 @@ input[type=search] { width: 220px; max-width: 100%; }
 .calc { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
 @media (max-width: 860px) { .calc { grid-template-columns: 1fr; } }
 .calc .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
-.calc label { font-size: 12.5px; color: var(--text-2); display: grid; gap: 3px; }
+.calc label { font-size: 13px; color: var(--text-2); display: grid; gap: 3px; }
 .comp { display: grid; grid-template-columns: minmax(0, 1fr) 84px 32px; gap: 6px; align-items: center; }
 .comp select { width: 100%; }
-.comp button, .btn { font: inherit; font-size: 12.5px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 32px; cursor: pointer; padding: 4px 10px; }
+.comp button, .btn { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 32px; cursor: pointer; padding: 4px 10px; }
 .out { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; display: grid; gap: 8px; }
 .out .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.1; }
 .out table { width: 100%; }
@@ -117,19 +123,30 @@ input[type=search] { width: 220px; max-width: 100%; }
 .method p { color: var(--text-2); max-width: 95ch; }
 .method ul { margin: 0; padding-left: 18px; color: var(--text-2); }
 .method li { margin: 3px 0; }
+/* foldable cards (Lead/lag, Correlation, Method and sources): open on wider screens, closed on phones */
+details.fold { display: block; }
+details.fold > * + * { margin-top: 10px; }
+details.fold > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 10px; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "▸"; color: var(--text-3); font-size: 13px; }
+details.fold[open] > summary::before { content: "▾"; }
+details.fold > summary .head { flex: 1; }
+details.fold > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+/* phones: the big tables keep name, signal and 12-month change; the rest is in the detail that opens on tap */
+@media (max-width: 600px) { .t th.ph, .t td.ph { display: none; } .t:has(.ph) td:first-child, .t:has(.ph) th:first-child { white-space: normal; } .mix { gap: 5px; } }
 .heat td.c { min-width: 52px; text-align: center; }
-.heat th.rot { white-space: normal; min-width: 52px; max-width: 80px; font-size: 11px; text-align: center; vertical-align: bottom; }
+.heat th.rot { white-space: normal; min-width: 52px; max-width: 80px; font-size: 12px; text-align: center; vertical-align: bottom; }
 .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; }
 .hs h3 { font-size: 14px; margin: 0 0 2px; }
 .hs .note b { color: var(--text-2); }
 .bar { display: inline-block; height: 8px; border-radius: 2px; background: var(--accent); vertical-align: middle; }
-.flag { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); white-space: nowrap; }
+.flag { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); white-space: nowrap; }
 .flag.hi { color: var(--crit-ink); border-color: var(--crit); }
 .flag.mid { color: var(--warn-ink); border-color: var(--warn); }
 .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
 .strip .kpi .n { font-size: 22px; }
 .fed svg { display: block; width: 100%; max-width: 460px; height: auto; overflow: visible; }
-.fed text { fill: var(--text-3); font-size: 10.5px; }
+.fed text { fill: var(--text-3); font-size: 12px; }
 /* ---- driver detail (hub pop-up + industry panel share one renderer) ---- */
 dialog.dlg { width: min(1080px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); overflow: auto; overscroll-behavior: contain; }
 dialog.dlg:focus { outline: none; }
@@ -142,7 +159,7 @@ body.locked { overflow: hidden; }
 .dt-head h2 { font-size: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
 .dt-head .note a { color: var(--text-2); }
 .dt-nav { display: flex; gap: 6px; }
-.dt-nav button { font: inherit; font-size: 12.5px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 34px; min-width: 34px; padding: 4px 10px; cursor: pointer; }
+.dt-nav button { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 6px; min-height: 34px; min-width: 34px; padding: 4px 10px; cursor: pointer; }
 .dt-nav button:hover { color: var(--text); border-color: var(--text-3); }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 1px; background: var(--grid); border: 1px solid var(--grid); border-radius: 8px; overflow: hidden; }
 .tiles > div { background: var(--surface); padding: 10px 12px; }
@@ -170,25 +187,46 @@ body.locked { overflow: hidden; }
 .meter .z.crit { background: rgba(229,83,75,.42); } .meter .z.warn { background: rgba(242,176,30,.32); } .meter .z.good { background: rgba(47,179,68,.38); } .meter .z.hi { background: rgba(180,183,189,.22); }
 .meter .z:first-child { border-radius: 5px 0 0 5px; } .meter .z.end { border-radius: 0 5px 5px 0; }
 .meter .mk { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--text); box-shadow: 0 0 0 2px var(--surface); }
-.meter .tk { position: absolute; top: 12px; font-size: 10.5px; color: var(--text-3); transform: translateX(-50%); white-space: nowrap; }
+.meter .tk { position: absolute; top: 12px; font-size: 12px; color: var(--text-3); transform: translateX(-50%); white-space: nowrap; }
 .rangebar { position: relative; height: 6px; border-radius: 3px; background: var(--grid); margin: 4px 0 2px; }
 .rangebar .mk { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--surface); }
 .rangeends { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; }
 .acc { width: 100%; }
 .acc th, .acc td { padding: 6px 5px; }
 .acc td.pub { color: var(--text); font-weight: 600; }
-.tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-left: 6px; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 0 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-left: 6px; }
 .why-flat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
-.linkbtn { font: inherit; background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; text-align: left; }
-.gapnote { font-size: 12.5px; color: var(--text-3); }
+.linkbtn { font: inherit; background: none; border: 0; padding: 3px 0; min-height: 24px; color: var(--accent); text-decoration: underline; cursor: pointer; text-align: left; }
+/* touch targets: at least 24px tall (WCAG 2.5.8) */
+details > summary { min-height: 24px; padding: 2px 0; }
+@media (max-width: 600px) { .t a.id, .t a.nm { display: inline-block; padding: 4px 0; } .t td { padding-top: 9px; padding-bottom: 9px; } }
+.gapnote { font-size: 13px; color: var(--text-3); }
 .fig:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .t tbody tr.click td a { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+/* Site header and skip link: same as the home page header */
+.dw-skip { position: absolute; left: 12px; top: -80px; z-index: 1000; padding: 10px 16px; border-radius: 4px; background: #ebe8e1; color: #161a1f; font: 600 15px/1.2 "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; text-decoration: none; }
+.dw-skip:focus { top: 12px; outline: 2px solid #9cc0dc; outline-offset: 2px; }
+.dw-site { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 22px 0 18px; margin: 0 0 20px; border-bottom: 1px solid #303741; font: 16px/1.6 "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+.dw-site .dw-me { font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-weight: 600; font-size: 19px; color: #ebe8e1; text-decoration: none; }
+.dw-site nav { display: flex; gap: 22px; font-size: 15px; }
+.dw-site nav a { color: #aeb3b9; text-decoration: none; padding: 6px 0; }
+.dw-site nav a:hover { color: #ebe8e1; }
+.dw-site nav a.on { color: #ebe8e1; box-shadow: inset 0 -2px 0 #9cc0dc; }
+.dw-site a:focus-visible { outline: 2px solid #9cc0dc; outline-offset: 3px; border-radius: 2px; }
+main:focus { outline: none; }
+.dw-site { padding-top: 0; margin-bottom: 20px; }
 </style>
 </head>
 <body>
-<nav class="home"><a href="/">Dawson Wilhelmi</a></nav>
-<div class="wrap" id="app"></div>
+<a class="dw-skip" href="#app">Skip to content</a>
+<div class="site-wrap">
+<header class="dw-site">
+  <a class="dw-me" href="/">Dawson Wilhelmi</a>
+  <nav aria-label="Site"><a href="/" class="on">Projects</a><a href="/about/">About</a></nav>
+</header>
+</div>
+<main class="wrap" id="app" tabindex="-1"></main>
 <script>
 {
 const D = /*__DATA__*/null;
@@ -253,6 +291,7 @@ function spotTable(items) {
 /* sortable tables: header cells carry data-sort="key"; rows are re-rendered by the caller */
 function sortable(table, rows, render, initial) {
   let key = initial[0], dir = initial[1];
+  table.querySelectorAll("th[data-sort]").forEach(th => { const b = document.createElement("button"); b.type = "button"; b.className = "sortb"; b.append(...th.childNodes); th.append(b); });
   const go = () => {
     const sorted = [...rows].sort((a, b) => {
       const x = a.sort[key], y = b.sort[key];
@@ -272,8 +311,8 @@ function sortable(table, rows, render, initial) {
 }
 
 const methodHTML = ids => `
-  <div class="card method" id="method">
-    <h2>Method and sources</h2>
+  <details class="card method fold" id="method">
+    <summary><h2>Method and sources</h2></summary>
     <p><b>Cost impact.</b> Every series is converted to what it means for a US buyer: for prices, a rise is a cost increase; for currencies quoted as foreign units per dollar, a rise is a stronger dollar and cheaper imports, so the sign flips (USD per euro keeps its sign). Industry figures are the <b>median</b> driver, so one volatile input such as jet fuel cannot dominate.</p>
     <p><b>Signals.</b> Each driver's latest 3-month and 12-month cost changes are ranked against all of its own 3- and 12-month changes since January 2004 (or its first month of data). <b>Alert</b> means a rise larger than 90% of past moves of that length, <b>Watch</b> larger than 75%, and <b>Opportunity</b> a 3-month fall larger than 90% of past moves. A move also has to be at least 1% over 3 months or 2% over 12 months to count. Ranking each series against itself is the idea behind control charts (Montgomery, <i>Introduction to Statistical Quality Control</i>): a 5% move is routine for jet fuel but rare for warehousing rates. Ranks use actual past moves rather than a bell curve because commodity price changes have fat tails (Mandelbrot, 1963). The 90/75/10 cut-offs and the materiality floors are judgment calls.</p>
     <p><b>Context.</b> A rising price is not by itself a reason to lock in. Prices are hard to forecast, and futures and "no change" forecasts are hard to beat (Alquist, Kilian and Vigfusson, 2013; Meese and Rogoff, 1983 for exchange rates). Commodity booms have tended to be shorter than slumps (Cashin, McDermott and Scott, 2002), spikes come when stocks are thin (Deaton and Laroque, 1992), and the cause matters for how long a rise lasts (Kilian, 2009). Each signal is therefore paired with: (1) the <b>price level</b> after inflation (CPI-U), ranked against monthly levels since 2004 (wages are not ranked, and currencies are ranked in nominal terms); and (2) the <b>outlook</b>: for crude oil, natural gas, diesel, jet fuel and industrial power, EIA's Short-Term Energy Outlook average for the next 12 months against its current-quarter value; otherwise the backtested forecast when it beat "no change". EIA stopped publishing free NYMEX futures prices in April 2024, so futures curves are not used.</p>
@@ -305,7 +344,7 @@ const methodHTML = ids => `
     <h2 style="margin-top:6px">Data publishers</h2>
     <ul>${pubList(ids).map(([n, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${esc(n)}</a></li>`).join("")}</ul>
     <p class="note">Monthly series retrieved through FRED, Federal Reserve Bank of St. Louis; agency data retrieved from each publisher's API. Series links are in the tables. Signals, forecasts and actions are illustrative analysis for purchasing decisions, not financial advice.</p>
-  </div>`;
+  </details>`;
 
 const app = document.getElementById("app");
 const ALL = Object.values(D.series);
@@ -401,7 +440,7 @@ function detailHTML(s, o) {
       ${gaps}
     </div>
     <div class="dt-grid">
-      <section><h3>How unusual is this?</h3>
+      <section><h3>Compared with its history</h3>
         ${meter("3-month move", pct(s.cost_change.m3), c.p3, "m3")}
         ${meter("12-month move", pct(s.cost_change.m12), c.p12, "m12")}
         ${lvl !== null && lvl !== undefined ? meter(c.level_basis === "real" ? "Price after inflation" : "Level in cost terms", "", lvl, "level") : `<p class="note">${s.group === "Labor" ? "Wage levels are not ranked: they rise over time and rarely fall, so a high level is normal." : "Not enough history to rank the price level."}</p>`}
@@ -421,7 +460,7 @@ function detailHTML(s, o) {
           <div class="meter-row"><span class="lab">${k}</span><span class="val">${p.toFixed(0)}% of the way from low to high</span></div>
           <div class="rangebar" role="img" aria-label="${k}: ${p.toFixed(0)}% of the way from low to high"><span class="mk" style="left:${Math.max(1, Math.min(99, p))}%"></span></div>
           <div class="rangeends"><span>Low ${fmt(s, lo)}${lm ? " · " + mLabel(lm) : ""}</span><span>High ${fmt(s, hi)}${hm ? " · " + mLabel(hm) : ""}</span></div></div>`).join("")}
-        <p class="note">Not adjusted for inflation. ${lvl !== null && lvl !== undefined ? "The after-inflation rank is under \"How unusual is this?\"." : ""}</p>
+        <p class="note">Not adjusted for inflation. ${lvl !== null && lvl !== undefined ? "The after-inflation rank is under \"Compared with its history\"." : ""}</p>
       </section>
       <section><h3>Related drivers and industries</h3>
         ${rel ? `<ul>${rel}</ul><p class="note">Correlation of monthly changes since 2018. History, not cause and effect; use as an early-warning hint.</p>` : `<p class="note">No lead/lag pair with this driver passed the significance screen.</p>`}
@@ -513,6 +552,9 @@ function mountDetail(root, s, o) {
 }
 const localTime = built => { const d = new Date(String(built).replace(" UTC", "Z").replace(" ", "T"));
   return isNaN(d) ? esc(built) : d.toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" }); };
+/* series whose last download failed keep their previous data; say so next to "Updated" (data/refresh_status.json) */
+const staleNote = () => { const r = D.refresh; if (!r || !r.failed.length) return "";
+  return `<span class="pill stale" title="Download failed on the last update, so these show the previous data: ${esc(r.failed.join(", "))}"><i></i>${r.failed.length} of ${r.total} series not refreshed</span>`; };
 const hashId = () => { const m = location.hash.match(/^#driver=([A-Za-z0-9]+)$/); return m && D.series[m[1]] ? m[1] : null; };
 
 /* ------------------------------ HUB ------------------------------ */
@@ -527,7 +569,7 @@ function hub() {
       <h1>Industry Market Watch</h1>
       <p class="sub">Input-cost pressure for ${inds.length} industries from ${ALL.length} official price, wage and currency series, with 6-month forecasts, backtested accuracy and buying signals.</p>
     </div>
-    <span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>
+    <span class="pills"><span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
   </div>
   <div class="kpis">
     <div class="card kpi"><div class="k">Most cost pressure, 12 mo</div><div class="n">${esc(hot[0].name)}</div><div class="d">Median driver ${pct(hot[0].pressure_12m)}</div></div>
@@ -543,8 +585,8 @@ function hub() {
     <div class="scroll"><table class="t" id="ind"><thead><tr>
       <th class="l" data-sort="name" data-first="asc">Industry</th>
       <th class="l" data-sort="alerts">Signals</th>
-      <th data-sort="p3">3 mo</th><th data-sort="p12">12 mo</th><th data-sort="f6">Next 6 mo (fcst)</th>
-      <th class="l" data-sort="topv">Biggest 12-mo riser</th><th class="l">Drivers</th></tr></thead><tbody></tbody></table></div>
+      <th class="ph" data-sort="p3">3 mo</th><th data-sort="p12">12 mo</th><th class="ph" data-sort="f6">Next 6 mo (fcst)</th>
+      <th class="l ph" data-sort="topv">Biggest 12-mo riser</th><th class="l ph">Drivers</th></tr></thead><tbody></tbody></table></div>
   </div>
 
   <div class="card">
@@ -553,9 +595,9 @@ function hub() {
     </div>
     <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><input type="search" id="q" placeholder="Search drivers or series IDs" aria-label="Search drivers"><span class="note" id="cnt"></span></div>
     <div class="scroll"><table class="t" id="drv"><thead><tr>
-      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="group" data-first="asc">Group</th><th data-sort="latest_month">Latest</th>
-      <th data-sort="m1">1 mo</th><th data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th><th class="l" data-sort="sigr">Signal</th>
-      <th data-sort="f6">6-mo fcst</th><th data-sort="mape">Backtest error, 3 mo</th><th class="l">24 mo</th><th class="l">Used in</th></tr></thead><tbody></tbody></table></div>
+      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l ph" data-sort="group" data-first="asc">Group</th><th class="ph" data-sort="latest_month">Latest</th>
+      <th class="ph" data-sort="m1">1 mo</th><th class="ph" data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th><th class="l" data-sort="sigr">Signal</th>
+      <th class="ph" data-sort="f6">6-mo fcst</th><th class="ph" data-sort="mape">Backtest error, 3 mo</th><th class="l ph">24 mo</th><th class="l ph">Used in</th></tr></thead><tbody></tbody></table></div>
     <p class="note">Changes are raw % changes; color shows cost impact. Backtest error is MAPE of the published method 3 months ahead, with the naive forecast's error alongside.</p>
   </div>
   ${methodHTML(Object.keys(D.series))}
@@ -569,12 +611,12 @@ function hub() {
       return `<tr class="click" tabindex="0" data-href="${d.slug}/index.html">
         <td class="l"><a href="${d.slug}/index.html" class="nm">${esc(d.name)}</a></td>
         <td class="l"><span class="mix"><span title="Alert"><i style="background:var(--crit)"></i>${d.alerts}</span><span title="Watch"><i style="background:var(--warn)"></i>${d.watches}</span><span title="Opportunity"><i style="background:var(--good)"></i>${d.opportunities}</span><span title="Stable"><i style="background:var(--neutral)"></i>${d.series.length - d.alerts - d.watches - d.opportunities}</span></span></td>
-        <td class="${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</td><td class="${cls(d.pressure_12m)}"><b>${pct(d.pressure_12m)}</b></td><td class="${cls(d.pressure_f6)}">${pct(d.pressure_f6)}</td>
-        <td class="l">${esc(t.name)} <span class="${cls(t.cost_change.m12)}">${pct(t.cost_change.m12)}</span></td><td class="l">${d.series.length}</td></tr>`;
+        <td class="ph ${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</td><td class="${cls(d.pressure_12m)}"><b>${pct(d.pressure_12m)}</b></td><td class="ph ${cls(d.pressure_f6)}">${pct(d.pressure_f6)}</td>
+        <td class="l ph">${esc(t.name)} <span class="${cls(t.cost_change.m12)}">${pct(t.cost_change.m12)}</span></td><td class="l ph">${d.series.length}</td></tr>`;
     }).join("");
   }, ["p12", -1]);
   itb.addEventListener("click", e => { const tr = e.target.closest("tr[data-href]"); if (tr && !e.target.closest("a")) location.href = tr.dataset.href; });
-  itb.addEventListener("keydown", e => { const tr = e.target.closest("tr[data-href]"); if (tr && e.key === "Enter") location.href = tr.dataset.href; });
+  itb.addEventListener("keydown", e => { const tr = e.target.closest("tr[data-href]"); if (tr && e.target === tr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); location.href = tr.dataset.href; } });
 
   const usedIn = {}; inds.forEach(d => d.series.forEach(i => (usedIn[i] = usedIn[i] || []).push(d)));
   const groups = ["All", ...new Set(ALL.map(s => s.group))];
@@ -590,13 +632,13 @@ function hub() {
     dtb.innerHTML = rows.map(({ s }) => {
       const b = s.backtest, f = s.forecast[5], ch = b.chosen;
       return `<tr class="click" tabindex="0" data-id="${s.id}" aria-label="${esc(s.name)}: open details"><td class="l"><span class="nm">${esc(s.name)}</span><br><a class="id" href="${s.source}" target="_blank" rel="noopener">${esc(s.id)}</a></td>
-      <td class="l">${esc(s.group)}</td><td>${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
-      ${["m1", "m3", "m12"].map(k => `<td class="${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
+      <td class="l ph">${esc(s.group)}</td><td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+      ${["m1", "m3", "m12"].map(k => `<td class="${k === "m12" ? "" : "ph "}${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
       <td class="l">${sig(s.signal)}</td>
-      <td class="${ch === "ets" ? cls(s.forecast_6m_cost) : "fl"}">${ch === "ets" ? pct(s.forecast_6m_pct) : "Flat"}<br><span class="rng">${fmt(s, f.lo)}–${fmt(s, f.hi)}</span></td>
-      <td>${b[ch].h3.toFixed(1)}%<br><span class="rng">naive ${b.naive.h3.toFixed(1)}%</span></td>
-      <td class="l">${spark(s)}</td>
-      <td class="l">${(usedIn[s.id] || []).map(d => `<a href="${d.slug}/index.html">${esc(d.name.split(/[ ,&]/)[0])}</a>`).join(", ")}</td></tr>`;
+      <td class="ph ${ch === "ets" ? cls(s.forecast_6m_cost) : "fl"}">${ch === "ets" ? pct(s.forecast_6m_pct) : "Flat"}<br><span class="rng">${fmt(s, f.lo)}–${fmt(s, f.hi)}</span></td>
+      <td class="ph">${b[ch].h3.toFixed(1)}%<br><span class="rng">naive ${b.naive.h3.toFixed(1)}%</span></td>
+      <td class="l ph">${spark(s)}</td>
+      <td class="l ph">${(usedIn[s.id] || []).map(d => `<a href="${d.slug}/index.html">${esc(d.name.split(/[ ,&]/)[0])}</a>`).join(", ")}</td></tr>`;
     }).join("");
   }, ["m12", -1]);
   document.getElementById("gf").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; g = b.dataset.g;
@@ -641,7 +683,7 @@ function industry() {
   <div class="crumb"><a href="../index.html">← All industries</a></div>
   <div class="top">
     <div><h1>${esc(d.name)}</h1><p class="sub">${esc(d.blurb)}</p></div>
-    <span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>
+    <span class="pills"><span class="pill"><i></i>Updated ${localTime(D.built)} · data through ${mLabel(months[months.length - 1], true)}</span>${staleNote()}</span>
   </div>
   <div class="kpis">
     <div class="card kpi"><div class="k">Median driver, 3 mo</div><div class="n ${cls(d.pressure_3m)}">${pct(d.pressure_3m)}</div><div class="d">cost impact</div></div>
@@ -663,10 +705,10 @@ function industry() {
   <div class="card">
     <div class="head"><h2>Cost drivers</h2><span class="note">Click a driver for its full detail below · sort by any column</span></div>
     <div class="scroll"><table class="t" id="drv"><thead><tr>
-      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="sigr">Signal</th><th data-sort="latest_month">Latest</th>
-      ${hasLatest ? `<th data-sort="dw" title="Newest daily or weekly value vs last month's average">Daily/weekly</th>` : ""}
-      <th data-sort="m1">1 mo</th><th data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th>
-      <th data-sort="f6">6-mo forecast</th><th data-sort="mape">Error, 3 mo ahead</th><th data-sort="hit">80% range hit rate</th><th class="l">24 mo</th></tr></thead><tbody></tbody></table></div>
+      <th class="l" data-sort="name" data-first="asc">Driver</th><th class="l" data-sort="sigr">Signal</th><th class="ph" data-sort="latest_month">Latest</th>
+      ${hasLatest ? `<th class="ph" data-sort="dw" title="Newest daily or weekly value vs last month's average">Daily/weekly</th>` : ""}
+      <th class="ph" data-sort="m1">1 mo</th><th class="ph" data-sort="m3">3 mo</th><th data-sort="m12">12 mo</th>
+      <th class="ph" data-sort="f6">6-mo forecast</th><th class="ph" data-sort="mape">Error, 3 mo ahead</th><th class="ph" data-sort="hit">80% range hit rate</th><th class="l ph">24 mo</th></tr></thead><tbody></tbody></table></div>
   </div>
   <div class="card" id="detail" aria-live="polite"></div>
   ${X.spot.length ? `<div class="card"><div class="head"><h2>Latest spot prices</h2><span class="note">Daily, weekly or monthly from the publishing agency · red = rising costs</span></div>${spotTable(X.spot)}</div>` : ""}
@@ -690,8 +732,8 @@ function industry() {
     </div>
   </div>
   <div class="two">
-    <div class="card"><div class="head"><h2>Lead/lag</h2><span class="note">Monthly changes, 2018 on</span></div><div id="ll"></div></div>
-    <div class="card"><div class="head"><h2>Correlation of 12-mo changes</h2><span class="note">Since Jan 2019</span></div><div class="scroll" id="corr"></div></div>
+    <details class="card fold"><summary><span class="head"><h2>Lead/lag</h2><span class="note">Monthly changes, 2018 on</span></span></summary><div id="ll"></div></details>
+    <details class="card fold"><summary><span class="head"><h2>Correlation of 12-mo changes</h2><span class="note">Since Jan 2019</span></span></summary><div class="scroll" id="corr"></div></details>
   </div>
   ${methodHTML(d.series)}`;
 
@@ -705,13 +747,13 @@ function industry() {
       return `<tr class="click${s.id === selId ? " sel" : ""}" tabindex="0" data-id="${s.id}">
         <td class="l"><span class="nm">${esc(s.name)}</span><br><span class="id">${esc(s.id)} · ${esc(s.group)}</span></td>
         <td class="l">${sig(s.signal)}</td>
-        <td>${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
-        ${hasLatest ? (LT[s.id] ? `<td>${fmt(s, LT[s.id].latest)} <span class="rng">${dLabel(LT[s.id].latest_date)}</span><br><span class="${cls(LT[s.id].vs_prev_month === null ? null : LT[s.id].vs_prev_month * s.direction)}">${pct(LT[s.id].vs_prev_month)}</span> <span class="rng">vs ${mLabel(LT[s.id].prev_month)} avg</span></td>` : `<td class="fl">—</td>`) : ""}
-        ${["m1", "m3", "m12"].map(k => `<td class="${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
-        <td>${beat ? `<span class="${cls(s.forecast_6m_cost)}">${fmt(s, f.mid)} (${pct(s.forecast_6m_pct)})</span>` : `<span class="fl">${fmt(s, f.mid)} (flat)</span>`}<br><span class="rng">${fmt(s, f.lo)} – ${fmt(s, f.hi)} by ${mLabel(f.month)}</span></td>
-        <td><span class="${beat ? "better" : ""}">${b[ch].h3.toFixed(1)}%</span><br><span class="rng">${beat ? "model; naive " + b.naive.h3.toFixed(1) + "%" : "naive; model " + b.ets.h3.toFixed(1) + "%"}</span></td>
-        <td>${b.coverage80.h3 === null ? "—" : b.coverage80.h3.toFixed(0) + "%"}<br><span class="rng">${b.coverage80.n3} tests</span></td>
-        <td class="l">${spark(s)}</td></tr>`;
+        <td class="ph">${fmt(s, s.latest)}<br><span class="rng">${mLabel(s.latest_month)}</span></td>
+        ${hasLatest ? (LT[s.id] ? `<td class="ph">${fmt(s, LT[s.id].latest)} <span class="rng">${dLabel(LT[s.id].latest_date)}</span><br><span class="${cls(LT[s.id].vs_prev_month === null ? null : LT[s.id].vs_prev_month * s.direction)}">${pct(LT[s.id].vs_prev_month)}</span> <span class="rng">vs ${mLabel(LT[s.id].prev_month)} avg</span></td>` : `<td class="fl ph">—</td>`) : ""}
+        ${["m1", "m3", "m12"].map(k => `<td class="${k === "m12" ? "" : "ph "}${cls(s.cost_change[k])}">${pct(s.change[k])}</td>`).join("")}
+        <td class="ph">${beat ? `<span class="${cls(s.forecast_6m_cost)}">${fmt(s, f.mid)} (${pct(s.forecast_6m_pct)})</span>` : `<span class="fl">${fmt(s, f.mid)} (flat)</span>`}<br><span class="rng">${fmt(s, f.lo)} – ${fmt(s, f.hi)} by ${mLabel(f.month)}</span></td>
+        <td class="ph"><span class="${beat ? "better" : ""}">${b[ch].h3.toFixed(1)}%</span><br><span class="rng">${beat ? "model; naive " + b.naive.h3.toFixed(1) + "%" : "naive; model " + b.ets.h3.toFixed(1) + "%"}</span></td>
+        <td class="ph">${b.coverage80.h3 === null ? "—" : b.coverage80.h3.toFixed(0) + "%"}<br><span class="rng">${b.coverage80.n3} tests</span></td>
+        <td class="l ph">${spark(s)}</td></tr>`;
     }).join("");
   }, ["sigr", -1]);
   const detailEl = document.getElementById("detail");
@@ -798,6 +840,12 @@ function industry() {
 }
 
 D.page === "hub" ? hub() : industry();
+/* folds start open on wider screens; a link to #method opens that one */
+const wide = matchMedia("(min-width: 601px)").matches;
+document.querySelectorAll("details.fold").forEach(f => { f.open = wide; });
+const openMethod = () => { if (location.hash === "#method") { const m = document.getElementById("method"); if (m) m.open = true; } };
+document.addEventListener("click", e => { if (e.target.closest('a[href="#method"]')) setTimeout(openMethod); });
+window.addEventListener("hashchange", openMethod); openMethod();
 }
 </script>
 </body>

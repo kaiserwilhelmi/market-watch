@@ -258,5 +258,12 @@ save("usaspending.json", usa)
 
 print("\n".join(log))
 print(f"agency fetch done; {len(failed)} failed: {', '.join(failed) or 'none'}")
-# Never fail the workflow for an agency outage: old values are kept and the page shows their dates.
+# record what kept old data, for check_refresh.py (skipped sources with no key are not counted)
+STATUS = OUT.parent / "refresh_status.json"
+status = json.loads(STATUS.read_text()) if STATUS.exists() else {}
+status["agency"] = dict(checked=time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),
+                        tried=sum(line.startswith(("ok", "FAIL")) for line in log), failed=sorted(failed))
+STATUS.write_text(json.dumps(status, indent=1, sort_keys=True) + "\n")
+# Never stop the workflow here for an agency outage: old values are kept and the page shows their dates.
+# check_refresh.py, the workflow's last step, fails the run afterwards if too many sources failed.
 sys.exit(0)
