@@ -1620,32 +1620,16 @@
    "source": "https://www.eia.gov/dnav/pet/hist/EER_EPJK_PF4_RGC_DPGD.htm",
    "publisher": "U.S. Energy Information Administration, Open Data API",
    "publisher_url": "https://www.eia.gov/opendata/",
-   "latest": 3.763,
-   "latest_date": "2026-11-17",
-   "chg_short": -18.7607944732297,
-   "short_from": "2026-10-20",
-   "chg_year": 50.339592489013164,
-   "year_from": "2025-11-18",
+   "latest": 3.397,
+   "latest_date": "2026-11-24",
+   "chg_short": -23.559855985598567,
+   "short_from": "2026-10-27",
+   "chg_year": 64.26499032882009,
+   "year_from": "2025-11-25",
    "prev_month": "2026-10",
    "prev_month_avg": 4.482681818181818,
-   "vs_prev_month": -16.05471562275017,
+   "vs_prev_month": -24.219470893032778,
    "series": [
-    [
-     "2026-05-20",
-     4.059
-    ],
-    [
-     "2026-05-21",
-     3.999
-    ],
-    [
-     "2026-05-22",
-     3.987
-    ],
-    [
-     "2026-05-26",
-     3.392
-    ],
     [
      "2026-05-27",
      3.253
@@ -2133,6 +2117,26 @@
     [
      "2026-11-17",
      3.763
+    ],
+    [
+     "2026-11-18",
+     3.662
+    ],
+    [
+     "2026-11-19",
+     3.697
+    ],
+    [
+     "2026-11-20",
+     3.624
+    ],
+    [
+     "2026-11-23",
+     3.397
+    ],
+    [
+     "2026-11-24",
+     3.397
     ]
    ]
   },
@@ -4304,20 +4308,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 359.91,
-   "latest_date": "2026-11-24",
-   "chg_short": -3.3071839234861122,
-   "short_from": "2026-10-27",
-   "chg_year": -2.7506822664757125,
-   "year_from": "2025-11-25",
+   "latest": 356.59,
+   "latest_date": "2026-11-25",
+   "chg_short": -3.363143631436316,
+   "short_from": "2026-10-28",
+   "chg_year": -3.1742152709894667,
+   "year_from": "2025-11-26",
    "prev_month": "2026-10",
    "prev_month_avg": 372.76454545454544,
-   "vs_prev_month": -3.448435644240444,
+   "vs_prev_month": -4.33907828729323,
    "series": [
-    [
-     "2026-05-27",
-     394.72
-    ],
     [
      "2026-05-28",
      392.32
@@ -4825,6 +4825,10 @@
     [
      "2026-11-24",
      359.91
+    ],
+    [
+     "2026-11-25",
+     356.59
     ]
    ]
   },
@@ -4837,20 +4841,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 346.0,
-   "latest_date": "2026-11-24",
-   "chg_short": -3.580883377455768,
-   "short_from": "2026-10-27",
-   "chg_year": -2.7898744135082754,
-   "year_from": "2025-11-25",
+   "latest": 344.71,
+   "latest_date": "2026-11-25",
+   "chg_short": -2.9669247009148525,
+   "short_from": "2026-10-28",
+   "chg_year": -3.0378892295575444,
+   "year_from": "2025-11-26",
    "prev_month": "2026-10",
    "prev_month_avg": 354.9831818181819,
-   "vs_prev_month": -2.530593638879197,
+   "vs_prev_month": -2.893991136583962,
    "series": [
-    [
-     "2026-05-27",
-     389.29
-    ],
     [
      "2026-05-28",
      385.58
@@ -5358,6 +5358,10 @@
     [
      "2026-11-24",
      346.0
+    ],
+    [
+     "2026-11-25",
+     344.71
     ]
    ]
   },
