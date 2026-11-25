@@ -98,7 +98,7 @@ Each "What to do now" item shows its three context numbers and a "Why this advic
 
 ## Data quality checks
 
-- Every value (80 series, Jan 2018–Oct 2026) was cross-checked against FRED's own annual averages for 2018–2025 and quarterly averages through 2026 Q3: 640 annual and 880 quarterly comparisons. Three 2026 Q1 energy flags (WTI, jet fuel, diesel) came from daily vs. monthly weighting during the March 2026 price spike; the monthly values were re-pulled and match FRED exactly.
+- Migration check (Nov 25, 2026): when the series moved from FRED copies to the publishers' own feeds, every overlapping month since 2004 was compared in a separate script. All 15,681 BLS values (58 series) matched exactly, and all 1,918 monthly Federal Reserve exchange-rate averages matched within 0.01% (rounding). Henry Hub and diesel matched exactly. EIA's own monthly averages for WTI and Gulf Coast jet fuel differ from an average of daily prices in some months (largest gap 1.63% for WTI, 6.54% for jet fuel, mostly before 2018); the site now uses EIA's monthly figure. The World Bank, BTS and less-than-truckload series are new and have no earlier copy to compare.
 - `verify_calcs.py` independently recomputes every % change, signal, range, naive backtest, industry median, correlation and lead/lag coefficient, and refits the model for a sample of series. The collector run stops before publishing if any check fails.
 
 ## Limitations
