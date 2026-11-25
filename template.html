@@ -34,6 +34,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 .sub { color: var(--text-2); max-width: 75ch; }
 .note { color: var(--text-3); font-size: 13px; }
 .crumb { font-size: 13px; }
+.crumb a { display: inline-block; padding: 4px 0; }
 .site-wrap { max-width: 1240px; margin: 0 auto; }
 .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
 .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-2); border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 10px; }
@@ -66,7 +67,7 @@ table.t { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-
 .t th.l, .t td.l { text-align: left; }
 .t td.wrap-ok { white-space: normal; min-width: 180px; }
 .t th[data-sort] { cursor: pointer; user-select: none; }
-.t th .sortb { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: inherit; }
+.t th .sortb { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: inherit; min-height: 24px; display: inline-flex; align-items: center; }
 .t th[data-sort]::after { content: " ↕"; color: var(--text-3); font-weight: 400; }
 .t th[aria-sort="ascending"]::after { content: " ↑"; color: var(--accent); }
 .t th[aria-sort="descending"]::after { content: " ↓"; color: var(--accent); }
@@ -195,7 +196,10 @@ body.locked { overflow: hidden; }
 .acc td.pub { color: var(--text); font-weight: 600; }
 .tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 0 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-left: 6px; }
 .why-flat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
-.linkbtn { font: inherit; background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; text-align: left; }
+.linkbtn { font: inherit; background: none; border: 0; padding: 3px 0; min-height: 24px; color: var(--accent); text-decoration: underline; cursor: pointer; text-align: left; }
+/* touch targets: at least 24px tall (WCAG 2.5.8) */
+details > summary { min-height: 24px; padding: 2px 0; }
+@media (max-width: 600px) { .t a.id, .t a.nm { display: inline-block; padding: 4px 0; } .t td { padding-top: 9px; padding-bottom: 9px; } }
 .gapnote { font-size: 13px; color: var(--text-3); }
 .fig:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .t tbody tr.click td a { position: relative; z-index: 1; }

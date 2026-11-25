@@ -134,3 +134,7 @@ python build.py                # index.html + <industry>/index.html
 - Meese, R. A., & Rogoff, K. (1983). Empirical exchange rate models of the seventies: Do they fit out of sample? *Journal of International Economics*, 14(1–2), 3–24.
 - Tashman, L. J. (2000). Out-of-sample tests of forecasting accuracy: An analysis and review. *International Journal of Forecasting*, 16(4), 437–450.
 - Williams, W. H., & Goodman, M. L. (1971). A simple method for the construction of empirical confidence limits for economic forecasts. *Journal of the American Statistical Association*, 66(336), 752–754.
+
+## Rights
+
+© 2026 Dawson Wilhelmi. All rights reserved. The code is public so it can be read; it is not licensed for reuse. Data belongs to its publishers and is used under their terms, credited on each page.
