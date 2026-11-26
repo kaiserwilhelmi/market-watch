@@ -150,6 +150,10 @@ python -m unittest discover tests
 - Tashman, L. J. (2000). Out-of-sample tests of forecasting accuracy: An analysis and review. *International Journal of Forecasting*, 16(4), 437–450.
 - Williams, W. H., & Goodman, M. L. (1971). A simple method for the construction of empirical confidence limits for economic forecasts. *Journal of the American Statistical Association*, 66(336), 752–754.
 
+## Theme
+
+The pages use the site theme from the site repo (`kaiserwilhelmi/kaiserwilhelmi.github.io`): `template.html` loads `/fonts/fonts.css`, `/theme.css` (before its own styles) and `/theme.js`, uses the shared `dw-site` header and `dw-skip` skip link, and reads every color and font from a theme token with a fallback, for example `--bg: var(--ink, #080c15);`. The fallbacks only show if the theme file can't be reached. To change the look, edit `theme.css` in the site repo, not this page. `tests/test_theme.py` checks this.
+
 ## Rights
 
 © 2026 Dawson Wilhelmi. All rights reserved. The code is public so it can be read; it is not licensed for reuse. Data belongs to its publishers and is used under their terms, credited on each page.
