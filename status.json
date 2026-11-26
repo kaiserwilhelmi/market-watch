@@ -8,26 +8,28 @@
    "ok": true
   },
   "spot": {
-   "checked": "2026-11-26T00:44:39Z",
-   "failed": [],
+   "checked": "2026-11-26T20:19:26Z",
+   "failed": [
+    "STEO"
+   ],
    "ok": true
   },
   "steo": {
-   "checked": "2026-11-25T19:16:20Z",
+   "checked": "2026-11-26T20:19:26Z",
    "failed": [
     "STEO"
    ],
    "ok": true
   },
   "usa": {
-   "checked": "2026-11-25T19:16:20Z",
+   "checked": "2026-11-26T20:19:26Z",
    "failed": [
     "STEO"
    ],
    "ok": true
   }
  },
- "run": "2026-11-26T00:44:39Z",
+ "run": "2026-11-26T20:19:26Z",
  "schema": 1,
  "series": {
   "APU0000708111": {
@@ -1468,5 +1470,5 @@
    "url": "https://www.worldbank.org/en/research/commodity-markets"
   }
  },
- "version": "0042dfd996c1"
+ "version": "9e90789cfd39"
 }

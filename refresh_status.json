@@ -1,7 +1,9 @@
 {
  "agency": {
-  "checked": "2026-11-26 00:56 UTC",
-  "failed": [],
-  "tried": 20
+  "checked": "2026-11-26 20:28 UTC",
+  "failed": [
+   "STEO"
+  ],
+  "tried": 28
  }
 }
