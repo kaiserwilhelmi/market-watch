@@ -8,9 +8,23 @@
    "ok": true
   },
   "spot": {
-   "checked": "2026-11-26T20:19:26Z",
+   "checked": "2026-11-27T02:59:46Z",
    "failed": [
-    "STEO"
+    "BRENT",
+    "DIESEL_R10",
+    "DIESEL_R20",
+    "DIESEL_R30",
+    "DIESEL_R40",
+    "DIESEL_R50",
+    "DIESEL_US",
+    "ELEC_COM",
+    "ELEC_IND",
+    "HH",
+    "JET",
+    "NG_IND",
+    "ULSD_GULF",
+    "ULSD_NYH",
+    "WTI"
    ],
    "ok": true
   },
@@ -29,7 +43,7 @@
    "ok": true
   }
  },
- "run": "2026-11-26T20:19:26Z",
+ "run": "2026-11-27T02:59:46Z",
  "schema": 1,
  "series": {
   "APU0000708111": {
@@ -1441,11 +1455,11 @@
   },
   "FRB": {
    "api": "H.10 Data Download Program",
-   "checked": "2026-11-25T22:23:05Z",
+   "checked": "2026-11-27T02:59:46Z",
    "error": null,
    "fails": 0,
    "keyed": false,
-   "last_ok": "2026-11-25T22:23:05Z",
+   "last_ok": "2026-11-27T02:59:46Z",
    "missing": [],
    "name": "Board of Governors of the Federal Reserve System",
    "next_check": "2026-12-01T21:30:00Z",
