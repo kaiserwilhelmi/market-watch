@@ -36,14 +36,12 @@
    "ok": true
   },
   "usa": {
-   "checked": "2026-11-26T20:19:26Z",
-   "failed": [
-    "STEO"
-   ],
+   "checked": "2026-11-27T12:04:46Z",
+   "failed": [],
    "ok": true
   }
  },
- "run": "2026-11-27T02:59:46Z",
+ "run": "2026-11-27T12:04:46Z",
  "schema": 1,
  "series": {
   "APU0000708111": {
@@ -1484,5 +1482,5 @@
    "url": "https://www.worldbank.org/en/research/commodity-markets"
   }
  },
- "version": "9e90789cfd39"
+ "version": "c82534d9e085"
 }
