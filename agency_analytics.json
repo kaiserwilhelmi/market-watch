@@ -4308,24 +4308,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 356.59,
-   "latest_date": "2026-11-25",
-   "chg_short": -3.363143631436316,
-   "short_from": "2026-10-28",
-   "chg_year": -3.1742152709894667,
-   "year_from": "2025-11-26",
+   "latest": 357.23,
+   "latest_date": "2026-11-27",
+   "chg_short": -2.0375143969725285,
+   "short_from": "2026-10-30",
+   "chg_year": -2.6143612671064798,
+   "year_from": "2025-11-28",
    "prev_month": "2026-10",
    "prev_month_avg": 372.76454545454544,
-   "vs_prev_month": -4.33907828729323,
+   "vs_prev_month": -4.167388139234851,
    "series": [
-    [
-     "2026-05-28",
-     392.32
-    ],
-    [
-     "2026-05-29",
-     391.47
-    ],
     [
      "2026-06-01",
      392.83
@@ -4829,6 +4821,10 @@
     [
      "2026-11-25",
      356.59
+    ],
+    [
+     "2026-11-27",
+     357.23
     ]
    ]
   },
@@ -4841,24 +4837,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2453",
    "publisher": "USDA Agricultural Marketing Service, Livestock Mandatory Reporting",
    "publisher_url": "https://mpr.datamart.ams.usda.gov/",
-   "latest": 344.71,
-   "latest_date": "2026-11-25",
-   "chg_short": -2.9669247009148525,
-   "short_from": "2026-10-28",
-   "chg_year": -3.0378892295575444,
-   "year_from": "2025-11-26",
+   "latest": 347.07,
+   "latest_date": "2026-11-27",
+   "chg_short": -1.3949656230467733,
+   "short_from": "2026-10-30",
+   "chg_year": -1.1337416322461213,
+   "year_from": "2025-11-28",
    "prev_month": "2026-10",
    "prev_month_avg": 354.9831818181819,
-   "vs_prev_month": -2.893991136583962,
+   "vs_prev_month": -2.2291709082248645,
    "series": [
-    [
-     "2026-05-28",
-     385.58
-    ],
-    [
-     "2026-05-29",
-     383.18
-    ],
     [
      "2026-06-01",
      383.09
@@ -5362,6 +5350,10 @@
     [
      "2026-11-25",
      344.71
+    ],
+    [
+     "2026-11-27",
+     347.07
     ]
    ]
   },
@@ -5374,24 +5366,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/2843",
    "publisher": "USDA Agricultural Marketing Service, My Market News",
    "publisher_url": "https://mymarketnews.ams.usda.gov/",
-   "latest": 142.26,
-   "latest_date": "2026-11-25",
-   "chg_short": 329.5289855072464,
-   "short_from": "2026-10-28",
-   "chg_year": -37.117093223710384,
-   "year_from": "2025-11-26",
+   "latest": 149.97,
+   "latest_date": "2026-11-27",
+   "chg_short": 329.71346704871064,
+   "short_from": "2026-10-30",
+   "chg_year": -34.6478995990936,
+   "year_from": "2025-11-28",
    "prev_month": "2026-10",
    "prev_month_avg": 35.95761904761905,
-   "vs_prev_month": 295.63242441498585,
+   "vs_prev_month": 317.0743335408086,
    "series": [
-    [
-     "2026-05-28",
-     23.96
-    ],
-    [
-     "2026-05-29",
-     20.86
-    ],
     [
      "2026-06-01",
      20.8
@@ -5883,6 +5867,10 @@
     [
      "2026-11-25",
      142.26
+    ],
+    [
+     "2026-11-27",
+     149.97
     ]
    ]
   },
@@ -5895,20 +5883,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/3646",
    "publisher": "USDA Agricultural Marketing Service, My Market News",
    "publisher_url": "https://mymarketnews.ams.usda.gov/",
-   "latest": 115.28,
-   "latest_date": "2026-11-20",
-   "chg_short": 2.017699115044258,
-   "short_from": "2026-10-23",
-   "chg_year": 0.7956631983911944,
-   "year_from": "2025-11-21",
+   "latest": 115.91,
+   "latest_date": "2026-11-27",
+   "chg_short": 3.676207513416818,
+   "short_from": "2026-10-30",
+   "chg_year": 1.1784217877094827,
+   "year_from": "2025-11-28",
    "prev_month": "2026-10",
    "prev_month_avg": 115.78599999999999,
-   "vs_prev_month": -0.4370131103933028,
+   "vs_prev_month": 0.1070941219145638,
    "series": [
-    [
-     "2026-05-29",
-     145.72
-    ],
     [
      "2026-06-05",
      137.35
@@ -6008,6 +5992,10 @@
     [
      "2026-11-20",
      115.28
+    ],
+    [
+     "2026-11-27",
+     115.91
     ]
    ]
   },
@@ -6020,20 +6008,16 @@
    "source": "https://mymarketnews.ams.usda.gov/viewReport/3646",
    "publisher": "USDA Agricultural Marketing Service, My Market News",
    "publisher_url": "https://mymarketnews.ams.usda.gov/",
-   "latest": 107.2,
-   "latest_date": "2026-11-20",
-   "chg_short": -2.9425079221367167,
-   "short_from": "2026-10-23",
-   "chg_year": 7.6629506879582365,
-   "year_from": "2025-11-21",
+   "latest": 107.4,
+   "latest_date": "2026-11-27",
+   "chg_short": 0.2801120448179484,
+   "short_from": "2026-10-30",
+   "chg_year": 8.495807657339128,
+   "year_from": "2025-11-28",
    "prev_month": "2026-10",
    "prev_month_avg": 109.226,
-   "vs_prev_month": -1.8548697196638098,
+   "vs_prev_month": -1.6717631333199034,
    "series": [
-    [
-     "2026-05-29",
-     83.42
-    ],
     [
      "2026-06-05",
      82.89
@@ -6133,6 +6117,10 @@
     [
      "2026-11-20",
      107.2
+    ],
+    [
+     "2026-11-27",
+     107.4
     ]
    ]
   }

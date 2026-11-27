@@ -8,31 +8,13 @@
    "ok": true
   },
   "spot": {
-   "checked": "2026-11-27T02:59:46Z",
-   "failed": [
-    "BRENT",
-    "DIESEL_R10",
-    "DIESEL_R20",
-    "DIESEL_R30",
-    "DIESEL_R40",
-    "DIESEL_R50",
-    "DIESEL_US",
-    "ELEC_COM",
-    "ELEC_IND",
-    "HH",
-    "JET",
-    "NG_IND",
-    "ULSD_GULF",
-    "ULSD_NYH",
-    "WTI"
-   ],
+   "checked": "2026-11-27T21:10:13Z",
+   "failed": [],
    "ok": true
   },
   "steo": {
-   "checked": "2026-11-26T20:19:26Z",
-   "failed": [
-    "STEO"
-   ],
+   "checked": "2026-11-27T21:10:13Z",
+   "failed": [],
    "ok": true
   },
   "usa": {
@@ -41,7 +23,7 @@
    "ok": true
   }
  },
- "run": "2026-11-27T12:04:46Z",
+ "run": "2026-11-27T21:10:13Z",
  "schema": 1,
  "series": {
   "APU0000708111": {
@@ -1482,5 +1464,5 @@
    "url": "https://www.worldbank.org/en/research/commodity-markets"
   }
  },
- "version": "c82534d9e085"
+ "version": "cd7d2a8518ca"
 }
